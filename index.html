@@ -33,12 +33,11 @@
       color: #fff;
       text-decoration: none;
       font-size: 1rem;
-      opacity: 0;
-      transform: translateY(20px);
-      animation-fill-mode: forwards;
-      animation-timing-function: ease-out;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
     }
-    nav a.active {
+    nav a:hover, nav a.active {
+      opacity: 1;
       font-weight: bold;
     }
     .container {
@@ -55,10 +54,6 @@
       margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      opacity: 0;
-      transform: translateY(20px);
-      animation-fill-mode: forwards;
-      animation-timing-function: ease-out;
     }
     .loader {
       margin-top: 1rem;
@@ -67,23 +62,13 @@
       border: 4px solid #333;
       border-top: 4px solid #fff;
       border-radius: 50%;
-      opacity: 0;
-      transform: scale(0.9);
-      animation-fill-mode: forwards;
-      animation-timing-function: ease-out;
-      animation-name: spin;
-      animation-iteration-count: infinite;
-      animation-duration: 1s;
+      animation: spin 1s linear infinite;
     }
     .socials {
       margin-top: 2rem;
       display: flex;
       gap: 1.5rem;
       justify-content: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation-fill-mode: forwards;
-      animation-timing-function: ease-out;
     }
     .socials a {
       display: inline-block;
@@ -94,25 +79,19 @@
     }
     .socials a:hover {
       transform: scale(1.2);
+      animation: pulseGlow 1.5s infinite alternate;
     }
 
-    /* Animations */
-    @keyframes fadeSlideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
+    @keyframes pulseGlow {
+      0% {
+        filter: drop-shadow(0 0 2px white);
       }
-    }
-    @keyframes loaderFadeScale {
-      to {
-        opacity: 1;
-        transform: scale(1);
+      100% {
+        filter: drop-shadow(0 0 8px white);
       }
     }
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
     @media (max-width: 600px) {
       h1 {
@@ -131,15 +110,15 @@
 <body oncontextmenu="return false">
   <nav>
     <ul>
-      <li><a href="#" class="active" style="animation: fadeSlideUp 0.7s ease-out forwards; animation-delay: 0s;">Home</a></li>
-      <li><a href="#" style="animation: fadeSlideUp 0.7s ease-out forwards; animation-delay: 0s;">About Us</a></li>
-      <li><a href="#" style="animation: fadeSlideUp 0.7s ease-out forwards; animation-delay: 0s;">Careers</a></li>
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Careers</a></li>
     </ul>
   </nav>
   <div class="container">
-    <h1 style="animation: fadeSlideUp 0.7s ease-out forwards; animation-delay: 0.3s;">COMING SOON</h1>
-    <div class="loader" style="animation: loaderFadeScale 0.7s ease-out forwards; animation-delay: 0.6s;"></div>
-    <div class="socials" style="animation: fadeSlideUp 0.7s ease-out forwards; animation-delay: 0.9s;">
+    <h1>COMING SOON</h1>
+    <div class="loader"></div>
+    <div class="socials">
       <a href="https://youtube.com/@sinwlkn" target="_blank" aria-label="YouTube">
         <svg viewBox="0 0 24 24" >
           <path d="M23.498 6.186a2.993 2.993 0 00-2.106-2.112C19.695 3.5 12 3.5 12 3.5s-7.694 0-9.39.574a2.993 2.993 0 00-2.106 2.112A31.8 31.8 0 000 12a31.8 31.8 0 00.504 5.814 2.993 2.993 0 002.106 2.112c1.696.574 9.39.574 9.39.574s7.694 0 9.392-.574a2.993 2.993 0 002.106-2.112A31.8 31.8 0 0024 12a31.8 31.8 0 00-.502-5.814zM9.545 15.568V8.432l6.182 3.57-6.182 3.566z"/>
