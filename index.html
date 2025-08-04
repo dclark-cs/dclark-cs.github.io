@@ -1,11 +1,20 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>SIN | Coming Soon</title>
+
+  <!-- SEO & Social Preview -->
+  <meta name="description" content="A faceless, cinematic storytelling experience.">
+  <meta property="og:title" content="SIN | Coming Soon">
+  <meta property="og:description" content="A faceless, cinematic storytelling experience.">
+  <meta property="og:image" content="/preview.jpg"> <!-- Replace with your own image -->
+  <link rel="icon" href="/favicon.ico" />
+
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/a2e0e6f87b.js" crossorigin="anonymous"></script>
+
   <style>
     * {
       margin: 0;
@@ -20,15 +29,22 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      user-select: none; /* disable text selection */
+      user-select: none;
     }
 
     nav {
       width: 100%;
       padding: 2rem 3rem;
       display: flex;
-      justify-content: flex-end;
-      background: transparent;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: white;
+      letter-spacing: 2px;
     }
 
     nav ul {
@@ -66,12 +82,20 @@
 
     h1 {
       font-size: 3rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       animation: fadeIn 1.5s ease-in-out forwards;
     }
 
+    .tagline {
+      font-size: 1.2rem;
+      color: #ccc;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      animation: fadeIn 2s ease-in-out;
+    }
+
     .loader {
-      margin-top: 1rem;
+      margin: 1rem auto;
       width: 40px;
       height: 40px;
       border: 4px solid #333;
@@ -80,8 +104,38 @@
       animation: spin 1s linear infinite;
     }
 
-    .socials {
+    /* Email Signup */
+    .notify {
       margin-top: 2rem;
+    }
+
+    .notify input {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px 0 0 6px;
+      font-size: 1rem;
+      outline: none;
+      width: 250px;
+    }
+
+    .notify button {
+      padding: 0.75rem 1.2rem;
+      border: none;
+      border-radius: 0 6px 6px 0;
+      background: #fff;
+      color: #0d0d0d;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .notify button:hover {
+      background: #e0e0e0;
+    }
+
+    /* Socials */
+    .socials {
+      margin-top: 2.5rem;
       display: flex;
       gap: 1.5rem;
     }
@@ -111,20 +165,32 @@
       }
 
       nav {
-        justify-content: center;
-        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       nav ul {
+        margin-top: 1rem;
         gap: 1rem;
+      }
+
+      .notify input {
+        width: 100%;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+      }
+
+      .notify button {
+        width: 100%;
+        border-radius: 6px;
       }
     }
   </style>
-
-  <script src="https://kit.fontawesome.com/a2e0e6f87b.js" crossorigin="anonymous"></script>
 </head>
+
 <body oncontextmenu="return false">
   <nav>
+    <div class="logo">SIN</div>
     <ul>
       <li><a href="#" class="active">Home</a></li>
       <li><a href="#">About Us</a></li>
@@ -134,7 +200,15 @@
 
   <div class="container">
     <h1>Coming Soon</h1>
+    <p class="tagline">A faceless, cinematic storytelling experience.</p>
     <div class="loader"></div>
+
+    <div class="notify">
+      <form onsubmit="event.preventDefault(); alert('Thanks! You’ll be notified.');">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit">Notify Me</button>
+      </form>
+    </div>
 
     <div class="socials">
       <a href="https://youtube.com/@sinwlkn" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -142,9 +216,8 @@
     </div>
   </div>
 
-  <!-- Anti-inspection script -->
+  <!-- Disable dev tools -->
   <script>
-    // Disable dev tools shortcuts
     document.addEventListener('keydown', function (e) {
       if (
         e.key === 'F12' ||
