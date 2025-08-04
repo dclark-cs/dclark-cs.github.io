@@ -2,26 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SIN | Coming Soon</title>
-
-  <!-- SEO & Social Preview -->
-  <meta name="description" content="A faceless, cinematic storytelling experience.">
-  <meta property="og:title" content="SIN | Coming Soon">
-  <meta property="og:description" content="A faceless, cinematic storytelling experience.">
-  <meta property="og:image" content="/preview.jpg"> <!-- Replace with your own image -->
-  <link rel="icon" href="/favicon.ico" />
-
-  <!-- Icons -->
-  <script src="https://kit.fontawesome.com/a2e0e6f87b.js" crossorigin="anonymous"></script>
-
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       background-color: #0d0d0d;
       color: #fff;
@@ -31,7 +17,6 @@
       min-height: 100vh;
       user-select: none;
     }
-
     nav {
       width: 100%;
       padding: 2rem 3rem;
@@ -39,20 +24,16 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .logo {
       font-weight: bold;
       font-size: 1.5rem;
-      color: white;
       letter-spacing: 2px;
     }
-
     nav ul {
       list-style: none;
       display: flex;
       gap: 2rem;
     }
-
     nav a {
       color: #fff;
       text-decoration: none;
@@ -60,16 +41,10 @@
       opacity: 0.8;
       transition: opacity 0.3s ease;
     }
-
-    nav a:hover {
+    nav a:hover, nav a.active {
       opacity: 1;
-    }
-
-    nav a.active {
       font-weight: bold;
-      opacity: 1;
     }
-
     .container {
       flex: 1;
       display: flex;
@@ -79,23 +54,13 @@
       text-align: center;
       padding: 2rem;
     }
-
     h1 {
       font-size: 3rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
       animation: fadeIn 1.5s ease-in-out forwards;
     }
-
-    .tagline {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 2rem;
-      opacity: 0.8;
-      animation: fadeIn 2s ease-in-out;
-    }
-
     .loader {
-      margin: 1rem auto;
+      margin-top: 1rem;
       width: 40px;
       height: 40px;
       border: 4px solid #333;
@@ -103,91 +68,41 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-
-    /* Email Signup */
-    .notify {
-      margin-top: 2rem;
-    }
-
-    .notify input {
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 6px 0 0 6px;
-      font-size: 1rem;
-      outline: none;
-      width: 250px;
-    }
-
-    .notify button {
-      padding: 0.75rem 1.2rem;
-      border: none;
-      border-radius: 0 6px 6px 0;
-      background: #fff;
-      color: #0d0d0d;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .notify button:hover {
-      background: #e0e0e0;
-    }
-
-    /* Socials */
     .socials {
-      margin-top: 2.5rem;
+      margin-top: 2rem;
       display: flex;
       gap: 1.5rem;
     }
-
     .socials a {
       color: #fff;
       font-size: 1.5rem;
       transition: transform 0.3s ease;
     }
-
     .socials a:hover {
       transform: scale(1.2);
     }
-
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @media (max-width: 600px) {
       h1 {
         font-size: 2rem;
       }
-
       nav {
-        flex-direction: column;
-        align-items: flex-start;
+        justify-content: center;
+        padding: 1rem;
       }
-
       nav ul {
-        margin-top: 1rem;
         gap: 1rem;
-      }
-
-      .notify input {
-        width: 100%;
-        border-radius: 6px;
-        margin-bottom: 1rem;
-      }
-
-      .notify button {
-        width: 100%;
-        border-radius: 6px;
       }
     }
   </style>
+  <script src="https://kit.fontawesome.com/a2e0e6f87b.js" crossorigin="anonymous"></script>
 </head>
-
 <body oncontextmenu="return false">
   <nav>
     <div class="logo">SIN</div>
@@ -197,27 +112,16 @@
       <li><a href="#">Careers</a></li>
     </ul>
   </nav>
-
   <div class="container">
     <h1>Coming Soon</h1>
-    <p class="tagline">A faceless, cinematic storytelling experience.</p>
     <div class="loader"></div>
-
-    <div class="notify">
-      <form onsubmit="event.preventDefault(); alert('Thanks! You’ll be notified.');">
-        <input type="email" placeholder="Enter your email" required>
-        <button type="submit">Notify Me</button>
-      </form>
-    </div>
-
     <div class="socials">
       <a href="https://youtube.com/@sinwlkn" target="_blank"><i class="fab fa-youtube"></i></a>
       <a href="https://instagram.com/sinwlkn" target="_blank"><i class="fab fa-instagram"></i></a>
     </div>
   </div>
-
-  <!-- Disable dev tools -->
   <script>
+    // Disable dev tools shortcuts
     document.addEventListener('keydown', function (e) {
       if (
         e.key === 'F12' ||
