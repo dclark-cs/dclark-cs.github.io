@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--
-    ================================================================================
-    | PROJECT: sinwlkn (sin) YouTube Channel - Official Site                        |
-    | DESCRIPTION:                                                                  |
-    |   Responsive, SPA-style landing page for the sinwlkn Team's YouTube project.  |
-    |   Features animated navigation, team info, interactive sections, and logo.    |
-    | TEAM: sinwlkn                                                                |
-    | LAST UPDATED: 2025-08-05                                                     |
-    ================================================================================
-  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>sinwlkn (sin) - Official Team Page</title>
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="logo.png" />
-  <!-- =======================
-       GLOBAL STYLESHEET
-       ======================= -->
   <style>
-    /* 1. Global Reset & Defaults */
     *, *::before, *::after {
       margin: 0; padding: 0; box-sizing: border-box;
-      cursor: none !important; /* Hide the native cursor */
+      cursor: none !important;
     }
     html, body {
       min-height: 100%;
@@ -34,8 +21,6 @@
       scroll-behavior: smooth;
       overflow-x: hidden;
     }
-
-    /* 2. Navigation Bar Styling */
     nav {
       width: 100%;
       padding: 2rem 3rem;
@@ -43,24 +28,10 @@
       align-items: center;
       position: relative;
       background: transparent;
+      justify-content: center;
     }
     .logo-link {
-      display: flex;
-      align-items: center;
-      margin-right: 2.2rem;
-      text-decoration: none;
-      user-select: none;
-      transition: filter 0.3s;
-    }
-    .logo-link img {
-      height: 48px;
-      width: auto;
-      display: block;
-      filter: drop-shadow(0 0 6px #0006ff44);
-      transition: filter 0.3s;
-    }
-    .logo-link:hover img {
-      filter: drop-shadow(0 0 14px #0006ffcc);
+      display: none;
     }
     nav ul {
       display: flex;
@@ -68,6 +39,8 @@
       list-style: none;
       position: relative;
       z-index: 2;
+      justify-content: center;
+      width: 100%;
     }
     nav a {
       color: #fff;
@@ -81,13 +54,13 @@
       cursor: pointer;
       user-select: none;
       letter-spacing: 0.04em;
+      text-align: center;
     }
     nav a:hover,
     nav a.active {
       opacity: 1;
       font-weight: bold;
     }
-    /* Animated oval highlight for active nav item */
     #nav-oval {
       position: absolute;
       top: 50%;
@@ -103,8 +76,6 @@
       height: 2.5rem;
       opacity: 1;
     }
-
-    /* 3. Main Content Container */
     .container {
       flex: 1;
       display: flex;
@@ -118,7 +89,6 @@
       z-index: 1;
       padding: 2rem;
     }
-    /* SPA-style Section Logic */
     .section {
       display: none;
       flex-direction: column;
@@ -135,43 +105,36 @@
       from { opacity: 0; transform: translateY(24px);}
       to   { opacity: 1; transform: translateY(0);}
     }
-
-    /* 4. Typography & Loader */
-    h1 {
-      font-size: 2.6rem;
-      margin-bottom: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 800;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
-    }
-    h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #0006ff;
-      font-weight: 600;
-    }
-    p {
-      font-size: 1.2rem;
-      color: #d7d7d7;
+    .logo-home {
+      height: 108px;
+      width: auto;
       margin-bottom: 1.5rem;
-      max-width: 600px;
-      line-height: 1.6;
+      filter: drop-shadow(0 0 22px #0006ff77);
+      max-width: 60vw;
+      max-height: 30vh;
+      z-index: 1;
     }
-    .loader {
-      margin: 1.5rem auto 0 auto;
-      width: 40px;
-      height: 40px;
-      border: 4px solid #23235c;
-      border-top: 4px solid #0006ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+    .tagline {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #0006ff;
+      text-transform: lowercase;
+      margin-bottom: 2.2rem;
+      word-break: break-word;
+      z-index: 1;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* 5. Social Media Buttons */
+    .coming-soon {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      color: #fff;
+      text-shadow: 0 2px 16px #0006ff44;
+      margin-bottom: 0.5rem;
+      word-break: break-word;
+      z-index: 1;
+      text-transform: uppercase;
+    }
     .socials {
       margin-top: 2rem;
       display: flex;
@@ -194,8 +157,6 @@
       0%   { filter: drop-shadow(0 0 2px #0006ff);}
       100% { filter: drop-shadow(0 0 14px #0006ff);}
     }
-
-    /* 6. Footer Styling */
     footer {
       padding: 1rem 0;
       text-align: center;
@@ -206,9 +167,9 @@
       text-transform: uppercase;
       user-select: none;
       opacity: 0.4;
+      z-index: 3;
+      position: relative;
     }
-
-    /* 7. Custom Cursor Styles */
     #custom-cursor {
       position: fixed;
       top: 0; left: 0;
@@ -241,16 +202,21 @@
     @media (pointer: coarse) {
       #custom-cursor { display: none !important; }
     }
-
-    /* 8. Responsive Design */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 1rem; }
+      .container { padding: 1rem; }
+      .logo-home { height: 80px; max-width: 80vw; }
+      .tagline { font-size: 1.1rem; }
+      .coming-soon { font-size: 1.4rem; }
+    }
     @media (max-width: 600px) {
-      nav { justify-content: center; padding: 1rem; }
-      .logo-link { margin-right: 1rem; }
-      nav ul { gap: 1rem; }
-      .container { padding: 1rem 1rem 0; }
-      h1 { font-size: 2rem; }
-      .loader { margin-top: 0.5rem; }
-      .socials { margin-top: 1rem; }
+      nav { padding: 1rem 0.3rem; }
+      nav ul { gap: 0.7rem; }
+      .container { padding: 0.5rem 0.5rem 0; }
+      .logo-home { height: 52px; max-width: 90vw; }
+      .tagline { font-size: 1rem; margin-bottom: 1.3rem; }
+      .coming-soon { font-size: 1.1rem; }
+      .socials { margin-top: 1rem; gap: 1rem; }
       footer {
         flex-shrink: 0;
         height: 2.5rem;
@@ -262,16 +228,7 @@
   </style>
 </head>
 <body oncontextmenu="return false">
-  <!--
-    ====================
-    | NAVIGATION BAR   |
-    ====================
-    - SPA-style navigation: Home, About, Careers
-  -->
   <nav>
-    <a href="#" class="logo-link" tabindex="-1">
-      <img src="logo.png" alt="sinwlkn logo" />
-    </a>
     <ul id="nav-list">
       <li><a href="#" class="active" data-section="home">Home</a></li>
       <li><a href="#" data-section="about">About</a></li>
@@ -279,37 +236,12 @@
     </ul>
     <div id="nav-oval"></div>
   </nav>
-  <!--
-    ==============================
-    | MAIN CONTENT: SPA SECTIONS |
-    ==============================
-  -->
   <div class="container">
     <!-- HOME SECTION -->
     <div id="section-home" class="section active">
-      <img src="logo.png" alt="sinwlkn logo large" style="height:108px;width:auto;margin-bottom:1.5rem;filter:drop-shadow(0 0 22px #0006ff77);" />
-      <h1>sinwlkn (sin)</h1>
-      <h2>Official YouTube Channel</h2>
-      <p>
-        Welcome to the official site of the <strong>sinwlkn Team</strong>!<br>
-        We're a creative collective sharing stories, insights, and epic content.<br>
-        Our journey is just beginning — stay tuned.
-      </p>
-      <div class="loader"></div>
-      <div class="socials">
-        <!-- YouTube -->
-        <a href="https://youtube.com/@sinwlkn" target="_blank" aria-label="YouTube">
-          <svg viewBox="0 0 24 24">
-            <path d="M23.498 6.186a2.993 2.993 0 00-2.106-2.112C19.695 3.5 12 3.5 12 3.5s-7.694 0-9.39.574a2.993 2.993 0 00-2.106 2.112A31.8 31.8 0 000 12a31.8 31.8 0 00.504 5.814 2.993 2.993 0 002.106 2.112C4.306 20.5 12 20.5 12 20.5s7.695 0 9.392-.574a2.993 2.993 0 002.106-2.112A31.8 31.8 0 0024 12a31.8 31.8 0 00-.502-5.814zM9.75 16.02V7.98l7.712 4.02L9.75 16.02z"/>
-          </svg>
-        </a>
-        <!-- Instagram -->
-        <a href="https://instagram.com/sinwlkn" target="_blank" aria-label="Instagram">
-          <svg viewBox="0 0 24 24">
-            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5zm4.25 2.25a6.25 6.25 0 110 12.5 6.25 6.25 0 010-12.5zm0 1.5a4.75 4.75 0 100 9.5 4.75 4.75 0 000-9.5zm6 1a1 1 0 110 2 1 1 0 010-2z"/>
-          </svg>
-        </a>
-      </div>
+      <img src="logo.png" alt="sinwlkn logo large" class="logo-home" />
+      <div class="tagline">faceless. fearless. storytelling.</div>
+      <div class="coming-soon">COMING SOON</div>
     </div>
     <!-- ABOUT SECTION -->
     <div id="section-about" class="section">
@@ -339,30 +271,11 @@
       </p>
     </div>
   </div>
-  <!--
-    ===========
-    | FOOTER  |
-    ===========
-  -->
   <footer>
-    Stories in the making — powered by the sinwlkn team.
+    Stories in the making — powered by the team.
   </footer>
-  <!--
-    ========================
-    | CUSTOM CURSOR ELEMENT|
-    ========================
-  -->
   <div id="custom-cursor"></div>
-  <!--
-    ========================
-    | APPLICATION SCRIPTS  |
-    ========================
-    - SPA navigation, animated nav oval, custom cursor, and dev tools lockout
-  -->
   <script>
-    //
-    // 1. Disable right-click and dev tools shortcuts for basic anti-tamper
-    //
     document.addEventListener('keydown', function (e) {
       if (
         e.key === 'F12' ||
@@ -373,14 +286,10 @@
       }
     });
 
-    //
-    // 2. Custom Cursor Logic (visible on desktop only)
-    //
     const cursor = document.getElementById('custom-cursor');
     let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0, hasMoved = false;
     const ease = 0.15;
     let inactivityTimeout;
-    // Track mouse movement for custom cursor
     window.addEventListener('mousemove', e => {
       mouseX = e.clientX; mouseY = e.clientY;
       if (!hasMoved) {
@@ -395,7 +304,6 @@
         cursor.classList.add('hidden');
       }, 2500);
     });
-    // Animate custom cursor position
     function animate() {
       if (hasMoved) {
         currentX += (mouseX - currentX) * ease;
@@ -405,19 +313,14 @@
       requestAnimationFrame(animate);
     }
     animate();
-    // Cursor interaction on hover for links/buttons
     const hoverTargets = document.querySelectorAll('a, button');
     hoverTargets.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
     });
 
-    //
-    // 3. Nav Oval Highlight Logic
-    //
     const navOval = document.getElementById('nav-oval');
     const navLinks = document.querySelectorAll('nav ul li a');
-    // Position oval under the active nav link
     function updateOvalPosition(element) {
       const rect = element.getBoundingClientRect();
       const navRect = element.closest('nav').getBoundingClientRect();
@@ -426,7 +329,6 @@
       navOval.style.width = width + 'px';
       navOval.style.left = left + 'px';
     }
-    // On load and resize, keep oval aligned
     window.addEventListener('load', () => {
       const activeLink = document.querySelector('nav a.active');
       if (activeLink) updateOvalPosition(activeLink);
@@ -436,19 +338,13 @@
       if (activeLink) updateOvalPosition(activeLink);
     });
 
-    //
-    // 4. SPA Navigation Logic
-    //
     const sections = document.querySelectorAll('.section');
     navLinks.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
-        // Update active nav link
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-        // Move oval highlight
         updateOvalPosition(link);
-        // Show the correct section
         const sectionName = link.getAttribute('data-section');
         sections.forEach(sec => {
           if (sec.id === `section-${sectionName}`) {
