@@ -129,15 +129,34 @@
       background-color: white;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      transition: background-color 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease;
+      transition: 
+        background-color 0.3s ease, 
+        transform 0.15s ease, 
+        box-shadow 0.3s ease,
+        opacity 0.5s ease;
       z-index: 9999;
       box-shadow: 0 0 5px white;
       mix-blend-mode: difference;
+      opacity: 0; /* Start hidden */
+    }
+    #custom-cursor.visible {
+      opacity: 1;
     }
     #custom-cursor.hovered {
       transform: translate(-50%, -50%) scale(1.6);
       box-shadow: 0 0 15px 4px white;
       background-color: white;
+    }
+    #custom-cursor.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Hide cursor on touch devices */
+    @media (pointer: coarse) {
+      #custom-cursor {
+        display: none !important;
+      }
     }
   </style>
 </head>
@@ -182,29 +201,47 @@
     });
 
     const cursor = document.getElementById('custom-cursor');
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = mouseX;
-    let currentY = mouseY;
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
     const ease = 0.15;
+    let hasMoved = false;
 
-    // Track mouse position
+    let inactivityTimeout;
+
     window.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      cursor.style.display = 'block';
+
+      if (!hasMoved) {
+        hasMoved = true;
+        // Show cursor on first move
+        cursor.classList.add('visible');
+        currentX = mouseX;
+        currentY = mouseY;
+      }
+
+      // Show cursor on movement
+      cursor.classList.remove('hidden');
+
+      // Reset inactivity timer
+      clearTimeout(inactivityTimeout);
+      inactivityTimeout = setTimeout(() => {
+        cursor.classList.add('hidden');
+      }, 2500);
     });
 
-    // Animate cursor smoothly
     function animate() {
-      currentX += (mouseX - currentX) * ease;
-      currentY += (mouseY - currentY) * ease;
-      cursor.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+      if (hasMoved) {
+        currentX += (mouseX - currentX) * ease;
+        currentY += (mouseY - currentY) * ease;
+        cursor.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+      }
       requestAnimationFrame(animate);
     }
     animate();
 
-    // Elements to detect hover on
     const hoverTargets = document.querySelectorAll('a, button');
 
     hoverTargets.forEach(el => {
