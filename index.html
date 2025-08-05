@@ -1,80 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!--
+    ================================================================================
+    | PROJECT: sinwlkn (sin) YouTube Channel - Official Site                        |
+    | DESCRIPTION:                                                                  |
+    |   Responsive, SPA-style landing page for the sinwlkn Team's YouTube project.  |
+    |   Features animated navigation, team info, interactive sections, and logo.    |
+    | TEAM: sinwlkn                                                                |
+    | LAST UPDATED: 2025-08-05                                                     |
+    ================================================================================
+  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>COMING SOON</title>
+  <title>sinwlkn (sin) - Official Team Page</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <!-- =======================
+       GLOBAL STYLESHEET
+       ======================= -->
   <style>
-    * {
+    /* 1. Global Reset & Defaults */
+    *, *::before, *::after {
       margin: 0; padding: 0; box-sizing: border-box;
-      cursor: none !important; /* Hide default cursor everywhere */
+      cursor: none !important; /* Hide the native cursor */
     }
-    body {
-      background-color: #0d0d0d;
+    html, body {
+      min-height: 100%;
+      width: 100%;
+      background: #0d0d0d;
       color: #fff;
-      font-family: Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       user-select: none;
-      position: relative;
+      scroll-behavior: smooth;
       overflow-x: hidden;
     }
+
+    /* 2. Navigation Bar Styling */
     nav {
       width: 100%;
       padding: 2rem 3rem;
       display: flex;
-      justify-content: flex-start;
       align-items: center;
-      position: relative; /* Needed for oval positioning */
+      position: relative;
+      background: transparent;
+    }
+    .logo-link {
+      display: flex;
+      align-items: center;
+      margin-right: 2.2rem;
+      text-decoration: none;
       user-select: none;
+      transition: filter 0.3s;
+    }
+    .logo-link img {
+      height: 48px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 6px #0006ff44);
+      transition: filter 0.3s;
+    }
+    .logo-link:hover img {
+      filter: drop-shadow(0 0 14px #0006ffcc);
     }
     nav ul {
-      list-style: none;
       display: flex;
       gap: 2rem;
+      list-style: none;
       position: relative;
-      z-index: 2; /* Keep nav links above oval */
+      z-index: 2;
     }
     nav a {
       color: #fff;
       text-decoration: none;
       font-size: 1rem;
       opacity: 0.8;
-      transition: opacity 0.3s ease;
-      position: relative;
-      padding: 0.5rem 1.5rem; /* padding so oval has space */
-      border-radius: 9999px; /* fully rounded for oval shape */
+      transition: opacity 0.3s, font-weight 0.2s;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
       z-index: 3;
       cursor: pointer;
       user-select: none;
+      letter-spacing: 0.04em;
     }
-    nav a:hover {
-      opacity: 1;
-    }
+    nav a:hover,
     nav a.active {
       opacity: 1;
       font-weight: bold;
-      /* text color remains white */
     }
-
-    /* White oval highlight behind active nav link */
+    /* Animated oval highlight for active nav item */
     #nav-oval {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255 255 255 / 0.15);
+      background: #0006ff33;
       border-radius: 9999px;
-      transition: 
+      transition:
         left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
         width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.4s ease;
+        opacity 0.4s;
       pointer-events: none;
       z-index: 1;
       height: 2.5rem;
       opacity: 1;
     }
 
+    /* 3. Main Content Container */
     .container {
       flex: 1;
       display: flex;
@@ -82,147 +112,90 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 2rem;
+      min-height: 60vh;
+      width: 100%;
       position: relative;
       z-index: 1;
+      padding: 2rem;
     }
+    /* SPA-style Section Logic */
+    .section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 45vh;
+      animation: fadeIn 0.6s;
+    }
+    .section.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+
+    /* 4. Typography & Loader */
     h1 {
-      font-size: 3rem;
+      font-size: 2.6rem;
       margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      font-weight: 800;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+    }
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0006ff;
+      font-weight: 600;
+    }
+    p {
+      font-size: 1.2rem;
+      color: #d7d7d7;
+      margin-bottom: 1.5rem;
+      max-width: 600px;
+      line-height: 1.6;
     }
     .loader {
-      margin-top: 1rem;
+      margin: 1.5rem auto 0 auto;
       width: 40px;
       height: 40px;
-      border: 4px solid #333;
-      border-top: 4px solid #fff;
+      border: 4px solid #23235c;
+      border-top: 4px solid #0006ff;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      position: relative;
-      z-index: 1;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 5. Social Media Buttons */
     .socials {
       margin-top: 2rem;
       display: flex;
       gap: 1.5rem;
       justify-content: center;
-      position: relative;
-      z-index: 1;
     }
     .socials a {
       display: inline-block;
       width: 40px;
       height: 40px;
-      fill: white;
-      transition: transform 0.3s ease;
-      position: relative;
-      z-index: 1;
+      fill: #0006ff;
+      transition: transform 0.3s, filter 0.3s;
     }
     .socials a:hover {
-      transform: scale(1.2);
-      animation: pulseGlow 1.5s infinite alternate;
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 8px #0006ff88);
+      animation: pulseGlow 1.3s infinite alternate;
     }
-
     @keyframes pulseGlow {
-      0% {
-        filter: drop-shadow(0 0 2px white);
-      }
-      100% {
-        filter: drop-shadow(0 0 8px white);
-      }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+      0%   { filter: drop-shadow(0 0 2px #0006ff);}
+      100% { filter: drop-shadow(0 0 14px #0006ff);}
     }
 
-    @media (max-width: 600px) {
-      body {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-      }
-      .container {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem 1rem 0;
-        overflow: hidden;
-      }
-      footer {
-        flex-shrink: 0;
-        height: 2.5rem;
-        line-height: 2.5rem;
-        padding: 0 1rem;
-        font-size: 0.75rem;
-        color: #888;
-        user-select: none;
-        opacity: 0.4;
-      }
-      h1 {
-        margin: 0 0 0.5rem 0;
-        font-size: 2rem;
-      }
-      .loader {
-        margin-top: 0.5rem;
-      }
-      .socials {
-        margin-top: 1rem;
-      }
-      nav {
-        justify-content: center;
-        padding: 1rem;
-      }
-      nav ul {
-        gap: 1rem;
-      }
-    }
-
-    /* Custom cursor styles */
-    #custom-cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: white;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: 
-        background-color 0.3s ease, 
-        transform 0.15s ease, 
-        box-shadow 0.3s ease,
-        opacity 0.5s ease;
-      z-index: 9999;
-      box-shadow: 0 0 5px white;
-      mix-blend-mode: difference;
-      opacity: 0; /* Start hidden */
-    }
-    #custom-cursor.visible {
-      opacity: 1;
-    }
-    #custom-cursor.hovered {
-      transform: translate(-50%, -50%) scale(1.6);
-      box-shadow: 0 0 15px 4px white;
-      background-color: white;
-    }
-    #custom-cursor.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Hide cursor on touch devices */
-    @media (pointer: coarse) {
-      #custom-cursor {
-        display: none !important;
-      }
-    }
-
-    /* Footer style option 3 */
+    /* 6. Footer Styling */
     footer {
       padding: 1rem 0;
       text-align: center;
@@ -234,45 +207,162 @@
       user-select: none;
       opacity: 0.4;
     }
+
+    /* 7. Custom Cursor Styles */
+    #custom-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #0006ff;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition:
+        background-color 0.3s,
+        transform 0.15s,
+        box-shadow 0.3s,
+        opacity 0.5s;
+      z-index: 9999;
+      box-shadow: 0 0 5px #0006ff;
+      mix-blend-mode: difference;
+      opacity: 0;
+    }
+    #custom-cursor.visible { opacity: 1; }
+    #custom-cursor.hovered {
+      transform: translate(-50%, -50%) scale(1.6);
+      box-shadow: 0 0 15px 4px #0006ff;
+      background-color: #fff;
+    }
+    #custom-cursor.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    @media (pointer: coarse) {
+      #custom-cursor { display: none !important; }
+    }
+
+    /* 8. Responsive Design */
+    @media (max-width: 600px) {
+      nav { justify-content: center; padding: 1rem; }
+      .logo-link { margin-right: 1rem; }
+      nav ul { gap: 1rem; }
+      .container { padding: 1rem 1rem 0; }
+      h1 { font-size: 2rem; }
+      .loader { margin-top: 0.5rem; }
+      .socials { margin-top: 1rem; }
+      footer {
+        flex-shrink: 0;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        padding: 0 1rem;
+        font-size: 0.75rem;
+      }
+    }
   </style>
 </head>
 <body oncontextmenu="return false">
+  <!--
+    ====================
+    | NAVIGATION BAR   |
+    ====================
+    - SPA-style navigation: Home, About, Careers
+  -->
   <nav>
+    <a href="#" class="logo-link" tabindex="-1">
+      <img src="logo.png" alt="sinwlkn logo" />
+    </a>
     <ul id="nav-list">
-      <li><a href="#index.html" class="active">Home</a></li>
-      <li><a href="#about.html">About Us</a></li>
-      <li><a href="#">Careers</a></li>
+      <li><a href="#" class="active" data-section="home">Home</a></li>
+      <li><a href="#" data-section="about">About</a></li>
+      <li><a href="#" data-section="careers">Careers</a></li>
     </ul>
-    <!-- Oval highlight div -->
     <div id="nav-oval"></div>
   </nav>
-
+  <!--
+    ==============================
+    | MAIN CONTENT: SPA SECTIONS |
+    ==============================
+  -->
   <div class="container">
-    <h1>COMING SOON</h1>
-    <div class="loader"></div>
-    <div class="socials">
-      <a href="https://youtube.com/@sinwlkn" target="_blank" aria-label="YouTube">
-        <svg viewBox="0 0 24 24" >
-          <path d="M23.498 6.186a2.993 2.993 0 00-2.106-2.112C19.695 3.5 12 3.5 12 3.5s-7.694 0-9.39.574a2.993 2.993 0 00-2.106 2.112A31.8 31.8 0 000 12a31.8 31.8 0 00.504 5.814 2.993 2.993 0 002.106 2.112c1.696.574 9.39.574 9.39.574s7.694 0 9.392-.574a2.993 2.993 0 002.106-2.112A31.8 31.8 0 0024 12a31.8 31.8 0 00-.502-5.814zM9.545 15.568V8.432l6.182 3.57-6.182 3.566z"/>
-        </svg>
-      </a>
-      <a href="https://instagram.com/sinwlkn" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" >
-          <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.5-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/>
-        </svg>
-      </a>
+    <!-- HOME SECTION -->
+    <div id="section-home" class="section active">
+      <img src="logo.png" alt="sinwlkn logo large" style="height:108px;width:auto;margin-bottom:1.5rem;filter:drop-shadow(0 0 22px #0006ff77);" />
+      <h1>sinwlkn (sin)</h1>
+      <h2>Official YouTube Channel</h2>
+      <p>
+        Welcome to the official site of the <strong>sinwlkn Team</strong>!<br>
+        We're a creative collective sharing stories, insights, and epic content.<br>
+        Our journey is just beginning — stay tuned.
+      </p>
+      <div class="loader"></div>
+      <div class="socials">
+        <!-- YouTube -->
+        <a href="https://youtube.com/@sinwlkn" target="_blank" aria-label="YouTube">
+          <svg viewBox="0 0 24 24">
+            <path d="M23.498 6.186a2.993 2.993 0 00-2.106-2.112C19.695 3.5 12 3.5 12 3.5s-7.694 0-9.39.574a2.993 2.993 0 00-2.106 2.112A31.8 31.8 0 000 12a31.8 31.8 0 00.504 5.814 2.993 2.993 0 002.106 2.112C4.306 20.5 12 20.5 12 20.5s7.695 0 9.392-.574a2.993 2.993 0 002.106-2.112A31.8 31.8 0 0024 12a31.8 31.8 0 00-.502-5.814zM9.75 16.02V7.98l7.712 4.02L9.75 16.02z"/>
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="https://instagram.com/sinwlkn" target="_blank" aria-label="Instagram">
+          <svg viewBox="0 0 24 24">
+            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5zm4.25 2.25a6.25 6.25 0 110 12.5 6.25 6.25 0 010-12.5zm0 1.5a4.75 4.75 0 100 9.5 4.75 4.75 0 000-9.5zm6 1a1 1 0 110 2 1 1 0 010-2z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <!-- ABOUT SECTION -->
+    <div id="section-about" class="section">
+      <h1>About sinwlkn</h1>
+      <p>
+        <b>sinwlkn</b> is more than just a YouTube channel — it's a movement.<br>
+        Our team is dedicated to producing high-quality content that inspires, entertains, and connects.<br>
+        From behind-the-scenes stories to industry insights and creative collaborations,<br>
+        we strive to keep our growing community engaged on every platform.
+      </p>
+      <h2>Meet the Team</h2>
+      <p>
+        <b>The sinwlkn Team</b> consists of passionate creators, editors, and visionaries.<br>
+        We believe in collaboration, innovation, and authenticity.<br>
+        Want to join or support us? Check our <b>Careers</b> page!
+      </p>
+    </div>
+    <!-- CAREERS SECTION -->
+    <div id="section-careers" class="section">
+      <h1>Careers at sinwlkn</h1>
+      <p>
+        We’re not hiring right now, but we’re always open to connecting with creative and driven people.<br>
+        <b>Interested in future roles?</b><br>
+        Email us at <a href="mailto:contact@sinwlkn.com" style="color:#0006ff;">contact@sinwlkn.com</a> or DM us on Instagram.<br>
+        <br>
+        <i>Keep checking back – as we grow, so will our team!</i>
+      </p>
     </div>
   </div>
-
+  <!--
+    ===========
+    | FOOTER  |
+    ===========
+  -->
   <footer>
-    Stories in the making — powered by our team.
+    Stories in the making — powered by the sinwlkn team.
   </footer>
-
-  <!-- Custom cursor element -->
+  <!--
+    ========================
+    | CUSTOM CURSOR ELEMENT|
+    ========================
+  -->
   <div id="custom-cursor"></div>
-
+  <!--
+    ========================
+    | APPLICATION SCRIPTS  |
+    ========================
+    - SPA navigation, animated nav oval, custom cursor, and dev tools lockout
+  -->
   <script>
-    // Disable dev tools shortcuts
+    //
+    // 1. Disable right-click and dev tools shortcuts for basic anti-tamper
+    //
     document.addEventListener('keydown', function (e) {
       if (
         e.key === 'F12' ||
@@ -283,39 +373,29 @@
       }
     });
 
-    // Custom cursor code (unchanged)
+    //
+    // 2. Custom Cursor Logic (visible on desktop only)
+    //
     const cursor = document.getElementById('custom-cursor');
-    let mouseX = 0;
-    let mouseY = 0;
-    let currentX = 0;
-    let currentY = 0;
+    let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0, hasMoved = false;
     const ease = 0.15;
-    let hasMoved = false;
-
     let inactivityTimeout;
-
+    // Track mouse movement for custom cursor
     window.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-
+      mouseX = e.clientX; mouseY = e.clientY;
       if (!hasMoved) {
         hasMoved = true;
-        // Show cursor on first move
         cursor.classList.add('visible');
         currentX = mouseX;
         currentY = mouseY;
       }
-
-      // Show cursor on movement
       cursor.classList.remove('hidden');
-
-      // Reset inactivity timer
       clearTimeout(inactivityTimeout);
       inactivityTimeout = setTimeout(() => {
         cursor.classList.add('hidden');
       }, 2500);
     });
-
+    // Animate custom cursor position
     function animate() {
       if (hasMoved) {
         currentX += (mouseX - currentX) * ease;
@@ -325,64 +405,58 @@
       requestAnimationFrame(animate);
     }
     animate();
-
+    // Cursor interaction on hover for links/buttons
     const hoverTargets = document.querySelectorAll('a, button');
-
     hoverTargets.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovered');
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovered');
-      });
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
     });
 
-    // NAV OVAL HIGHLIGHT LOGIC
-
+    //
+    // 3. Nav Oval Highlight Logic
+    //
     const navOval = document.getElementById('nav-oval');
     const navLinks = document.querySelectorAll('nav ul li a');
-
+    // Position oval under the active nav link
     function updateOvalPosition(element) {
       const rect = element.getBoundingClientRect();
       const navRect = element.closest('nav').getBoundingClientRect();
-
-      // Calculate position relative to nav container
       const left = rect.left - navRect.left;
       const width = rect.width;
-
-      // Set oval size and position
       navOval.style.width = width + 'px';
       navOval.style.left = left + 'px';
     }
-
-    // Initialize position on page load, behind the active link
+    // On load and resize, keep oval aligned
     window.addEventListener('load', () => {
       const activeLink = document.querySelector('nav a.active');
-      if (activeLink) {
-        updateOvalPosition(activeLink);
-      }
+      if (activeLink) updateOvalPosition(activeLink);
     });
-
-    // Update oval position on window resize (to stay aligned)
     window.addEventListener('resize', () => {
       const activeLink = document.querySelector('nav a.active');
-      if (activeLink) {
-        updateOvalPosition(activeLink);
-      }
+      if (activeLink) updateOvalPosition(activeLink);
     });
 
-    // Click event to move oval and change active link
+    //
+    // 4. SPA Navigation Logic
+    //
+    const sections = document.querySelectorAll('.section');
     navLinks.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
-
-        // Remove active class from all
+        // Update active nav link
         navLinks.forEach(l => l.classList.remove('active'));
-        // Add active to clicked
         link.classList.add('active');
-
-        // Move oval to clicked link
+        // Move oval highlight
         updateOvalPosition(link);
+        // Show the correct section
+        const sectionName = link.getAttribute('data-section');
+        sections.forEach(sec => {
+          if (sec.id === `section-${sectionName}`) {
+            sec.classList.add('active');
+          } else {
+            sec.classList.remove('active');
+          }
+        });
       });
     });
   </script>
