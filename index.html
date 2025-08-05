@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>sinwlkn (sin) - Official Team Page</title>
+  <title>sin - Home</title>
   <link rel="icon" type="image/png" href="logo.png" />
   <style>
     *,*:before,*:after{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
@@ -191,8 +191,23 @@
             sec.classList.remove('active');
           }
         });
+        // Page Title Switcher
+        updatePageTitle(sectionName);
       });
     });
+
+    // Page Title Switcher
+    const sectionTitles = {
+      home: "sin - Home",
+      about: "sin - About",
+      careers: "sin - Careers"
+    };
+    function updatePageTitle(section) {
+      document.title = sectionTitles[section] || "sin";
+    }
+    // Initial title set
+    updatePageTitle("home");
+
     // Block context menu and selection
     document.addEventListener('contextmenu',function(e){e.preventDefault()});
     document.body.style.webkitUserSelect='none';
