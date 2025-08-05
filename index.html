@@ -4,243 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>sinwlkn (sin) - Official Team Page</title>
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="logo.png" />
   <style>
-    *, *::before, *::after {
-      margin: 0; padding: 0; box-sizing: border-box;
-      cursor: none !important;
-    }
-    html, body {
-      min-height: 100%;
-      width: 100%;
-      background: #0d0d0d;
-      color: #fff;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      user-select: none;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-    nav {
-      width: 100%;
-      padding: 2rem 3rem;
-      display: flex;
-      align-items: center;
-      position: relative;
-      background: transparent;
-      justify-content: center;
-    }
-    .logo-link {
-      display: none;
-    }
-    nav ul {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-      position: relative;
-      z-index: 2;
-      justify-content: center;
-      width: 100%;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      opacity: 0.8;
-      transition: opacity 0.3s, font-weight 0.2s;
-      padding: 0.5rem 1.5rem;
-      border-radius: 9999px;
-      z-index: 3;
-      cursor: pointer;
-      user-select: none;
-      letter-spacing: 0.04em;
-      text-align: center;
-    }
-    nav a:hover,
-    nav a.active {
-      opacity: 1;
-      font-weight: bold;
-    }
-    #nav-oval {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #0006ff33;
-      border-radius: 9999px;
-      transition:
-        left 0.5s cubic-bezier(0.45,0,0.55,1),
-        width 0.5s cubic-bezier(0.45,0,0.55,1),
-        opacity 0.4s;
-      pointer-events: none;
-      z-index: 1;
-      height: 2.5rem;
-      opacity: 1;
-    }
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 60vh;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-      padding: 2rem;
-    }
-    .section {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 45vh;
-      animation: fadeIn 0.6s;
-    }
-    .section.active {
-      display: flex;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(24px);}
-      to   { opacity: 1; transform: translateY(0);}
-    }
-    .logo-home {
-      height: 108px;
-      width: auto;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 0 22px #0006ff77);
-      max-width: 60vw;
-      max-height: 30vh;
-      z-index: 1;
-    }
-    .tagline {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: #0006ff;
-      text-transform: lowercase;
-      margin-bottom: 2.2rem;
-      word-break: break-word;
-      z-index: 1;
-    }
-    .coming-soon {
-      font-size: 2.1rem;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      color: #fff;
-      text-shadow: 0 2px 16px #0006ff44;
-      margin-bottom: 1.2rem;
-      word-break: break-word;
-      z-index: 1;
-      text-transform: uppercase;
-    }
-    /* Spinner styles */
-    .loader {
-      margin: 0 auto;
-      display: block;
-      width: 36px;
-      height: 36px;
-      border: 4px solid #222e;
-      border-top: 4px solid #0006ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      opacity: 0.85;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg);}
-    }
-    .socials {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-    }
-    .socials a {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      fill: #0006ff;
-      transition: transform 0.3s, filter 0.3s;
-    }
-    .socials a:hover {
-      transform: scale(1.18);
-      filter: drop-shadow(0 0 8px #0006ff88);
-      animation: pulseGlow 1.3s infinite alternate;
-    }
-    @keyframes pulseGlow {
-      0%   { filter: drop-shadow(0 0 2px #0006ff);}
-      100% { filter: drop-shadow(0 0 14px #0006ff);}
-    }
-    footer {
-      padding: 1rem 0;
-      text-align: center;
-      color: #888;
-      font-size: 0.75rem;
-      font-family: Helvetica, Arial, sans-serif;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      user-select: none;
-      opacity: 0.4;
-      z-index: 3;
-      position: relative;
-    }
-    #custom-cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: #0006ff;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition:
-        background-color 0.3s,
-        transform 0.15s,
-        box-shadow 0.3s,
-        opacity 0.5s;
-      z-index: 9999;
-      box-shadow: 0 0 5px #0006ff;
-      mix-blend-mode: difference;
-      opacity: 0;
-    }
-    #custom-cursor.visible { opacity: 1; }
-    #custom-cursor.hovered {
-      transform: translate(-50%, -50%) scale(1.6);
-      box-shadow: 0 0 15px 4px #0006ff;
-      background-color: #fff;
-    }
-    #custom-cursor.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    @media (pointer: coarse) {
-      #custom-cursor { display: none !important; }
-    }
-    @media (max-width: 900px) {
-      nav { padding: 1.5rem 1rem; }
-      .container { padding: 1rem; }
-      .logo-home { height: 80px; max-width: 80vw; }
-      .tagline { font-size: 1.1rem; }
-      .coming-soon { font-size: 1.4rem; }
-    }
-    @media (max-width: 600px) {
-      nav { padding: 1rem 0.3rem; }
-      nav ul { gap: 0.7rem; }
-      .container { padding: 0.5rem 0.5rem 0; }
-      .logo-home { height: 52px; max-width: 90vw; }
-      .tagline { font-size: 1rem; margin-bottom: 1.3rem; }
-      .coming-soon { font-size: 1.1rem; }
-      .socials { margin-top: 1rem; gap: 1rem; }
-      .loader { width: 26px; height: 26px; border-width: 3px; }
-      footer {
-        flex-shrink: 0;
-        height: 2.5rem;
-        line-height: 2.5rem;
-        padding: 0 1rem;
-        font-size: 0.75rem;
-      }
-    }
+    *,*:before,*:after{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
+    html,body{min-height:100%;width:100%;background:#0d0d0d;color:#fff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;user-select:none;scroll-behavior:smooth;overflow-x:hidden}
+    nav{width:100%;padding:2rem 3rem;display:flex;align-items:center;position:relative;background:transparent;justify-content:center}
+    .logo-link{display:none}
+    nav ul{display:flex;gap:2rem;list-style:none;position:relative;z-index:2;justify-content:center;width:100%}
+    nav a{color:#fff;text-decoration:none;font-size:1rem;opacity:.8;transition:opacity .3s,font-weight .2s;padding:.5rem 1.5rem;border-radius:9999px;z-index:3;cursor:pointer;user-select:none;letter-spacing:.04em;text-align:center}
+    nav a:hover,nav a.active{opacity:1;font-weight:bold}
+    #nav-oval{position:absolute;top:50%;transform:translateY(-50%);background:#0006ff33;border-radius:9999px;transition:left .5s cubic-bezier(.45,0,.55,1),width .5s cubic-bezier(.45,0,.55,1),opacity .4s;pointer-events:none;z-index:1;height:2.5rem;opacity:1}
+    .container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:60vh;width:100%;position:relative;z-index:1;padding:2rem}
+    .section{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:45vh;animation:fadeIn .6s}
+    .section.active{display:flex}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .logo-home{height:108px;width:auto;margin-bottom:1.5rem;filter:drop-shadow(0 0 22px #0006ff77);max-width:60vw;max-height:30vh;z-index:1}
+    .tagline{font-size:1.4rem;font-weight:600;letter-spacing:.08em;color:#0006ff;text-transform:lowercase;margin-bottom:2.2rem;word-break:break-word;z-index:1}
+    .coming-soon{font-size:2.1rem;font-weight:800;letter-spacing:.07em;color:#fff;text-shadow:0 2px 16px #0006ff44;margin-bottom:1.2rem;word-break:break-word;z-index:1;text-transform:uppercase}
+    .loader{margin:0 auto 2.3rem auto;display:block;width:36px;height:36px;border:4px solid #222e;border-top:4px solid #0006ff;border-radius:50%;animation:spin 1s linear infinite;opacity:.85}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    footer{padding:1rem 0;text-align:center;color:#888;font-size:0.75rem;font-family:Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;user-select:none;opacity:.4;z-index:3;position:relative}
+    .footer-logo-wrap{width:100%;display:flex;justify-content:center;align-items:center;margin-top:.5rem;margin-bottom:1.2rem;}
+    .footer-logo{height:28px;width:auto;filter:drop-shadow(0 0 5px #0006ff88);opacity:.70;}
+    #custom-cursor{position:fixed;top:0;left:0;width:20px;height:20px;border-radius:50%;background-color:#0006ff;pointer-events:none;transform:translate(-50%,-50%);transition:background-color .3s,transform .15s,box-shadow .3s,opacity .5s;z-index:9999;box-shadow:0 0 5px #0006ff;mix-blend-mode:difference;opacity:0}
+    #custom-cursor.visible{opacity:1}
+    #custom-cursor.hovered{transform:translate(-50%,-50%) scale(1.6);box-shadow:0 0 15px 4px #0006ff;background-color:#fff}
+    #custom-cursor.hidden{opacity:0;pointer-events:none}
+    @media (pointer:coarse){#custom-cursor{display:none!important}}
+    @media (max-width:900px){nav{padding:1.5rem 1rem}.container{padding:1rem}.logo-home{height:80px;max-width:80vw}.tagline{font-size:1.1rem}.coming-soon{font-size:1.4rem}.footer-logo{height:21px}}
+    @media (max-width:600px){nav{padding:1rem .3rem}nav ul{gap:.7rem}.container{padding:.5rem .5rem 0}.logo-home{height:52px;max-width:90vw}.tagline{font-size:1rem;margin-bottom:1.3rem}.coming-soon{font-size:1.1rem}.loader{width:26px;height:26px;border-width:3px}.footer-logo{height:17px}footer{flex-shrink:0;height:2.5rem;line-height:2.5rem;padding:0 1rem;font-size:.75rem}}
   </style>
 </head>
 <body oncontextmenu="return false">
@@ -253,46 +45,75 @@
     <div id="nav-oval"></div>
   </nav>
   <div class="container">
-    <!-- HOME SECTION -->
     <div id="section-home" class="section active">
       <img src="logo.png" alt="sinwlkn logo large" class="logo-home" />
       <div class="tagline">faceless. fearless. storytelling.</div>
       <div class="coming-soon">COMING SOON</div>
       <span class="loader"></span>
     </div>
-    <!-- ABOUT SECTION -->
     <div id="section-about" class="section">
-      <h1>About sinwlkn</h1>
-      <p>
-        <b>sinwlkn</b> is more than just a YouTube channel — it's a movement.<br>
-        Our team is dedicated to producing high-quality content that inspires, entertains, and connects.<br>
-        From behind-the-scenes stories to industry insights and creative collaborations,<br>
-        we strive to keep our growing community engaged on every platform.
-      </p>
-      <h2>Meet the Team</h2>
-      <p>
-        <b>The sinwlkn Team</b> consists of passionate creators, editors, and visionaries.<br>
-        We believe in collaboration, innovation, and authenticity.<br>
-        Want to join or support us? Check our <b>Careers</b> page!
-      </p>
+      <h1>About</h1>
+      <div style="max-width:500px;margin:1.5rem auto 0 auto;text-align:center;">
+        <p style="font-size:1.15rem;font-weight:600;color:#0006ff;letter-spacing:0.04em;">
+          Creating content that stands out.
+        </p>
+        <p style="margin:1.2rem 0 1.6rem 0;color:#fff;opacity:0.85;">
+          We are dedicated to making content that is engaging, informative, creative, and detailed. Every project is crafted with the goal of sparking curiosity, providing value, and inspiring our audience.
+        </p>
+        <div style="background:#16162a;border-radius:16px;padding:1.2rem 1.2rem 1.5rem 1.2rem;box-shadow:0 2px 16px #0006ff33;">
+          <div style="font-size:1.02rem;color:#fff;opacity:0.92;margin-bottom:1rem;">
+            Our commitment is simple: deliver content that is both meaningful and memorable. Whether exploring new ideas or diving deep into complex topics, we push for creativity, depth, and a unique perspective in everything we share.
+          </div>
+        </div>
+        <div style="margin-top:1.8rem;font-size:0.98rem;color:#aaa;opacity:0.79;">
+          <span style="display:inline-block;margin-bottom:0.3rem;">
+            We believe in the power of stories and the impact of well-crafted information.<br>
+            Thank you for being a part of the journey.
+          </span>
+        </div>
+      </div>
     </div>
-    <!-- CAREERS SECTION -->
     <div id="section-careers" class="section">
-      <h1>Careers at sinwlkn</h1>
-      <p>
-        We’re not hiring right now, but we’re always open to connecting with creative and driven people.<br>
-        <b>Interested in future roles?</b><br>
-        Email us at <a href="mailto:contact@sinwlkn.com" style="color:#0006ff;">contact@sinwlkn.com</a> or DM us on Instagram.<br>
-        <br>
-        <i>Keep checking back – as we grow, so will our team!</i>
-      </p>
+      <h1>Join the Story</h1>
+      <div style="max-width:460px;margin:1.5rem auto 0 auto;text-align:center;">
+        <p style="font-size:1.15rem;font-weight:600;color:#0006ff;letter-spacing:0.04em;">
+          Help us tell stories no one else can.
+        </p>
+        <p style="margin:1.2rem 0 1.6rem 0;color:#fff;opacity:0.85;">
+          We are building something different. If you’re a creative mind who wants to make an impact—even if you don’t see an open role—let’s connect.
+        </p>
+        <div style="background:#16162a;border-radius:16px;padding:1.2rem 1.2rem 1.5rem 1.2rem;box-shadow:0 2px 16px #0006ff33;">
+          <div style="font-size:1.02rem;color:#fff;opacity:0.92;margin-bottom:1rem;">
+            No open positions right now.<br>
+            But we’d still love to hear from editors, writers, collaborators, visionaries—anyone passionate about fearless storytelling.
+          </div>
+          <a 
+            href="mailto:contact@sinwlkn.dev" 
+            style="display:inline-block;margin-top:0.7rem;padding:0.7rem 2.2rem;background:#0006ff;color:#fff;font-weight:bold;border-radius:999px;text-decoration:none;transition:background 0.18s, color 0.18s;box-shadow:0 2px 12px #0006ff40;letter-spacing:0.02em;font-size:1.07rem;"
+            onmouseover="this.style.background='#fff';this.style.color='#0006ff';"
+            onmouseout="this.style.background='#0006ff';this.style.color='#fff';"
+          >
+            Email us: contact@sinwlkn.dev
+          </a>
+        </div>
+        <div style="margin-top:1.8rem;font-size:0.98rem;color:#aaa;opacity:0.79;">
+          <span style="display:inline-block;margin-bottom:0.3rem;">
+            We value creativity, diversity, and fearless ideas.<br>
+            Check back soon—our team is just getting started.
+          </span>
+        </div>
+      </div>
     </div>
   </div>
   <footer>
     Stories in the making — powered by the team.
   </footer>
+  <div class="footer-logo-wrap">
+    <img src="logo.png" alt="sinwlkn footer logo" class="footer-logo" />
+  </div>
   <div id="custom-cursor"></div>
   <script>
+    // Prevent right-click/dev tools
     document.addEventListener('keydown', function (e) {
       if (
         e.key === 'F12' ||
@@ -302,7 +123,7 @@
         e.preventDefault();
       }
     });
-
+    // Custom Cursor
     const cursor = document.getElementById('custom-cursor');
     let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0, hasMoved = false;
     const ease = 0.15;
@@ -335,7 +156,7 @@
       el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
     });
-
+    // Nav oval animation
     const navOval = document.getElementById('nav-oval');
     const navLinks = document.querySelectorAll('nav ul li a');
     function updateOvalPosition(element) {
@@ -354,7 +175,7 @@
       const activeLink = document.querySelector('nav a.active');
       if (activeLink) updateOvalPosition(activeLink);
     });
-
+    // SPA navigation, with nav oval slide
     const sections = document.querySelectorAll('.section');
     navLinks.forEach(link => {
       link.addEventListener('click', e => {
@@ -372,6 +193,12 @@
         });
       });
     });
+    // Block context menu and selection
+    document.addEventListener('contextmenu',function(e){e.preventDefault()});
+    document.body.style.webkitUserSelect='none';
+    document.body.style.MozUserSelect='none';
+    document.body.style.msUserSelect='none';
+    document.body.style.userSelect='none';
   </script>
 </body>
 </html>
