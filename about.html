@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us — SIN</title>
+  <style>
+    /* Base styles, matching your main page */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      cursor: none !important;
+    }
+    body {
+      background-color: #0d0d0d;
+      color: #fff;
+      font-family: Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      overflow-x: hidden;
+    }
+    nav {
+      width: 100%;
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      user-select: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+      position: relative;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      z-index: 3;
+      cursor: pointer;
+      user-select: none;
+    }
+    nav a:hover {
+      opacity: 1;
+    }
+    nav a.active {
+      opacity: 1;
+      font-weight: bold;
+    }
+    /* Oval highlight behind active nav link */
+    #nav-oval {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255 255 255 / 0.15);
+      border-radius: 9999px;
+      transition: left 0.4s cubic-bezier(0.4,0,0.2,1), width 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+      z-index: 1;
+      height: 2.5rem;
+      opacity: 1;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+    }
+    strong {
+      font-weight: bold;
+    }
+
+    footer {
+      padding: 1rem 0;
+      text-align: center;
+      color: #888;
+      font-size: 0.75rem;
+      font-family: Helvetica, Arial, sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      user-select: none;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        justify-content: center;
+        padding: 1rem;
+      }
+      nav ul {
+        gap: 1rem;
+      }
+      main {
+        padding: 1rem 1.5rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false">
+  <nav>
+    <ul id="nav-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About Us</a></li>
+      <li><a href="#">Careers</a></li>
+    </ul>
+    <div id="nav-oval"></div>
+  </nav>
+
+  <main>
+    <h1>About Us</h1>
+    <p><strong>Who We Are:</strong><br />
+      Sin is a storytelling-focused YouTube channel creating high-quality, faceless content that dives into fascinating topics through engaging 3D visuals and narratives. Inspired by creators like Fern, we strive to entertain and inform with every video.</p>
+    <p><strong>Our Mission:</strong><br />
+      To craft captivating stories that spark curiosity and connect with an audience hungry for deep, immersive content — all without showing our faces, focusing purely on the power of story and visuals.</p>
+    <p><strong>What to Expect:</strong><br />
+      - Weekly storytelling videos with polished 3D animation<br />
+      - Content that covers mysterious, intriguing, or lesser-known topics<br />
+      - A community built around shared curiosity and wonder</p>
+    <p><strong>Why Faceless?</strong><br />
+      We believe stories should shine without distraction. By staying faceless, the focus remains on the story itself, visuals, and the experience.</p>
+    <p><strong>Get Involved:</strong><br />
+      Follow us on YouTube and Instagram (<a href="https://youtube.com/@sinwlkn" target="_blank" style="color:#fff; text-decoration: underline;">@sinwlkn</a>) for updates, teasers, and behind-the-scenes peeks.</p>
+  </main>
+
+  <footer>
+    Stories in the making — powered by our team.
+  </footer>
+
+  <script>
+    // NAV OVAL HIGHLIGHT LOGIC (same as main page)
+    const navOval = document.getElementById('nav-oval');
+    const navLinks = document.querySelectorAll('nav ul li a');
+
+    function updateOvalPosition(element) {
+      const rect = element.getBoundingClientRect();
+      const navRect = element.closest('nav').getBoundingClientRect();
+
+      const left = rect.left - navRect.left;
+      const width = rect.width;
+
+      navOval.style.width = width + 'px';
+      navOval.style.left = left + 'px';
+    }
+
+    window.addEventListener('load', () => {
+      const activeLink = document.querySelector('nav a.active');
+      if (activeLink) updateOvalPosition(activeLink);
+    });
+
+    window.addEventListener('resize', () => {
+      const activeLink = document.querySelector('nav a.active');
+      if (activeLink) updateOvalPosition(activeLink);
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        updateOvalPosition(link);
+
+        // Navigate to the page
+        window.location.href = link.getAttribute('href');
+      });
+    });
+  </script>
+</body>
+</html>
