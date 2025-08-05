@@ -117,6 +117,22 @@
       nav ul {
         gap: 1rem;
       }
+
+      /* Make page fit viewport height without scrolling on mobile */
+      body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .container {
+        flex: 1 1 auto;
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+      }
+      footer {
+        flex-shrink: 0;
+        padding: 0.8rem 1rem;
+      }
     }
 
     /* Custom cursor styles */
