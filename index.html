@@ -68,8 +68,8 @@
       background: #0006ff33;
       border-radius: 9999px;
       transition:
-        left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-        width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        left 0.5s cubic-bezier(0.45,0,0.55,1),
+        width 0.5s cubic-bezier(0.45,0,0.55,1),
         opacity 0.4s;
       pointer-events: none;
       z-index: 1;
@@ -130,10 +130,25 @@
       letter-spacing: 0.07em;
       color: #fff;
       text-shadow: 0 2px 16px #0006ff44;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.2rem;
       word-break: break-word;
       z-index: 1;
       text-transform: uppercase;
+    }
+    /* Spinner styles */
+    .loader {
+      margin: 0 auto;
+      display: block;
+      width: 36px;
+      height: 36px;
+      border: 4px solid #222e;
+      border-top: 4px solid #0006ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      opacity: 0.85;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg);}
     }
     .socials {
       margin-top: 2rem;
@@ -217,6 +232,7 @@
       .tagline { font-size: 1rem; margin-bottom: 1.3rem; }
       .coming-soon { font-size: 1.1rem; }
       .socials { margin-top: 1rem; gap: 1rem; }
+      .loader { width: 26px; height: 26px; border-width: 3px; }
       footer {
         flex-shrink: 0;
         height: 2.5rem;
@@ -242,6 +258,7 @@
       <img src="logo.png" alt="sinwlkn logo large" class="logo-home" />
       <div class="tagline">faceless. fearless. storytelling.</div>
       <div class="coming-soon">COMING SOON</div>
+      <span class="loader"></span>
     </div>
     <!-- ABOUT SECTION -->
     <div id="section-about" class="section">
