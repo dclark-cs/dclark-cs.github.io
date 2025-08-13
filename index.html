@@ -1,1520 +1,658 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIN — Channel & Brand Management</title>
-  <meta name="description" content="We help YouTubers and brands achieve their goals. We manage channels and brands so you can focus on creating.">
+  <!--
+    Project: sinwlkn.dev
+    Purpose: Single-page marketing + scheduling (no contact form; only scheduling widget + email).
+    Change Log (personal notes):
+      - 2025-08-13: Removed contact form & section.
+      - 2025-08-13: Removed optional hero image / placeholder column per request.
+      - Keep file lean: Bootstrap + Calendly widget only.
+      - No images/photos by request. Add SVG/og image later if needed.
+  -->
+  <meta charset="utf-8" />
+  <title>sinwlkn.dev | Affordable Custom Websites</title>
 
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="SIN — Channel & Brand Management">
-  <meta property="og:description" content="We help YouTubers and brands achieve their goals. We manage channels and brands so you can focus on creating.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="/logo.png">
-  <meta property="og:url" content="https://sinwlkn.dev/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#0d6efd">
+  <!-- Meta -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="description" content="sinwlkn.dev builds clean, fast, affordable websites for small businesses, creators, and early products. Simple process, transparent pricing." />
+  <meta name="author" content="sinwlkn.dev" />
+  <meta name="keywords" content="affordable website, freelance web developer, small business website, custom website build, solo developer" />
+  <meta name="theme-color" content="#4f46e5"/>
 
-  <!-- Favicon -->
-  <link rel="icon" href="/logo.png" type="image/png">
+  <!-- Open Graph / Twitter (no og:image yet) -->
+  <meta property="og:title" content="sinwlkn.dev | Solo Web Dev" />
+  <meta property="og:description" content="Affordable custom websites built fast by a solo developer." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sinwlkn.dev/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="sinwlkn.dev | Solo Web Dev" />
+  <meta name="twitter:description" content="Affordable custom websites built fast by a solo developer." />
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Calendly widget CSS (popup styling) -->
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <!-- Favicon (emoji) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 x=%220.12em%22 font-size=%2285%22>💻</text></svg>">
+
+  <!-- CSS: Bootstrap + Calendly -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
 
   <style>
+    /* ===== THEME & GLOBAL ===== */
     :root {
-      scroll-behavior: smooth;
-      --ring: 0 0 0 .2rem rgba(13,110,253,.35);
-      --elev: 0 .5rem 1rem rgba(0,0,0,.08);
+      --brand-gradient-light: linear-gradient(110deg,#f5f7ff,#eef2ff,#ffffff);
+    }
+    [data-bs-theme=dark] {
+      --bs-body-bg:#0f1320;
+      --brand-gradient-dark: radial-gradient(circle at 25% 35%,#222b46,#0f1320 70%);
+    }
+    body {
+      scroll-padding-top: 5rem;
+      font-feature-settings: "kern";
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* Engaging but subtle visuals */
-    header.hero-bg {
-      background:
-        radial-gradient(1200px 400px at 20% 10%, rgba(var(--bs-primary-rgb), .08), transparent 60%),
-        radial-gradient(800px 300px at 90% -10%, rgba(13, 110, 253, .06), transparent 50%),
-        linear-gradient(135deg, rgba(13,110,253,.06), rgba(13,110,253,0) 40%, rgba(32,201,151,.06) 60%, rgba(32,201,151,0));
-      background-size: 120% 120%;
+    /* Hero backgrounds */
+    header.hero { background: var(--brand-gradient-light); }
+    [data-bs-theme=dark] header.hero { background: var(--brand-gradient-dark); }
+
+    /* Reusable cards */
+    .card-hover {
+      transition: transform .25s ease, box-shadow .25s ease;
     }
-    @media (prefers-reduced-motion: no-preference) {
-      header.hero-bg { animation: gradientShift 14s ease-in-out infinite alternate; }
-      @keyframes gradientShift {
-        from { background-position: 0% 0%; }
-        to   { background-position: 100% 50%; }
-      }
+    .card-hover:hover,
+    .card-hover:focus-within {
+      transform: translateY(-4px);
+      box-shadow: 0 .75rem 1.25rem -0.5rem rgba(0,0,0,.18);
     }
 
-    /* Cards + buttons micro-interactions */
-    .card { transition: transform .25s ease, box-shadow .25s ease; }
-    .card:hover { transform: translateY(-4px); box-shadow: var(--elev); }
-    .btn { transition: transform .15s ease, box-shadow .15s ease; }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 .25rem .75rem rgba(0,0,0,.06); }
-    .btn:active { transform: translateY(0); box-shadow: none; }
-
-    /* Focus states */
-    a:focus-visible, button:focus-visible, .form-control:focus, .form-select:focus {
-      outline: none !important;
-      box-shadow: var(--ring) !important;
+    /* Typography / decoration */
+    .logo-text { font-weight:600; letter-spacing:.5px; }
+    .gradient-text {
+      background: linear-gradient(90deg,#6366f1,#4f46e5 55%,#7c3aed);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .small-note {
+      font-size:.7rem;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      font-weight:600;
+    }
+    .tech-badge {
+      background: var(--bs-tertiary-bg);
+      border:1px solid var(--bs-border-color);
+      font-size:.65rem;
+      padding:.35rem .55rem;
+      border-radius:.5rem;
+      font-weight:500;
+      white-space:nowrap;
     }
 
-    /* Team avatars — perfect circles, never squished */
-    .avatar {
-      width: 72px;
-      height: 72px;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: center;
-      flex: 0 0 72px;
-      background: #f3f3f3;
+    /* Accessibility utils */
+    .visually-hidden-focusable:not(:focus):not(:active){
+      position:absolute;width:1px;height:1px;
+      padding:0;margin:-1px;overflow:hidden;
+      clip:rect(0 0 0 0);white-space:nowrap;border:0;
+    }
+    .user-tabbing :focus-visible {
+      outline:2px solid #4f46e5;
+      outline-offset:2px;
     }
 
-    /* Ensure images scale nicely elsewhere */
-    img:not(.avatar) { max-width: 100%; height: auto; }
+    /* Process steps connector */
+    .process-line {
+      position:absolute;
+      top:2.6rem;
+      left:1.25rem;
+      bottom:-2.2rem;
+      width:2px;
+      background:var(--bs-border-color);
+    }
+    .process-step:last-child .process-line { display:none; }
 
-    /* Reveal on scroll */
-    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.reveal-visible { opacity: 1; transform: none; }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
+    /* Pricing cards */
+    .plan-card { border:1px solid var(--bs-border-color); }
+    .plan-card.highlight { border:2px solid #4f46e5; }
+
+    /* Schedule wrapper */
+    .schedule-wrapper {
+      border:1px solid var(--bs-border-color);
+      border-radius:.75rem;
+      background: var(--bs-body-bg);
+      padding:1.5rem;
+    }
+    [data-bs-theme=dark] .schedule-wrapper { background:#162033; }
+
+    /* Floating CTA */
+    .floating-cta {
+      position:fixed;
+      bottom:1.2rem;
+      right:1.25rem;
+      z-index:1030;
+    }
+    @media (max-width:575.98px){
+      .floating-cta { display:none; }
     }
 
-    .placeholder-media { background: linear-gradient(135deg, rgba(0,0,0,.02), rgba(0,0,0,.06)); }
-    .apply-area.d-none { display: none !important; }
-    .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-    /* About extras */
-    .stat-card {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,.06);
-      border-radius: .75rem;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 .25rem .75rem rgba(0,0,0,.035);
+    /* Single-column hero adjustments after removing image */
+    .hero .lead {
+      max-width: 48rem;
     }
-    .stat-card .value { font-weight: 700; font-size: 1.5rem; }
-    .chip {
-      display: inline-block;
-      padding: .25rem .5rem;
-      border: 1px solid rgba(0,0,0,.1);
-      border-radius: 999px;
-      background: #fff;
-      font-size: .8rem;
-      color: #6c757d;
-      margin: .125rem;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-    .process { gap: .5rem; }
-    .process .chip { border-color: rgba(13,110,253,.2); color: #0d6efd; background: rgba(13,110,253,.04); }
   </style>
 
-  <!-- JobPosting JSON-LD -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "JobPosting",
-        "title": "Channel Manager",
-        "description": "Own end-to-end YouTube channel operations: calendar planning, publishing, metadata optimization, and cross-functional coordination with editors, designers, and talent.",
-        "employmentType": "FULL_TIME",
-        "hiringOrganization": { "@type": "Organization", "name": "SIN", "sameAs": "https://sinwlkn.dev" },
-        "jobLocationType": "TELECOMMUTE",
-        "applicantLocationRequirements": { "@type": "Country", "name": "Worldwide" },
-        "directApply": true,
-        "datePosted": "2025-08-09",
-        "url": "https://sinwlkn.dev/?job=ChannelManager"
-      },
-      {
-        "@type": "JobPosting",
-        "title": "Video Editor",
-        "description": "Edit for clarity, momentum, and retention. Collaborate on titles, thumbnails, and storytelling beats. Iterate quickly from feedback.",
-        "employmentType": "CONTRACTOR",
-        "hiringOrganization": { "@type": "Organization", "name": "SIN", "sameAs": "https://sinwlkn.dev" },
-        "jobLocationType": "TELECOMMUTE",
-        "applicantLocationRequirements": { "@type": "Country", "name": "Worldwide" },
-        "directApply": true,
-        "datePosted": "2025-08-09",
-        "url": "https://sinwlkn.dev/?job=VideoEditor"
-      },
-      {
-        "@type": "JobPosting",
-        "title": "Thumbnail Designer",
-        "description": "Concept and design scroll-stopping thumbnails. Collaborate on titles and A/B testing. Maintain brand consistency.",
-        "employmentType": "CONTRACTOR",
-        "hiringOrganization": { "@type": "Organization", "name": "SIN", "sameAs": "https://sinwlkn.dev" },
-        "jobLocationType": "TELECOMMUTE",
-        "applicantLocationRequirements": { "@type": "Country", "name": "Worldwide" },
-        "directApply": true,
-        "datePosted": "2025-08-09",
-        "url": "https://sinwlkn.dev/?job=ThumbnailDesigner"
-      },
-      {
-        "@type": "JobPosting",
-        "title": "Brand Partnerships Manager",
-        "description": "Prospect, pitch, and close partner opportunities. Coordinate deliverables and ensure brand safety and fit. Report on performance and renewals.",
-        "employmentType": "FULL_TIME",
-        "hiringOrganization": { "@type": "Organization", "name": "SIN", "sameAs": "https://sinwlkn.dev" },
-        "jobLocationType": "TELECOMMUTE",
-        "applicantLocationRequirements": { "@type": "Country", "name": "Worldwide" },
-        "directApply": true,
-        "datePosted": "2025-08-09",
-        "url": "https://sinwlkn.dev/?job=PartnershipsManager"
-      },
-      {
-        "@type": "JobPosting",
-        "title": "Creator Analytics Specialist",
-        "description": "Translate data into editorial and packaging insights that move CTR, retention, and revenue. Build reporting and partner on experiments.",
-        "employmentType": "FULL_TIME",
-        "hiringOrganization": { "@type": "Organization", "name": "SIN", "sameAs": "https://sinwlkn.dev" },
-        "jobLocationType": "TELECOMMUTE",
-        "applicantLocationRequirements": { "@type": "Country", "name": "Worldwide" },
-        "directApply": true,
-        "datePosted": "2025-08-09",
-        "url": "https://sinwlkn.dev/?job=AnalyticsSpecialist"
-      }
-    ]
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Don",
+    "url":"https://sinwlkn.dev/",
+    "jobTitle":"Web Developer",
+    "brand":{"@type":"Brand","name":"sinwlkn.dev"},
+    "description":"Solo web developer creating affordable, fast, accessible websites.",
+    "email":"mailto:don@sinwlkn.dev"
   }
   </script>
 </head>
-<body class="bg-light">
+<body>
+  <!-- Skip link -->
+  <a href="#main" class="visually-hidden-focusable bg-primary text-white px-3 py-2 rounded shadow-sm ms-2 mt-2">Skip to main content</a>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-body border-bottom py-2 fixed-top">
     <div class="container">
-      <a class="navbar-brand fw-semibold" href="#">SIN</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <span class="logo-text">sinwlkn<span class="text-primary">.dev</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+      <div id="navMenu" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
           <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="#careers">Careers</a></li>
+          <li class="nav-item"><a class="nav-link" href="#process">Process</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+          <li class="nav-item">
+            <button id="themeToggleBtn" class="btn btn-outline-secondary btn-sm ms-lg-2" type="button" aria-label="Toggle dark mode">🌙</button>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a href="#schedule" class="btn btn-primary btn-sm">Book a Call</a>
+          </li>
         </ul>
-        <a class="btn btn-primary ms-lg-3 mt-3 mt-lg-0" href="#contact" data-role="open-contact">Get in touch</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <header class="py-5 bg-body-tertiary border-bottom hero-bg">
-    <div class="container py-4">
-      <div class="row align-items-center">
-        <div class="col-lg-7 reveal">
-          <h1 class="display-5 fw-bold">We help YouTubers and brands achieve their goals</h1>
-          <p class="lead text-secondary mt-3">We manage channels and brands so you can focus on creating.</p>
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <a class="btn btn-primary btn-lg" href="#contact" data-role="open-contact">Start a conversation</a>
-            <a class="btn btn-outline-secondary btn-lg" href="#services">Our services</a>
-            <a class="btn btn-outline-primary btn-lg" href="#" data-role="calendly-popup">Book a call</a>
-          </div>
+  <!-- HERO (single-column now) -->
+  <header class="hero pt-7 pb-5 pt-lg-8" style="margin-top:4rem">
+    <div class="container">
+      <div class="col-lg-10 col-xl-9 px-0">
+        <span class="small-note text-secondary d-inline-block mb-2">Solo Web Development</span>
+        <h1 class="display-5 fw-bold mb-3">
+          Affordable, Clean, Fast <span class="gradient-text">Websites</span>
+        </h1>
+        <p class="lead mb-4">
+          I build simple, fast, mobile‑friendly websites for small businesses, side projects, and creators. No agency layers. Straightforward process, honest pricing.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#schedule" class="btn btn-primary btn-lg px-4">Book Intro Call</a>
+          <a href="mailto:don@sinwlkn.dev" class="btn btn-outline-secondary btn-lg px-4">Email Me</a>
         </div>
-        <div class="col-lg-5 d-none d-lg-block reveal">
-          <img
-            src="/display.jpg"
-            alt="Pen and paper planning for content strategy"
-            class="img-fluid rounded-3 shadow-sm border"
-            width="1200"
-            height="675"
-            loading="lazy"
-            decoding="async"
-          >
+        <div class="d-flex flex-wrap gap-4 mt-4 small text-secondary">
+          <div><strong>Fast load</strong></div>
+          <div><strong>Responsive</strong></div>
+          <div><strong>Accessible basics</strong></div>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- About (expanded) -->
-  <section id="about" class="py-5">
-    <div class="container">
-      <div class="row gy-4 align-items-start">
-        <div class="col-lg-7 reveal">
-          <h2 class="h3">About</h2>
-          <p class="text-secondary">We are a hands‑on partner for creators and brands. From ideation to publishing and post‑launch analysis, we manage the day‑to‑day so you can stay focused on making great content.</p>
-          <p class="text-secondary mb-0">Our approach blends creative instincts with data discipline. We test fast, iterate packaging and hooks, and operationalize what works across long‑form, Shorts, and multi‑platform distribution.</p>
+  <main id="main">
+    <!-- SERVICES -->
+    <section id="services" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">What I Offer</h2>
+          <p class="text-secondary mb-0">Focused on practical web development. No fluff.</p>
         </div>
-        <div class="col-lg-5 reveal">
-          <div class="row g-3">
-            <div class="col-6">
-              <div class="stat-card">
-                <div class="value">+22–48%</div>
-                <div class="small text-secondary">CTR improvement from packaging sprints</div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="stat-card">
-                <div class="value">+35–120s</div>
-                <div class="small text-secondary">Avg. watch‑time lift across edits</div>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="stat-card">
-                <div class="value">200–300k+</div>
-                <div class="small text-secondary">Recent channel growth on partner channels</div>
+        <div class="row g-4">
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">🌐</div>
+                <h5 class="card-title mb-2">New Website Build</h5>
+                <p class="small mb-2">Custom layout with your branding, fast and responsive.</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Home + inner pages</li>
+                  <li>Lead / contact form integration</li>
+                  <li>Basic SEO meta & structure</li>
+                </ul>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row mt-4 gy-4">
-        <div class="col-lg-6 reveal">
-          <h3 class="h6 text-uppercase text-secondary">Who we partner with</h3>
-          <ul class="mb-0 text-secondary">
-            <li>Creators ready to scale sustainably (not just chase spikes)</li>
-            <li>Brands seeking native, on‑channel content and partnerships</li>
-            <li>Teams that value clear process, fast feedback, and measurable outcomes</li>
-          </ul>
-        </div>
-        <div class="col-lg-6 reveal">
-          <h3 class="h6 text-uppercase text-secondary">How we work</h3>
-          <ul class="mb-0 text-secondary">
-            <li>Packaging sprints to iterate titles/thumbnails and hooks</li>
-            <li>Editorial calendars that balance growth with brand goals</li>
-            <li>Weekly reporting with actionable next steps, not vanity metrics</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services (expanded "What we do") -->
-  <section id="services" class="py-5 bg-white border-top border-bottom">
-    <div class="container">
-      <h2 class="h3 mb-4 reveal">What we do</h2>
-
-      <div class="row g-4">
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Channel Management</h3>
-              <p class="card-text text-secondary">End‑to‑end operations across upload cadence and optimization.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>Calendars, publishing, metadata</li>
-                <li>End screens, playlists, community posts</li>
-                <li>Cross‑channel coordination</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Brand & Partnerships</h3>
-              <p class="card-text text-secondary">Align partners with audience and creative direction.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>Prospecting and negotiation</li>
-                <li>Briefs, deliverables, approvals</li>
-                <li>Performance reporting and renewals</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Analytics & Growth</h3>
-              <p class="card-text text-secondary">Translate data into editorial decisions that move key metrics.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>CTR, retention, RPM tracking</li>
-                <li>Experiment design and analysis</li>
-                <li>Dashboards and weekly insights</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Packaging & Thumbnails</h3>
-              <p class="card-text text-secondary">Concept, design, and A/B testing to capture intent and clicks.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>Title frameworks and angle testing</li>
-                <li>Thumbnail comps and rapid iteration</li>
-                <li>Comparative packaging reviews</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Shorts & Multiplatform</h3>
-              <p class="card-text text-secondary">Adapt long‑form to Shorts and distribute natively where it fits.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>Cut‑downs with platform‑specific hooks</li>
-                <li>Aspect, captions, and pacing for feeds</li>
-                <li>Scheduling across YT, IG, TT</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 card-title">Production Ops & Systems</h3>
-              <p class="card-text text-secondary">Keep teams moving with clear roles and predictable delivery.</p>
-              <ul class="small text-secondary mb-0 ps-3">
-                <li>Briefs, checklists, handoffs</li>
-                <li>Editor/designer pipelines</li>
-                <li>Tooling and asset management</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Process -->
-      <div class="mt-4 reveal">
-        <h3 class="h6 text-uppercase text-secondary mb-2">Our process</h3>
-        <div class="d-flex flex-wrap process">
-          <span class="chip">Discover</span>
-          <span class="chip">Plan</span>
-          <span class="chip">Produce</span>
-          <span class="chip">Package</span>
-          <span class="chip">Publish</span>
-          <span class="chip">Analyze & Iterate</span>
-        </div>
-      </div>
-
-      <!-- Tools (industry standards only) -->
-      <div class="mt-3 reveal">
-        <h3 class="h6 text-uppercase text-secondary mb-2">Tools</h3>
-        <div>
-          <span class="chip">YouTube Studio</span>
-          <span class="chip">YouTube Analytics API</span>
-          <span class="chip">Google Sheets</span>
-          <span class="chip">Adobe Premiere Pro</span>
-          <span class="chip">DaVinci Resolve</span>
-          <span class="chip">Adobe Photoshop</span>
-          <span class="chip">Figma</span>
-          <span class="chip">Looker Studio</span>
-          <span class="chip">Frame.io</span>
-        </div>
-      </div>
-
-      <div class="d-flex flex-wrap gap-2 align-items-center mt-4 reveal">
-        <a class="btn btn-primary" href="#" data-role="calendly-popup">Book a call</a>
-        <a class="btn btn-outline-secondary" href="#contact" data-role="open-contact">Contact form</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Team -->
-  <section id="team" class="py-5 bg-white border-top">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col-lg-10 reveal">
-          <h2 class="h3">Team</h2>
-          <p class="text-secondary mb-0">A focused, hands‑on leadership team guiding strategy, execution, and partner success.</p>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-md-6 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body d-flex">
-              <img src="/donovan.jpg" alt="Donovan — Founder & Owner" class="avatar me-3" loading="lazy" decoding="async">
-              <div>
-                <h3 class="h6 mb-1">Donovan</h3>
-                <p class="small text-secondary mb-2">Founder & Owner</p>
-                <p class="small mb-0">Leads strategy and client relationships, setting the vision for channel growth, brand partnerships, and sustainable results.</p>
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">🛠️</div>
+                <h5 class="card-title mb-2">Site Updates</h5>
+                <p class="small mb-2">Add pages, tweak layout, improve responsiveness or speed.</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Refactoring</li>
+                  <li>Bug fixes</li>
+                  <li>Content changes</li>
+                </ul>
               </div>
             </div>
           </div>
-        </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">⚡</div>
+                <h5 class="card-title mb-2">Performance Basics</h5>
+                <p class="small mb-2">Lightweight tuning for faster initial load + core improvements.</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Image optimization</li>
+                  <li>Bundle trimming</li>
+                  <li>Simple caching advice</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">📝</div>
+                <h5 class="card-title mb-2">Basic CMS Setup</h5>
+                <p class="small mb-2">Optional simple content management (static or headless).</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Blog / posts</li>
+                  <li>Editable pages</li>
+                  <li>Docs area</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">🔐</div>
+                <h5 class="card-title mb-2">Launch Support</h5>
+                <p class="small mb-2">Help deploying to a host and basic configuration.</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Hosting setup</li>
+                  <li>Form handling</li>
+                  <li>Simple analytics</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 card-hover shadow-sm">
+              <div class="card-body">
+                <div class="fs-2 mb-2">🔁</div>
+                <h5 class="card-title mb-2">Maintenance</h5>
+                <p class="small mb-2">Small monthly support for fixes & light changes.</p>
+                <ul class="small ps-3 mb-0">
+                  <li>Minor edits</li>
+                  <li>Content updates</li>
+                  <li>Error checks</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div><!-- /row -->
+      </div>
+    </section>
 
-        <div class="col-md-6 reveal">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body d-flex">
-              <img src="/sevyn.jpg" alt="Sevyn — Project & Team Manager" class="avatar me-3" loading="lazy" decoding="async">
-              <div>
-                <h3 class="h6 mb-1">Sevyn</h3>
-                <p class="small text-secondary mb-2">Project & Team Manager</p>
-                <p class="small mb-0">Drives planning and delivery across teams, aligning creators, editors, and partners to hit timelines and KPIs with clarity.</p>
+    <!-- PROCESS -->
+    <section id="process" class="py-5 bg-body-tertiary">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Simple Process</h2>
+          <p class="text-secondary mb-0">Clear steps from idea to launch.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="d-flex flex-column gap-4">
+              <div class="position-relative ps-5 process-step">
+                <div class="process-line"></div>
+                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:2.6rem;height:2.6rem;">1</div>
+                <h5>Quick Chat</h5>
+                <p class="small text-secondary mb-0">You tell me what you need (pages, purpose, deadline).</p>
+              </div>
+              <div class="position-relative ps-5 process-step">
+                <div class="process-line"></div>
+                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:2.6rem;height:2.6rem;">2</div>
+                <h5>Scope & Quote</h5>
+                <p class="small text-secondary mb-0">I outline what’s included, timeline, and a flat or range price.</p>
+              </div>
+              <div class="position-relative ps-5 process-step">
+                <div class="process-line"></div>
+                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:2.6rem;height:2.6rem;">3</div>
+                <h5>Build</h5>
+                <p class="small text-secondary mb-0">I implement the pages & features, share previews for feedback.</p>
+              </div>
+              <div class="position-relative ps-5 process-step">
+                <div class="process-line"></div>
+                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:2.6rem;height:2.6rem;">4</div>
+                <h5>Polish & Test</h5>
+                <p class="small text-secondary mb-0">Responsiveness, basic accessibility, performance basics.</p>
+              </div>
+              <div class="position-relative ps-5 process-step">
+                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:2.6rem;height:2.6rem;">5</div>
+                <h5>Launch & Support</h5>
+                <p class="small text-secondary mb-0">Deploy + optional maintenance for small tweaks later.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="d-flex flex-wrap gap-2 align-items-center mt-4 reveal">
-        <span class="small text-secondary">Want to work with us?</span>
-        <a class="btn btn-sm btn-outline-primary" href="#" data-role="calendly-popup">Book a call</a>
-        <a class="btn btn-sm btn-outline-secondary" href="#careers">View careers</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Careers -->
-  <section id="careers" class="py-5">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col-lg-10 reveal">
-          <h2 class="h3">Careers</h2>
-          <p class="text-secondary mb-0">We are growing and looking for talented people to join us. All roles are remote. Explore current openings below.</p>
+    <!-- PRICING -->
+    <section id="pricing" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Straightforward Pricing</h2>
+          <p class="text-secondary mb-0">Affordable ranges while I build my portfolio. Transparent and fair.</p>
         </div>
-      </div>
-
-      <!-- Jobs list -->
-      <div class="list-group shadow-sm reveal">
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="h6 mb-1">Channel Manager</h3>
-            <p class="mb-0 small text-secondary">Remote • Full-time</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="ChannelManager">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jobModalChannelManager">View</button>
-          </div>
-        </div>
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="h6 mb-1">Video Editor</h3>
-            <p class="mb-0 small text-secondary">Remote • Contract</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="VideoEditor">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jobModalVideoEditor">View</button>
-          </div>
-        </div>
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="h6 mb-1">Thumbnail Designer</h3>
-            <p class="mb-0 small text-secondary">Remote • Contract</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="ThumbnailDesigner">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jobModalThumbnailDesigner">View</button>
-          </div>
-        </div>
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="h6 mb-1">Brand Partnerships Manager</h3>
-            <p class="mb-0 small text-secondary">Remote • Full-time</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="PartnershipsManager">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jobModalPartnershipsManager">View</button>
-          </div>
-        </div>
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="h6 mb-1">Creator Analytics Specialist</h3>
-            <p class="mb-0 small text-secondary">Remote • Full-time</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="AnalyticsSpecialist">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jobModalAnalyticsSpecialist">View</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex flex-wrap gap-2 align-items-center mt-3 reveal">
-        <span class="small text-secondary">Questions or not ready to apply?</span>
-        <a class="btn btn-sm btn-outline-primary" href="#" data-role="calendly-popup">Book a call</a>
-        <a class="btn btn-sm btn-outline-secondary" href="#contact" data-role="open-contact">Contact form</a>
-      </div>
-
-      <p class="small text-secondary mt-3 mb-0 reveal">You can apply to each job once. Don’t see a fit? Introduce yourself via the <a href="#contact" data-role="open-contact">contact form</a>.</p>
-      <p class="small text-secondary mt-2 mb-0 reveal">Hiring process: application review → 15–20 min intro call → role exercise (paid when applicable) → final conversation and references.</p>
-      <p class="small text-secondary mt-2 mb-0 reveal">We are an equal opportunity employer. We welcome and encourage applicants of all backgrounds and do not discriminate based on race, color, religion, national origin, age, sex, gender identity or expression, sexual orientation, disability, veteran status, or any other protected status.</p>
-    </div>
-  </section>
-
-  <!-- Job Modals (unchanged content for forms/logic) -->
-  <!-- Channel Manager -->
-  <div class="modal fade job-modal" id="jobModalChannelManager" tabindex="-1" aria-labelledby="jobModalChannelManagerLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="jobModalChannelManagerLabel">Channel Manager — Remote</h1>
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="ChannelManager">Copy link</button>
-            <button type="button" class="btn btn-sm btn-primary" data-role="toggle-apply" data-target="#applyArea-ChannelManager">Apply</button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-info d-none" role="alert" data-role="applied-note">
-            Your application has been received. You can only apply once for this role.
-          </div>
-          <div class="role-info">
-            <p>We are seeking a Channel Manager to own end-to-end operations: calendar planning, publishing, metadata optimization, and cross-functional coordination with editors, designers, and talent.</p>
-            <ul class="mb-3">
-              <li>Lead upload cadence, titles, descriptions, tags, and end screens.</li>
-              <li>Partner with creative to iterate on thumbnails and hooks.</li>
-              <li>Analyze audience retention and CTR to inform experiments.</li>
-            </ul>
-            <p class="small text-secondary">Please provide specific outcomes and the channels involved.</p>
-          </div>
-
-          <div id="applyArea-ChannelManager" class="apply-area d-none mt-3">
-            <h2 class="h6 mb-3">Apply for Channel Manager</h2>
-            <form class="apply-form" data-jobkey="ChannelManager" novalidate>
-              <input type="hidden" name="job_title" value="Channel Manager">
-
-              <!-- Honeypot -->
-              <div class="hp-field" aria-hidden="true">
-                <label for="hp-cm">Leave this field blank</label>
-                <input id="hp-cm" type="text" name="company" tabindex="-1" autocomplete="off">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-md-6 col-lg-4">
+            <div class="card plan-card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Starter Site</h5>
+                <p class="small text-secondary flex-grow-0">Simple online presence (great for local service or landing).</p>
+                <h3 class="fw-bold mb-3">$500 – $900</h3>
+                <ul class="small ps-3 flex-grow-1">
+                  <li>Up to 3 pages</li>
+                  <li>Mobile friendly layout</li>
+                  <li>Lead / contact form integration</li>
+                  <li>Basic SEO meta</li>
+                </ul>
+                <a href="#schedule" class="btn btn-outline-primary w-100 mt-2">Book Intro Call</a>
               </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card plan-card h-100 highlight">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0">Standard Website</h5>
+                  <span class="badge text-bg-primary">Popular</span>
+                </div>
+                <p class="small text-secondary flex-grow-0">Business site with more content & structure.</p>
+                <h3 class="fw-bold mb-3">$900 – $1.8k</h3>
+                <ul class="small ps-3 flex-grow-1">
+                  <li>Up to ~8 pages</li>
+                  <li>Reusable components</li>
+                  <li>Simple CMS (optional)</li>
+                  <li>Performance & accessibility basics</li>
+                </ul>
+                <a href="#schedule" class="btn btn-primary w-100 mt-2">Book Intro Call</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 col-lg-4">
+            <div class="card plan-card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Maintenance</h5>
+                <p class="small text-secondary flex-grow-0">Light monthly updates & fixes.</p>
+                <h3 class="fw-bold mb-3">$150 – $400/mo</h3>
+                <ul class="small ps-3 flex-grow-1">
+                  <li>Small content changes</li>
+                  <li>Minor feature tweaks</li>
+                  <li>Error checks & improvements</li>
+                </ul>
+                <a href="#schedule" class="btn btn-outline-primary w-100 mt-2">Book Intro Call</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="small text-secondary text-center mt-4 mb-0">
+          Final price depends on pages, features, integrations. <a href="#schedule">Tell me what you need →</a>
+        </p>
+      </div>
+    </section>
 
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label" for="name-cm">Full name</label>
-                  <input class="form-control" id="name-cm" name="name" type="text" required>
-                  <div class="invalid-feedback">Please enter your full name.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="email-cm">Email</label>
-                  <input class="form-control" id="email-cm" name="email" type="email" required>
-                  <div class="invalid-feedback">Please enter a valid email.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tz-cm">Location / Timezone</label>
-                  <input class="form-control" id="tz-cm" name="location_timezone" type="text" required placeholder="e.g., EST / UTC-5">
-                  <div class="invalid-feedback">Please provide your location or timezone.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="channels-cm">Links to channels you’ve managed</label>
-                  <textarea class="form-control" id="channels-cm" name="managed_channels" rows="3" required placeholder="Paste 1–3 channel URLs and your role on each."></textarea>
-                  <div class="invalid-feedback">Please include at least one channel link.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="tools-cm">Tools you use</label>
-                  <input class="form-control" id="tools-cm" name="tools" type="text" required placeholder="YouTube Studio, Looker Studio, Premiere, etc.">
-                  <div class="invalid-feedback">Please list the tools you use.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="result-cm">Biggest growth result</label>
-                  <textarea class="form-control" id="result-cm" name="biggest_result" rows="3" required placeholder="Describe the situation, action, and measurable results."></textarea>
-                  <div class="invalid-feedback">Please describe a specific result.</div>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yes" id="consent-cm" name="consent" required>
-                    <label class="form-check-label" for="consent-cm">
-                      I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                    </label>
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+    <!-- SCHEDULE -->
+    <section id="schedule" class="py-5 bg-body-tertiary">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Schedule a 15‑Minute Intro</h2>
+          <p class="text-secondary mb-0">Pick a time that works. I’ll confirm and send a quick outline beforehand.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="schedule-wrapper text-center">
+              <p class="small text-secondary mb-4">No long forms. Choose a slot and we’ll connect.</p>
+              <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-3">
+                <button id="openScheduleBtn" class="btn btn-primary btn-lg px-4">Open Scheduling Widget</button>
+                <a href="mailto:don@sinwlkn.dev" class="btn btn-outline-secondary btn-lg px-4">Email Instead</a>
+              </div>
+              <p class="small text-secondary mb-0">
+                If the widget doesn’t open, <a href="https://calendly.com/sinwlkn/15" rel="noopener" target="_blank">open direct link</a>.
+              </p>
+              <!-- Inline alternative (disabled):
+              <div class="calendly-inline-widget mt-4"
+                   data-url="https://calendly.com/sinwlkn/15?hide_landing_page_details=1&hide_gdpr_banner=1"
+                   style="min-width:320px;height:680px;"></div>
+              -->
+              <noscript class="small d-block mt-4">
+                JavaScript required to load the scheduler.
+              </noscript>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">FAQ</h2>
+          <p class="text-secondary mb-0">Quick answers.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="accordion" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="fq1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fa1" aria-expanded="true" aria-controls="fa1">
+                    How long does a site take?
+                  </button>
+                </h2>
+                <div id="fa1" class="accordion-collapse collapse show" aria-labelledby="fq1" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small">
+                    Starter sites are often 1–2 weeks. Standard sites 2–4 weeks depending on feedback speed and content readiness.
                   </div>
                 </div>
               </div>
-
-              <div class="form-text mt-2">We’ll confirm submission here—no external thank-you page. One application per role.</div>
-              <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-primary">Submit application</button>
-                <button type="button" class="btn btn-outline-secondary" data-role="toggle-apply" data-target="#applyArea-ChannelManager">Cancel</button>
-              </div>
-              <div class="mt-3" data-role="form-status"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Job Modal: Video Editor -->
-  <div class="modal fade job-modal" id="jobModalVideoEditor" tabindex="-1" aria-labelledby="jobModalVideoEditorLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="jobModalVideoEditorLabel">Video Editor — Remote</h1>
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="VideoEditor">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-role="toggle-apply" data-target="#applyArea-VideoEditor">Apply</button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-info d-none" role="alert" data-role="applied-note">
-            Your application has been received. You can only apply once for this role.
-          </div>
-          <div class="role-info">
-            <p>We are looking for a Video Editor with strong pacing, story, and YouTube-native sensibilities around hooks, pattern breaks, and retention.</p>
-            <ul class="mb-3">
-              <li>Own cuts for clarity, momentum, and watch-time.</li>
-              <li>Collaborate on titles, thumbnails, and storytelling beats.</li>
-              <li>Deliver reliably, take feedback, and iterate quickly.</li>
-            </ul>
-            <p class="small text-secondary">Provide direct links to work that reflects your best editing.</p>
-          </div>
-
-          <div id="applyArea-VideoEditor" class="apply-area d-none mt-3">
-            <h2 class="h6 mb-3">Apply for Video Editor</h2>
-            <form class="apply-form" data-jobkey="VideoEditor" novalidate>
-              <input type="hidden" name="job_title" value="Video Editor">
-
-              <div class="hp-field" aria-hidden="true">
-                <label for="hp-ve">Leave this field blank</label>
-                <input id="hp-ve" type="text" name="company" tabindex="-1" autocomplete="off">
-              </div>
-
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label" for="name-ve">Full name</label>
-                  <input class="form-control" id="name-ve" name="name" type="text" required>
-                  <div class="invalid-feedback">Please enter your full name.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="email-ve">Email</label>
-                  <input class="form-control" id="email-ve" name="email" type="email" required>
-                  <div class="invalid-feedback">Please enter a valid email.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tz-ve">Location / Timezone</label>
-                  <input class="form-control" id="tz-ve" name="location_timezone" type="text" required placeholder="e.g., PST / UTC-8">
-                  <div class="invalid-feedback">Please provide your location or timezone.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tools-ve">Primary editing tools</label>
-                  <input class="form-control" id="tools-ve" name="tools" type="text" required placeholder="Premiere, Resolve, After Effects, etc.">
-                  <div class="invalid-feedback">Please list your primary tools.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="best1-ve">Link to your best edit</label>
-                  <input class="form-control" id="best1-ve" name="best_edit_link" type="url" required placeholder="https://...">
-                  <div class="invalid-feedback">Please add a valid link.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="best2-ve">Another strong example</label>
-                  <input class="form-control" id="best2-ve" name="second_best_edit_link" type="url" required placeholder="https://...">
-                  <div class="invalid-feedback">Please add a valid link.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="impact-ve">Describe a change you made that improved performance</label>
-                  <textarea class="form-control" id="impact-ve" name="impact_story" rows="3" required placeholder="What you changed, why, and the metric movement."></textarea>
-                  <div class="invalid-feedback">Please describe your impact.</div>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yes" id="consent-ve" name="consent" required>
-                    <label class="form-check-label" for="consent-ve">
-                      I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                    </label>
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="fq2">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa2" aria-expanded="false" aria-controls="fa2">
+                    Do you write copy or provide design?
+                  </button>
+                </h2>
+                <div id="fa2" class="accordion-collapse collapse" aria-labelledby="fq2" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small">
+                    I focus on development. If you have branding / copy I implement it. I can assist with layout structure & basic styling decisions but not full brand identity design.
                   </div>
                 </div>
               </div>
-
-              <div class="form-text mt-2">We’ll confirm submission here—no external thank-you page. One application per role.</div>
-              <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-primary">Submit application</button>
-                <button type="button" class="btn btn-outline-secondary" data-role="toggle-apply" data-target="#applyArea-VideoEditor">Cancel</button>
-              </div>
-              <div class="mt-3" data-role="form-status"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Job Modal: Thumbnail Designer -->
-  <div class="modal fade job-modal" id="jobModalThumbnailDesigner" tabindex="-1" aria-labelledby="jobModalThumbnailDesignerLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="jobModalThumbnailDesignerLabel">Thumbnail Designer — Remote</h1>
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="ThumbnailDesigner">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-role="toggle-apply" data-target="#applyArea-ThumbnailDesigner">Apply</button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-info d-none" role="alert" data-role="applied-note">
-            Your application has been received. You can only apply once for this role.
-          </div>
-          <div class="role-info">
-            <p>We are looking for a Thumbnail Designer who pairs visual craft with data-driven iteration to increase CTR across formats.</p>
-            <ul class="mb-3">
-              <li>Concept, design, and deliver thumbnails optimized for scroll-stopping impact.</li>
-              <li>Collaborate on titles and A/B testing frameworks.</li>
-              <li>Maintain brand consistency across channels.</li>
-            </ul>
-          </div>
-
-          <div id="applyArea-ThumbnailDesigner" class="apply-area d-none mt-3">
-            <h2 class="h6 mb-3">Apply for Thumbnail Designer</h2>
-            <form class="apply-form" data-jobkey="ThumbnailDesigner" novalidate>
-              <input type="hidden" name="job_title" value="Thumbnail Designer">
-
-              <div class="hp-field" aria-hidden="true">
-                <label for="hp-td">Leave this field blank</label>
-                <input id="hp-td" type="text" name="company" tabindex="-1" autocomplete="off">
-              </div>
-
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label" for="name-td">Full name</label>
-                  <input class="form-control" id="name-td" name="name" type="text" required>
-                  <div class="invalid-feedback">Please enter your full name.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="email-td">Email</label>
-                  <input class="form-control" id="email-td" name="email" type="email" required>
-                  <div class="invalid-feedback">Please enter a valid email.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tz-td">Location / Timezone</label>
-                  <input class="form-control" id="tz-td" name="location_timezone" type="text" required placeholder="e.g., CET / UTC+1">
-                  <div class="invalid-feedback">Please provide your location or timezone.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tools-td">Design tools</label>
-                  <input class="form-control" id="tools-td" name="tools" type="text" required placeholder="Photoshop, Figma, Illustrator">
-                  <div class="invalid-feedback">Please list your design tools.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="portfolio-td">Portfolio link</label>
-                  <input class="form-control" id="portfolio-td" name="portfolio_link" type="url" required placeholder="https://...">
-                  <div class="invalid-feedback">Please add a valid portfolio link.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="thumb2-td">Link to your favorite thumbnail you designed</label>
-                  <input class="form-control" id="thumb2-td" name="favorite_thumbnail_link" type="url" required placeholder="https://...">
-                  <div class="invalid-feedback">Please add a valid link.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="testing-td">How do you approach testing?</label>
-                  <textarea class="form-control" id="testing-td" name="testing_approach" rows="3" required placeholder="Briefly outline how you iterate and measure impact."></textarea>
-                  <div class="invalid-feedback">Please describe your approach.</div>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yes" id="consent-td" name="consent" required>
-                    <label class="form-check-label" for="consent-td">
-                      I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                    </label>
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="fq3">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa3" aria-expanded="false" aria-controls="fa3">
+                    What tech do you use?
+                  </button>
+                </h2>
+                <div id="fa3" class="accordion-collapse collapse" aria-labelledby="fq3" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small">
+                    Modern HTML, CSS, JavaScript. Can add lightweight frameworks or static tools if they add value. Optional simple headless CMS for content editing.
                   </div>
                 </div>
               </div>
-
-              <div class="form-text mt-2">We’ll confirm submission here—no external thank-you page. One application per role.</div>
-              <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-primary">Submit application</button>
-                <button type="button" class="btn btn-outline-secondary" data-role="toggle-apply" data-target="#applyArea-ThumbnailDesigner">Cancel</button>
-              </div>
-              <div class="mt-3" data-role="form-status"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Job Modal: Brand Partnerships Manager -->
-  <div class="modal fade job-modal" id="jobModalPartnershipsManager" tabindex="-1" aria-labelledby="jobModalPartnershipsManagerLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="jobModalPartnershipsManagerLabel">Brand Partnerships Manager — Remote</h1>
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="PartnershipsManager">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-role="toggle-apply" data-target="#applyArea-PartnershipsManager">Apply</button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-info d-none" role="alert" data-role="applied-note">
-            Your application has been received. You can only apply once for this role.
-          </div>
-          <div class="role-info">
-            <p>We are hiring a Brand Partnerships Manager to drive pipeline, negotiate deals, and manage long-term relationships that align with audience and brand goals.</p>
-            <ul class="mb-3">
-              <li>Prospect, pitch, and close sponsor and partner opportunities.</li>
-              <li>Coordinate deliverables and ensure brand safety and fit.</li>
-              <li>Report on performance and renewals.</li>
-            </ul>
-          </div>
-
-          <div id="applyArea-PartnershipsManager" class="apply-area d-none mt-3">
-            <h2 class="h6 mb-3">Apply for Brand Partnerships Manager</h2>
-            <form class="apply-form" data-jobkey="PartnershipsManager" novalidate>
-              <input type="hidden" name="job_title" value="Brand Partnerships Manager">
-
-              <div class="hp-field" aria-hidden="true">
-                <label for="hp-bpm">Leave this field blank</label>
-                <input id="hp-bpm" type="text" name="company" tabindex="-1" autocomplete="off">
-              </div>
-
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label" for="name-bpm">Full name</label>
-                  <input class="form-control" id="name-bpm" name="name" type="text" required>
-                  <div class="invalid-feedback">Please enter your full name.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="email-bpm">Email</label>
-                  <input class="form-control" id="email-bpm" name="email" type="email" required>
-                  <div class="invalid-feedback">Please enter a valid email.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tz-bpm">Location / Timezone</label>
-                  <input class="form-control" id="tz-bpm" name="location_timezone" type="text" required placeholder="e.g., IST / UTC+5:30">
-                  <div class="invalid-feedback">Please provide your location or timezone.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="linkedin-bpm">LinkedIn profile</label>
-                  <input class="form-control" id="linkedin-bpm" name="linkedin" type="url" required placeholder="https://www.linkedin.com/in/...">
-                  <div class="invalid-feedback">Please add a valid LinkedIn URL.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="wins-bpm">Notable partnerships you closed</label>
-                  <textarea class="form-control" id="wins-bpm" name="notable_partnerships" rows="3" required placeholder="Share 2–3 examples with brief outcomes."></textarea>
-                  <div class="invalid-feedback">Please list notable partnerships.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="strategy-bpm">Outreach strategy and process</label>
-                  <textarea class="form-control" id="strategy-bpm" name="outreach_strategy" rows="3" required placeholder="Your sourcing, qualification, and follow-up approach."></textarea>
-                  <div class="invalid-feedback">Please describe your strategy.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="deal-bpm">Typical deal size / CPM</label>
-                  <input class="form-control" id="deal-bpm" name="typical_deal" type="text" required placeholder="e.g., $15–$30 CPM; $10–50k per campaign">
-                  <div class="invalid-feedback">Please provide typical deal context.</div>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yes" id="consent-bpm" name="consent" required>
-                    <label class="form-check-label" for="consent-bpm">
-                      I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                    </label>
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="fq4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa4" aria-expanded="false" aria-controls="fa4">
+                    How do payments work?
+                  </button>
+                </h2>
+                <div id="fa4" class="accordion-collapse collapse" aria-labelledby="fq4" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body small">
+                    Typically 40% to start, remainder at handoff / launch. Maintenance billed monthly. Flexible for very small projects if needed.
                   </div>
                 </div>
               </div>
-
-              <div class="form-text mt-2">We’ll confirm submission here—no external thank-you page. One application per role.</div>
-              <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-primary">Submit application</button>
-                <button type="button" class="btn btn-outline-secondary" data-role="toggle-apply" data-target="#applyArea-PartnershipsManager">Cancel</button>
-              </div>
-              <div class="mt-3" data-role="form-status"></div>
-            </form>
+            </div>
+            <p class="small text-center mt-4 mb-0">
+              More questions? <a href="mailto:don@sinwlkn.dev">Email me</a> or <a href="#schedule">book a call</a>.
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <!-- Job Modal: Creator Analytics Specialist -->
-  <div class="modal fade job-modal" id="jobModalAnalyticsSpecialist" tabindex="-1" aria-labelledby="jobModalAnalyticsSpecialistLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="jobModalAnalyticsSpecialistLabel">Creator Analytics Specialist — Remote</h1>
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-role="copy-link" data-job="AnalyticsSpecialist">Copy link</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" data-role="toggle-apply" data-target="#applyArea-AnalyticsSpecialist">Apply</button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-info d-none" role="alert" data-role="applied-note">
-            Your application has been received. You can only apply once for this role.
-          </div>
-          <div class="role-info">
-            <p>We are adding a Creator Analytics Specialist to translate data into editorial and packaging insights that move CTR, retention, and revenue.</p>
-            <ul class="mb-3">
-              <li>Build repeatable reporting and spot actionable trends.</li>
-              <li>Partner with creative on experiments and measurement.</li>
-              <li>Communicate findings clearly to non-technical partners.</li>
-            </ul>
-          </div>
-
-          <div id="applyArea-AnalyticsSpecialist" class="apply-area d-none mt-3">
-            <h2 class="h6 mb-3">Apply for Creator Analytics Specialist</h2>
-            <form class="apply-form" data-jobkey="AnalyticsSpecialist" novalidate>
-              <input type="hidden" name="job_title" value="Creator Analytics Specialist">
-
-              <div class="hp-field" aria-hidden="true">
-                <label for="hp-as">Leave this field blank</label>
-                <input id="hp-as" type="text" name="company" tabindex="-1" autocomplete="off">
-              </div>
-
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label" for="name-as">Full name</label>
-                  <input class="form-control" id="name-as" name="name" type="text" required>
-                  <div class="invalid-feedback">Please enter your full name.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="email-as">Email</label>
-                  <input class="form-control" id="email-as" name="email" type="email" required>
-                  <div class="invalid-feedback">Please enter a valid email.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tz-as">Location / Timezone</label>
-                  <input class="form-control" id="tz-as" name="location_timezone" type="text" required placeholder="e.g., GMT / UTC+0">
-                  <div class="invalid-feedback">Please provide your location or timezone.</div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label" for="tools-as">Analytics tools you use</label>
-                  <input class="form-control" id="tools-as" name="tools" type="text" required placeholder="YouTube Analytics API, Sheets, Looker Studio, SQL">
-                  <div class="invalid-feedback">Please list your tools.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="example-as">Example analysis and outcome</label>
-                  <textarea class="form-control" id="example-as" name="example_analysis" rows="3" required placeholder="Summarize a finding and how it changed content decisions."></textarea>
-                  <div class="invalid-feedback">Please describe an example.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="dashboard-as">Dashboard or report link</label>
-                  <input class="form-control" id="dashboard-as" name="dashboard_link" type="url" required placeholder="https://...">
-                  <div class="invalid-feedback">Please add a valid link.</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="sql-as">SQL proficiency</label>
-                  <select class="form-select" id="sql-as" name="sql_level" required>
-                    <option value="" selected disabled>Choose...</option>
-                    <option>None</option>
-                    <option>Basic</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                  <div class="invalid-feedback">Please select your level.</div>
-                </div>
-                <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yes" id="consent-as" name="consent" required>
-                    <label class="form-check-label" for="consent-as">
-                      I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                    </label>
-                    <div class="invalid-feedback">You must agree before submitting.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-text mt-2">We’ll confirm submission here—no external thank-you page. One application per role.</div>
-              <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-primary">Submit application</button>
-                <button type="button" class="btn btn-outline-secondary" data-role="toggle-apply" data-target="#applyArea-AnalyticsSpecialist">Cancel</button>
-              </div>
-              <div class="mt-3" data-role="form-status"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contact: collapsed form (opens on button press) -->
-  <section id="contact" class="py-5">
+  <!-- FOOTER -->
+  <footer class="py-4 border-top bg-body">
     <div class="container">
-      <div class="p-3 p-md-4 bg-primary text-white rounded-3 reveal">
-        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-          <div>
-            <h2 class="h4 mb-2">Ready to talk?</h2>
-            <p class="mb-0 opacity-75">Tell us about your goals. We’ll respond within 1 business day.</p>
-          </div>
-          <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#contactFormWrap" aria-expanded="false" aria-controls="contactFormWrap">Open contact form</button>
-            <a class="btn btn-outline-light" href="#" data-role="calendly-popup">Or, book a call</a>
+      <div class="row gy-3 align-items-center">
+        <div class="col-md-6">
+          <span class="small text-secondary">&copy; <span id="year"></span> sinwlkn.dev. All rights reserved.</span>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex flex-wrap justify-content-md-end gap-3 small">
+            <a href="#services" class="link-secondary text-decoration-none">Services</a>
+            <a href="#process" class="link-secondary text-decoration-none">Process</a>
+            <a href="#pricing" class="link-secondary text-decoration-none">Pricing</a>
+            <a href="#schedule" class="link-secondary text-decoration-none">Schedule</a>
+            <a href="#faq" class="link-secondary text-decoration-none">FAQ</a>
+            <a href="mailto:don@sinwlkn.dev" class="link-secondary text-decoration-none">Email</a>
+            <a href="#" class="link-secondary text-decoration-none">Privacy</a>
           </div>
         </div>
-      </div>
-
-      <div id="contactFormWrap" class="collapse mt-3">
-        <div class="bg-white rounded-3 shadow-sm p-3 p-md-4">
-          <form id="contactForm" novalidate>
-            <!-- Honeypot -->
-            <div class="hp-field" aria-hidden="true">
-              <label for="hp-contact">Leave this field blank</label>
-              <input id="hp-contact" type="text" name="hp_field" tabindex="-1" autocomplete="off">
-            </div>
-
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="c-name" class="form-label">Full name</label>
-                <input type="text" class="form-control" id="c-name" name="name" required>
-                <div class="invalid-feedback">Please enter your name.</div>
-              </div>
-              <div class="col-md-6">
-                <label for="c-email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="c-email" name="email" required>
-                <div class="invalid-feedback">Please enter a valid email.</div>
-              </div>
-              <div class="col-md-6">
-                <label for="c-company" class="form-label">Company / Channel</label>
-                <input type="text" class="form-control" id="c-company" name="company" placeholder="Optional">
-              </div>
-              <div class="col-md-6">
-                <label for="c-topic" class="form-label">Topic</label>
-                <select id="c-topic" class="form-select" name="topic" required>
-                  <option value="" selected disabled>Choose…</option>
-                  <option>Channel management</option>
-                  <option>Partnerships / brand</option>
-                  <option>Production / editing</option>
-                  <option>Analytics & growth</option>
-                  <option>Other</option>
-                </select>
-                <div class="invalid-feedback">Please choose a topic.</div>
-              </div>
-              <div class="col-12">
-                <label for="c-message" class="form-label">Message</label>
-                <textarea class="form-control" id="c-message" name="message" rows="4" required placeholder="Share a bit about your goals, timeline, and what success looks like."></textarea>
-                <div class="invalid-feedback">Please add a brief message.</div>
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="yes" id="c-consent" name="consent" required>
-                  <label class="form-check-label" for="c-consent">
-                    I agree to the <a href="#" data-role="open-legal" data-target="#privacyModal">Privacy Policy</a> and <a href="#" data-role="open-legal" data-target="#termsModal">Terms</a>.
-                  </label>
-                  <div class="invalid-feedback">You must agree before submitting.</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex gap-2 mt-3">
-              <button type="submit" class="btn btn-primary">Send message</button>
-              <button type="reset" class="btn btn-outline-secondary">Clear</button>
-            </div>
-            <div id="contactStatus" class="mt-3"></div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-4 bg-white border-top">
-    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-      <p class="mb-2 mb-md-0 text-secondary small">© <span id="year"></span> SIN. All rights reserved.</p>
-      <div class="d-flex flex-wrap gap-3 align-items-center">
-        <a class="link-secondary small" href="https://instagram.com/sinwlkn.dev" target="_blank" rel="noopener" aria-label="SIN on Instagram">@sinwlkn.dev</a>
-        <a class="link-secondary small" href="#" data-role="calendly-popup">Book a call</a>
-        <a class="link-secondary small" href="#" data-role="open-legal" data-target="#privacyModal">Privacy</a>
-        <a class="link-secondary small" href="#" data-role="open-legal" data-target="#termsModal">Terms</a>
       </div>
     </div>
   </footer>
 
-  <!-- Privacy Policy Modal -->
-  <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="privacyModalLabel">Privacy Policy</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text-secondary mb-3">Effective date: 2025-08-09</p>
-          <p>At SIN (“we”, “us”, “our”), we respect your privacy. This Policy explains what personal information we collect on <strong>sinwlkn.dev</strong> and through our services, how we use and share it, and the choices you have.</p>
-
-          <h2 class="h6 mt-4">Information we collect</h2>
-          <ul>
-            <li>Contact details you provide (name, email) when you email us or submit forms.</li>
-            <li>Application details you provide for roles (location/timezone, experience, links to work, responses to role‑specific questions).</li>
-            <li>Scheduling information when you book via Calendly (your name, email, chosen time, and meeting metadata).</li>
-            <li>Technical information such as IP address and device/browser information transmitted by your browser and by third‑party widgets (e.g., Calendly). We also use localStorage on your device to remember if you’ve already applied to a specific role.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">How we use information</h2>
-          <ul>
-            <li>To respond to inquiries and provide our services.</li>
-            <li>To evaluate and manage job applications and communicate about opportunities.</li>
-            <li>To schedule and host meetings via Calendly.</li>
-            <li>To maintain site functionality and prevent spam and abuse (e.g., honeypot checks, per‑device “one application per role”).</li>
-            <li>To comply with legal obligations and enforce our Terms.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">Legal bases (EEA/UK)</h2>
-          <p>Where applicable, we process personal data based on: (i) performance of a contract or taking steps at your request; (ii) our legitimate interests; and/or (iii) your consent when required.</p>
-
-          <h2 class="h6 mt-4">Sharing of information</h2>
-          <ul>
-            <li><strong>Formspree</strong> (form processing): we use Formspree to receive application and contact form submissions.</li>
-            <li><strong>Calendly</strong> (scheduling): when you book a meeting, Calendly receives your scheduling details.</li>
-            <li>Service providers and professional advisors that help us operate our business.</li>
-            <li>Authorities when required by law or to protect rights, safety, and security.</li>
-            <li>In connection with a business transaction, to the extent permitted by law.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">Cookies and local storage</h2>
-          <p>We do not use tracking cookies on this site. Third‑party widgets (e.g., Calendly) may set cookies necessary for their functionality. We use browser localStorage only to remember that a device already submitted an application for a specific role.</p>
-
-          <h2 class="h6 mt-4">Data retention</h2>
-          <ul>
-            <li>Inquiries: typically retained for up to 12 months.</li>
-            <li>Job applications: typically retained for up to 24 months (or longer if legally required or if we proceed with hiring processes).</li>
-            <li>Scheduling metadata: retained per Calendly’s policies and our meeting records.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">Your rights</h2>
-          <p>Depending on your location, you may have rights to access, correct, delete, restrict or object to processing, and to data portability. To exercise your rights, contact us at the <a href="#contact" data-role="open-contact">contact form</a>.</p>
-
-          <h2 class="h6 mt-4">Children’s privacy</h2>
-          <p>Our site and services are not directed to children under 13 (or the minimum age required in your jurisdiction).</p>
-
-          <h2 class="h6 mt-4">International transfers</h2>
-          <p>We may process information in countries outside your own. Where required, we take appropriate safeguards to protect personal information when transferred internationally.</p>
-
-          <h2 class="h6 mt-4">Security</h2>
-          <p>We implement reasonable measures to protect personal information. However, no method of transmission or storage is completely secure.</p>
-
-          <h2 class="h6 mt-4">Third‑party sites</h2>
-          <p>Our site may link to third‑party sites or services (e.g., Instagram, Calendly). Their privacy practices are governed by their own policies.</p>
-
-          <h2 class="h6 mt-4">Changes to this Policy</h2>
-          <p>We may update this Policy from time to time. We will post updates here and adjust the effective date.</p>
-
-          <h2 class="h6 mt-4">Contact us</h2>
-          <p>Questions or requests? Use the <a href="#contact" data-role="open-contact">contact form</a>.</p>
-        </div>
-      </div>
-    </div>
+  <!-- Floating CTA -->
+  <div class="floating-cta">
+    <a href="#schedule" class="btn btn-primary shadow">Book a Call →</a>
   </div>
 
-  <!-- Terms Modal -->
-  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="termsModalLabel">Terms of Service</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text-secondary mb-3">Effective date: 2025-08-09</p>
+  <!-- JS: Bootstrap -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
 
-          <p>These Terms of Service (“Terms”) govern your use of <strong>sinwlkn.dev</strong> and any related services offered by SIN (“we”, “us”, “our”). By accessing or using the site, you agree to these Terms.</p>
-
-          <h2 class="h6 mt-4">1. Use of the site</h2>
-          <ul>
-            <li>You must use the site in compliance with applicable laws and these Terms.</li>
-            <li>You will not attempt to disrupt or interfere with the operation or security of the site.</li>
-            <li>Content on this site is provided for general informational purposes and does not constitute advice.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">2. Submissions</h2>
-          <ul>
-            <li>You may submit forms (e.g., job applications, contact requests) through the site. You represent that the information you provide is accurate and not misleading.</li>
-            <li>We may contact you regarding your submission and keep records consistent with our Privacy Policy.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">3. Intellectual property</h2>
-          <ul>
-            <li>The site and its contents are owned by or licensed to us and are protected by intellectual property laws.</li>
-            <li>You may not copy, modify, distribute, or create derivative works from site content without our prior written consent, except as permitted by law.</li>
-          </ul>
-
-          <h2 class="h6 mt-4">4. Third‑party services</h2>
-          <p>The site integrates third‑party services such as Formspree (form processing) and Calendly (scheduling). Your use of these services is subject to their terms and policies.</p>
-
-          <h2 class="h6 mt-4">5. Disclaimer</h2>
-          <p>The site and services are provided “as is” and “as available” without warranties of any kind, express or implied, including warranties of merchantability, fitness for a particular purpose, and non‑infringement.</p>
-
-          <h2 class="h6 mt-4">6. Limitation of liability</h2>
-          <p>To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues.</p>
-
-          <h2 class="h6 mt-4">7. Changes to the Terms</h2>
-          <p>We may update these Terms from time to time. We will post updates here with the effective date.</p>
-
-          <h2 class="h6 mt-4">8. Governing law</h2>
-          <p>These Terms are governed by the laws of the jurisdiction where SIN has its principal place of business, without regard to conflict of law principles.</p>
-
-          <h2 class="h6 mt-4">9. Contact</h2>
-          <p>Questions about these Terms? Use the <a href="#contact" data-role="open-contact">contact form</a>.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Calendly widget JS -->
+  <!-- Calendly widget -->
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
   <script>
-    // Year in footer
+    /* Utility: throttle scroll events */
+    function throttle(fn, wait){
+      let t=0;
+      return function(...args){
+        const now = Date.now();
+        if(now - t >= wait){
+          t = now;
+          fn.apply(this,args);
+        }
+      }
+    }
+
+    /* Theme toggle */
+    (function initThemeToggle(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggleBtn');
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const initial = stored || (prefersDark.matches ? 'dark' : 'light');
+      setTheme(initial);
+      prefersDark.addEventListener('change', e => {
+        if(!localStorage.getItem('theme')) setTheme(e.matches ? 'dark':'light');
+      });
+      function setTheme(mode){
+        root.setAttribute('data-bs-theme', mode);
+        btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+        btn.setAttribute('aria-label', mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+        localStorage.setItem('theme', mode);
+      }
+      btn.addEventListener('click', () => {
+        setTheme(root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
+      });
+    })();
+
+    /* Scroll-based active nav highlight */
+    (function initScrollSpyLite(){
+      const sections = [...document.querySelectorAll('main section[id]')];
+      const links = [...document.querySelectorAll('.navbar a.nav-link')];
+      function update(){
+        const offset = window.scrollY + 140;
+        let current = null;
+        sections.forEach(sec => {
+          if(offset >= sec.offsetTop && offset < sec.offsetTop + sec.offsetHeight){
+            current = sec.id;
+          }
+        });
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+      }
+      document.addEventListener('scroll', throttle(update, 120), {passive:true});
+      update();
+    })();
+
+    /* Year injection */
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Reveal on scroll
-    (function revealOnScroll(){
-      const els = document.querySelectorAll('.reveal');
-      if (!('IntersectionObserver' in window)) {
-        els.forEach(el => el.classList.add('reveal-visible'));
-        return;
+    /* Keyboard focus ring activation */
+    (function initFocusRing(){
+      function handleFirstTab(e){
+        if(e.key === 'Tab'){
+          document.documentElement.classList.add('user-tabbing');
+          window.removeEventListener('keydown', handleFirstTab);
+        }
       }
-      const io = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('reveal-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      els.forEach(el => io.observe(el));
+      window.addEventListener('keydown', handleFirstTab);
     })();
 
-    // Toggle apply form visibility
-    document.querySelectorAll('[data-role="toggle-apply"]').forEach(btn => {
+    /* Scheduling popup (Calendly) */
+    (function initScheduling(){
+      const btn = document.getElementById('openScheduleBtn');
+      if(!btn) return;
       btn.addEventListener('click', () => {
-        const target = document.querySelector(btn.getAttribute('data-target'));
-        if (target && target.classList) target.classList.toggle('d-none');
-      });
-    });
-
-    // Copy job link buttons
-    function jobUrl(jobKey) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('job', jobKey);
-      url.hash = 'careers';
-      return url.toString();
-    }
-    document.querySelectorAll('[data-role="copy-link"]').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const jobKey = btn.getAttribute('data-job');
-        const link = jobUrl(jobKey);
-        try {
-          await navigator.clipboard.writeText(link);
-          const original = btn.textContent;
-          btn.textContent = 'Copied!';
-          btn.classList.remove('btn-outline-secondary');
-          btn.classList.add('btn-success');
-          setTimeout(() => {
-            btn.textContent = original;
-            btn.classList.remove('btn-success');
-            btn.classList.add('btn-outline-secondary');
-          }, 1500);
-        } catch (e) {
-          window.prompt('Copy this link', link);
-        }
-      });
-    });
-
-    // Open job modal if ?job=XYZ is present
-    (function openJobFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const job = params.get('job');
-      if (!job) return;
-      const modalMap = {
-        'ChannelManager': '#jobModalChannelManager',
-        'VideoEditor': '#jobModalVideoEditor',
-        'ThumbnailDesigner': '#jobModalThumbnailDesigner',
-        'PartnershipsManager': '#jobModalPartnershipsManager',
-        'AnalyticsSpecialist': '#jobModalAnalyticsSpecialist'
-      };
-      const sel = modalMap[job];
-      if (sel) {
-        const el = document.querySelector(sel);
-        if (el) new bootstrap.Modal(el).show();
-      }
-    })();
-
-    // Modal show handler for job forms
-    document.querySelectorAll('.job-modal').forEach(modalEl => {
-      modalEl.addEventListener('show.bs.modal', () => {
-        const form = modalEl.querySelector('.apply-form');
-        const appliedNote = modalEl.querySelector('[data-role="applied-note"]');
-        const applyBtn = modalEl.querySelector('[data-role="toggle-apply"]');
-        const applyArea = modalEl.querySelector('.apply-area');
-        if (!form) return;
-        const jobKey = form.dataset.jobkey;
-        const applied = localStorage.getItem('applied-' + jobKey) === 'true';
-        if (applied) {
-          appliedNote?.classList.remove('d-none');
-          applyBtn?.setAttribute('disabled', 'true');
-          applyArea?.classList.add('d-none');
+        if(window.Calendly){
+          Calendly.initPopupWidget({
+            url: 'https://calendly.com/sinwlkn/15?hide_landing_page_details=1&hide_gdpr_banner=1'
+          });
         } else {
-          appliedNote?.classList.add('d-none');
-          applyBtn?.removeAttribute('disabled');
-        }
-      });
-      modalEl.addEventListener('hidden.bs.modal', () => {
-        const form = modalEl.querySelector('.apply-form');
-        if (form) form.classList.remove('was-validated');
-      });
-    });
-
-    // Formspree endpoints
-    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblkzgqn'; // jobs (existing)
-    const CONTACT_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblkzgqn'; // contact; replace with dedicated ID if desired
-
-    // Disable a form
-    function disableForm(form) {
-      form.querySelectorAll('input, textarea, button, select').forEach(el => el.setAttribute('disabled', 'true'));
-    }
-
-    // Job application forms submit
-    document.querySelectorAll('.apply-form').forEach(form => {
-      const jobKey = form.dataset.jobkey;
-      const statusEl = form.querySelector('[data-role="form-status"]');
-      const submitBtn = form.querySelector('button[type="submit"]');
-
-      if (localStorage.getItem('applied-' + jobKey) === 'true') {
-        if (statusEl) statusEl.innerHTML = '<div class="alert alert-info mb-0">You already applied for this role. We have your application.</div>';
-        disableForm(form);
-      }
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!submitBtn) return;
-
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">Please complete all required fields.</div>';
-          return;
-        }
-
-        const hp = form.querySelector('.hp-field input[name="company"]');
-        if (hp && hp.value.trim() !== '') {
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-success mb-0">Application submitted and processed. Thank you!</div>';
-          return;
-        }
-
-        submitBtn.disabled = true;
-        if (statusEl) statusEl.innerHTML = '<div class="alert alert-secondary mb-0">Submitting…</div>';
-
-        try {
-          const formData = new FormData(form);
-          formData.append('_subject', 'New job application — ' + (formData.get('job_title') || jobKey));
-          formData.append('_origin', window.location.href);
-
-          const resp = await fetch(FORMSPREE_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: formData
-          });
-
-          if (resp.ok) {
-            if (statusEl) statusEl.innerHTML = '<div class="alert alert-success mb-0">Application submitted and processed. Thank you! You can only apply for this role once.</div>';
-            localStorage.setItem('applied-' + jobKey, 'true');
-            disableForm(form);
-            const modal = form.closest('.job-modal');
-            const note = modal?.querySelector('[data-role="applied-note"]');
-            note?.classList.remove('d-none');
-          } else {
-            const data = await resp.json().catch(() => ({}));
-            const err = (data && data.errors && data.errors[0] && data.errors[0].message) ? data.errors[0].message : 'Something went wrong. Please try again.';
-            if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">' + err + '</div>';
-            submitBtn.disabled = false;
-          }
-        } catch (error) {
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">Network error. Please try again.</div>';
-          submitBtn.disabled = false;
-        }
-      });
-    });
-
-    // Contact form submit
-    (function handleContactForm() {
-      const form = document.getElementById('contactForm');
-      if (!form) return;
-      const statusEl = document.getElementById('contactStatus');
-      const submitBtn = form.querySelector('button[type="submit"]');
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">Please complete all required fields.</div>';
-          return;
-        }
-
-        // Honeypot
-        const hp = form.querySelector('input[name="hp_field"]');
-        if (hp && hp.value.trim() !== '') {
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-success mb-0">Thanks! We’ll be in touch.</div>';
-          form.reset();
-          return;
-        }
-
-        submitBtn.disabled = true;
-        if (statusEl) statusEl.innerHTML = '<div class="alert alert-secondary mb-0">Sending…</div>';
-
-        try {
-          const formData = new FormData(form);
-          const topic = formData.get('topic') || 'General';
-          formData.append('_subject', 'New inquiry — ' + topic);
-          formData.append('_origin', window.location.href);
-
-          const resp = await fetch(CONTACT_FORMSPREE_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: formData
-          });
-
-          if (resp.ok) {
-            if (statusEl) statusEl.innerHTML = '<div class="alert alert-success mb-0">Message sent. We’ll reply within 1 business day.</div>';
-            disableForm(form);
-          } else {
-            const data = await resp.json().catch(() => ({}));
-            const err = (data && data.errors && data.errors[0] && data.errors[0].message) ? data.errors[0].message : 'Something went wrong. Please try again.';
-            if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">' + err + '</div>';
-            submitBtn.disabled = false;
-          }
-        } catch (error) {
-          if (statusEl) statusEl.innerHTML = '<div class="alert alert-danger mb-0">Network error. Please try again.</div>';
-          submitBtn.disabled = false;
+          window.location.href = 'https://calendly.com/sinwlkn/15';
         }
       });
     })();
 
-    // Calendly popup triggers
-    document.querySelectorAll('[data-role="calendly-popup"]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (window.Calendly && Calendly.initPopupWidget) {
-          Calendly.initPopupWidget({ url: 'https://calendly.com/sinwlkn/30min?hide_gdpr_banner=1' });
-        }
-      });
-    });
-
-    // Open legal modals (works from within other modals)
-    function openLegalModal(targetSelector) {
-      const active = document.querySelector('.modal.show');
-      let prevModal = null;
-      if (active) {
-        prevModal = active;
-        bootstrap.Modal.getOrCreateInstance(active).hide();
-      }
-      const legalEl = document.querySelector(targetSelector);
-      if (legalEl) {
-        const legalModal = new bootstrap.Modal(legalEl);
-        legalEl.addEventListener('hidden.bs.modal', function onHide() {
-          legalEl.removeEventListener('hidden.bs.modal', onHide);
-          if (prevModal) {
-            bootstrap.Modal.getOrCreateInstance(prevModal).show();
-          }
-        });
-        legalModal.show();
-      }
-    }
-    document.querySelectorAll('[data-role="open-legal"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = link.getAttribute('data-target');
-        if (target) openLegalModal(target);
-      });
-    });
-
-    // Make "Start a conversation", "Get in touch", and other links open the contact form collapse
-    document.querySelectorAll('[data-role="open-contact"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        // allow anchor to scroll, then open the collapse
-        setTimeout(() => {
-          const el = document.getElementById('contactFormWrap');
-          if (el) bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }).show();
-        }, 150);
-      });
-    });
+    /* TODO (personal):
+       - Add privacy page (currently placeholder link).
+       - Add SVG og:image for better link previews.
+       - Portfolio section once examples are available.
+       - Optional analytics (respect privacy).
+    */
   </script>
 </body>
 </html>
