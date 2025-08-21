@@ -1,658 +1,2390 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<!--
+  Project: sinwlkn.dev – Brand Management Studio
+  Owner: sinwlkn.dev
+  Purpose: Marketing site with Careers, Client Portal (key + PIN gate), and plan modal
+  Tech: Bootstrap 5, vanilla JS, Calendly widget
+  Notes:
+    - Sensitive values (portal key + PIN) are obfuscated client-side and never stored persistently.
+    - A separate build step can minify HTML/CSS/JS to dist/ for deployment.
+  Contrib:
+    - Keep sections clearly labeled.
+    - Prefer utilities over inline styles; keep magic numbers behind constants.
+-->
+<html lang="en" class="h-100">
 <head>
-  <!--
-    Project: sinwlkn.dev
-    Purpose: Single-page marketing + scheduling (no contact form; only scheduling widget + email).
-    Change Log (personal notes):
-      - 2025-08-13: Removed contact form & section.
-      - 2025-08-13: Removed optional hero image / placeholder column per request.
-      - Keep file lean: Bootstrap + Calendly widget only.
-      - No images/photos by request. Add SVG/og image later if needed.
-  -->
-  <meta charset="utf-8" />
-  <title>sinwlkn.dev | Affordable Custom Websites</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sinwlkn.dev – Brand Management Studio</title>
+<meta name="description" content="Operational brand management retainers: strategy, identity evolution, messaging governance & embedded execution for growth teams.">
+<meta name="theme-color" content="#0D6EFD">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="icon" href="data:,">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 
-  <!-- Meta -->
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="description" content="sinwlkn.dev builds clean, fast, affordable websites for small businesses, creators, and early products. Simple process, transparent pricing." />
-  <meta name="author" content="sinwlkn.dev" />
-  <meta name="keywords" content="affordable website, freelance web developer, small business website, custom website build, solo developer" />
-  <meta name="theme-color" content="#4f46e5"/>
-
-  <!-- Open Graph / Twitter (no og:image yet) -->
-  <meta property="og:title" content="sinwlkn.dev | Solo Web Dev" />
-  <meta property="og:description" content="Affordable custom websites built fast by a solo developer." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sinwlkn.dev/" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="sinwlkn.dev | Solo Web Dev" />
-  <meta name="twitter:description" content="Affordable custom websites built fast by a solo developer." />
-
-  <!-- Favicon (emoji) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 x=%220.12em%22 font-size=%2285%22>💻</text></svg>">
-
-  <!-- CSS: Bootstrap + Calendly -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous"
-  />
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
-
-  <style>
-    /* ===== THEME & GLOBAL ===== */
-    :root {
-      --brand-gradient-light: linear-gradient(110deg,#f5f7ff,#eef2ff,#ffffff);
-    }
-    [data-bs-theme=dark] {
-      --bs-body-bg:#0f1320;
-      --brand-gradient-dark: radial-gradient(circle at 25% 35%,#222b46,#0f1320 70%);
-    }
-    body {
-      scroll-padding-top: 5rem;
-      font-feature-settings: "kern";
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    /* Hero backgrounds */
-    header.hero { background: var(--brand-gradient-light); }
-    [data-bs-theme=dark] header.hero { background: var(--brand-gradient-dark); }
-
-    /* Reusable cards */
-    .card-hover {
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .card-hover:hover,
-    .card-hover:focus-within {
-      transform: translateY(-4px);
-      box-shadow: 0 .75rem 1.25rem -0.5rem rgba(0,0,0,.18);
-    }
-
-    /* Typography / decoration */
-    .logo-text { font-weight:600; letter-spacing:.5px; }
-    .gradient-text {
-      background: linear-gradient(90deg,#6366f1,#4f46e5 55%,#7c3aed);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-    .small-note {
-      font-size:.7rem;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      font-weight:600;
-    }
-    .tech-badge {
-      background: var(--bs-tertiary-bg);
-      border:1px solid var(--bs-border-color);
-      font-size:.65rem;
-      padding:.35rem .55rem;
-      border-radius:.5rem;
-      font-weight:500;
-      white-space:nowrap;
-    }
-
-    /* Accessibility utils */
-    .visually-hidden-focusable:not(:focus):not(:active){
-      position:absolute;width:1px;height:1px;
-      padding:0;margin:-1px;overflow:hidden;
-      clip:rect(0 0 0 0);white-space:nowrap;border:0;
-    }
-    .user-tabbing :focus-visible {
-      outline:2px solid #4f46e5;
-      outline-offset:2px;
-    }
-
-    /* Process steps connector */
-    .process-line {
-      position:absolute;
-      top:2.6rem;
-      left:1.25rem;
-      bottom:-2.2rem;
-      width:2px;
-      background:var(--bs-border-color);
-    }
-    .process-step:last-child .process-line { display:none; }
-
-    /* Pricing cards */
-    .plan-card { border:1px solid var(--bs-border-color); }
-    .plan-card.highlight { border:2px solid #4f46e5; }
-
-    /* Schedule wrapper */
-    .schedule-wrapper {
-      border:1px solid var(--bs-border-color);
-      border-radius:.75rem;
-      background: var(--bs-body-bg);
-      padding:1.5rem;
-    }
-    [data-bs-theme=dark] .schedule-wrapper { background:#162033; }
-
-    /* Floating CTA */
-    .floating-cta {
-      position:fixed;
-      bottom:1.2rem;
-      right:1.25rem;
-      z-index:1030;
-    }
-    @media (max-width:575.98px){
-      .floating-cta { display:none; }
-    }
-
-    /* Single-column hero adjustments after removing image */
-    .hero .lead {
-      max-width: 48rem;
-    }
-  </style>
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Person",
-    "name":"Don",
-    "url":"https://sinwlkn.dev/",
-    "jobTitle":"Web Developer",
-    "brand":{"@type":"Brand","name":"sinwlkn.dev"},
-    "description":"Solo web developer creating affordable, fast, accessible websites.",
-    "email":"mailto:don@sinwlkn.dev"
-  }
-  </script>
+<style>
+:root{
+  --primary:#0D6EFD;
+  --gradient:linear-gradient(135deg,#0D6EFD,#3c8dff);
+  --ink:#121823;
+  --ink-soft:#566274;
+  --bg:#ffffff;
+  --bg-alt:#f4f8fc;
+  --radius:.85rem;
+  --radius-lg:1.35rem;
+  --shadow-sm:0 .5rem 1.3rem -.6rem rgba(15,40,85,.25);
+  --focus:0 0 0 .2rem rgba(13,110,253,.35);
+  --easing:cubic-bezier(.16,.8,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.48;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.02em;color:var(--ink);}
+h1{font-size:clamp(2.4rem,5vw,3.35rem);line-height:1.06;}
+h2{font-size:clamp(2rem,3.6vw,2.55rem);line-height:1.12;}
+h3{font-size:clamp(1.25rem,2vw,1.55rem);line-height:1.18;}
+p.lead{font-size:clamp(1.05rem,1.35vw,1.25rem);color:var(--ink-soft);font-weight:400;}
+small,.small{font-size:.78rem;}
+a{color:var(--primary);text-decoration:none;}
+a:hover{color:#094ea7;text-decoration:underline;}
+/* Accessibility */
+.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;}
+.skip-link:focus{left:50%;top:.75rem;width:auto;height:auto;z-index:999;background:#fff;padding:.65rem 1rem;border-radius:.6rem;box-shadow:var(--shadow-sm);transform:translateX(-50%);}
+/* Sections */
+.section{padding:4.25rem 0;}
+.section-alt{background:var(--bg-alt);}
+.centered{text-align:center;margin-inline:auto;}
+.container-narrow{max-width:860px;margin:0 auto;}
+/* Hero */
+.hero{
+  position:relative;
+  padding:6rem 0 4.6rem;
+  text-align:center;
+  background:
+    radial-gradient(circle at 58% 28%,rgba(13,110,253,.18),transparent 60%),
+    linear-gradient(150deg,#ffffff,#eef6ff);
+}
+.hero::after{
+  content:"";
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(135deg,rgba(13,110,253,.05) 0 2px,transparent 2px 9px);
+  opacity:.25;
+  pointer-events:none;
+}
+.hero .cta-group{justify-content:center;}
+.hero h1,.hero p.lead{ text-shadow:0 1px 2px rgba(0,0,0,.08); }
+/* Proof pills */
+.proof-strip{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:.8rem;
+  margin-top:1.9rem;
+  max-width:780px;
+  margin-inline:auto;
+}
+.proof-pill{
+  font-size:.73rem;
+  letter-spacing:.05em;
+  font-weight:600;
+  background:#e9f3ff;
+  padding:.55rem .75rem;
+  border-radius:2rem;
+  color:#22405d;
+  position:relative;
+  overflow:hidden;
+}
+.proof-pill span{color:var(--primary);}
+.proof-pill:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(255,255,255,.6),transparent 60%);
+  mix-blend-mode:overlay;
+  opacity:0;
+  transition:.6s;
+}
+.proof-pill:hover:before{opacity:1;}
+/* Cards */
+.card-base{
+  background:#fff;
+  border:1px solid #e2e8f1;
+  border-radius:var(--radius);
+  padding:1.15rem 1.05rem 1rem;
+  position:relative;
+  overflow:hidden;
+  transition:transform .7s var(--easing),border-color .5s,box-shadow .6s;
+}
+.card-base:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(130deg,rgba(13,110,253,.13),transparent 55%),
+    linear-gradient(35deg,rgba(13,110,253,.08),transparent 70%);
+  opacity:0;
+  transition:.6s;
+  pointer-events:none;
+}
+.card-base:hover{transform:translateY(-6px);border-color:#bcd9ff;box-shadow:var(--shadow-sm);}
+.card-base:hover:before{opacity:.55;}
+.service-card{min-height:100%;}
+/* Pricing */
+.price-card{min-height:100%;}
+.price-card.featured{
+  border:2px solid var(--primary);
+  box-shadow:0 1.2rem 2.8rem -1rem rgba(13,110,253,.45);
+}
+.price-card.featured:after{
+  content:"Recommended";
+  position:absolute;
+  top:.6rem;right:.6rem;
+  background:var(--gradient);
+  color:#fff;
+  font-size:.56rem;
+  font-weight:600;
+  letter-spacing:.05em;
+  padding:.36rem .55rem;
+  border-radius:1rem;
+}
+.price{font-variant-numeric:tabular-nums;}
+.price small{font-size:.62em;color:#64707d;font-weight:500;}
+/* Buttons */
+.btn{
+  --bs-btn-font-weight:600;
+  --bs-btn-line-height:1.1;
+  border-radius:.7rem;
+  letter-spacing:.02em;
+  position:relative;
+  transition:filter .55s,transform .55s;
+}
+.btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
+.btn-gradient{
+  background:var(--gradient);
+  border:none;
+  color:#fff;
+  box-shadow:0 .55rem 1.2rem -.5rem rgba(13,110,253,.55);
+}
+.btn-gradient:hover{filter:brightness(.93);color:#fff;}
+.btn-outline-primary{
+  background:#fff;
+  border:1px solid rgba(13,110,253,.6);
+  color:#0d5cd2;
+}
+.btn-outline-primary:hover{background:var(--primary);color:#fff;}
+.btn-soft{
+  background:#e8f2ff;
+  border:1px solid #c3dcff;
+  color:#0a4f9e;
+}
+.btn-soft:hover{background:#ffffff;color:#09386d;border-color:#a9c9ff;}
+/* Comparison */
+.comparison-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 9px;
+  font-size:.8rem;
+  margin-inline:auto;
+}
+.comparison-table th,.comparison-table td{
+  background:#fff;
+  padding:.7rem .75rem;
+  border:1px solid #e1e7ef;
+  vertical-align:top;
+  line-height:1.25;
+}
+.comparison-table th{
+  font-weight:600;
+  text-align:center;
+  background:linear-gradient(145deg,#f1f7ff,#ffffff 60%);
+}
+.comparison-table td:first-child,
+.comparison-table th:first-child{
+  text-align:left;
+  font-weight:600;
+  min-width:170px;
+}
+.comparison-table .highlight-column{
+  outline:2px solid var(--primary);
+  box-shadow:0 0 0 .35rem rgba(13,110,253,.15);
+  position:relative;
+}
+.comparison-table .highlight-column:before{
+  content:"★";
+  position:absolute;
+  top:-11px;
+  right:6px;
+  font-size:.75rem;
+  color:var(--primary);
+}
+.table-note{font-size:.66rem;color:#5b6570;margin-top:.6rem;text-align:center;}
+/* Metrics */
+.metric-grid{display:grid;gap:1rem;margin-inline:auto;max-width:1000px;}
+@media (min-width:700px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
+.metric-card{
+  background:linear-gradient(140deg,#ffffff,#f2f7fd);
+  border:1px solid #e1e7f0;
+  border-radius:var(--radius);
+  padding:1rem .85rem .9rem;
+  display:flex;
+  flex-direction:column;
+  gap:.35rem;
+  text-align:left;
+}
+.metric-value{
+  font-size:1.7rem;
+  font-weight:700;
+  letter-spacing:-.03em;
+  background:linear-gradient(90deg,#0D6EFD,#3090ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 1px 0 rgba(0,0,0,.06);
+}
+.metric-label{
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  font-weight:600;
+  color:#435166;
+}
+/* Cases */
+.case-grid{display:grid;gap:1rem;max-width:1080px;margin-inline:auto;}
+@media (min-width:900px){.case-grid{grid-template-columns:repeat(3,1fr);}}
+.case-card{display:flex;flex-direction:column;gap:.65rem;min-height:100%;}
+.case-metric{
+  display:inline-block;
+  background:#e7f1ff;
+  padding:.35rem .55rem;
+  font-size:.63rem;
+  font-weight:600;
+  letter-spacing:.07em;
+  color:var(--primary);
+  border-radius:.55rem;
+  text-transform:uppercase;
+}
+/* Reviews */
+.reviews-grid{display:grid;gap:1rem;max-width:1100px;margin-inline:auto;}
+@media (min-width:900px){.reviews-grid{grid-template-columns:repeat(3,1fr);}}
+.review-card{
+  background:#fff;
+  border:1px solid #e1e7ef;
+  border-radius:var(--radius);
+  padding:1rem .95rem .85rem;
+  position:relative;
+  overflow:hidden;
+  font-size:.82rem;
+  line-height:1.34;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+  transition:transform .55s var(--easing),border-color .5s,box-shadow .55s;
+}
+.review-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(13,110,253,.12),transparent 55%),linear-gradient(40deg,rgba(13,110,253,.08),transparent 70%);
+  opacity:0;
+  transition:.55s;
+}
+.review-card:hover{transform:translateY(-6px);border-color:#bcd9ff;box-shadow:var(--shadow-sm);}
+.review-card:hover:before{opacity:.55;}
+.stars{font-size:.85rem;letter-spacing:.05em;color:#f5a623;font-weight:600;}
+.review-meta{font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;color:#5e6b78;display:flex;gap:.5rem;flex-wrap:wrap;}
+/* Schedule (simplified no embed) */
+.schedule-section{text-align:center;}
+.schedule-box{
+  max-width:760px;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid #dfe5ef;
+  border-radius:var(--radius-lg);
+  padding:2.1rem 1.8rem 2rem;
+  box-shadow:var(--shadow-sm);
+  position:relative;
+  overflow:hidden;
+}
+.schedule-box:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 70% 30%,rgba(13,110,253,.18),transparent 70%);
+  opacity:.45;
+  pointer-events:none;
+}
+.schedule-badges{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:.55rem;
+  margin:1.1rem 0 1.35rem;
+}
+.schedule-badges span{
+  background:#e7f2ff;
+  color:var(--primary);
+  font-size:.6rem;
+  letter-spacing:.07em;
+  font-weight:600;
+  padding:.42rem .58rem;
+  border-radius:.55rem;
+  text-transform:uppercase;
+}
+ul.inline-list{
+  list-style:none;
+  padding:0;
+  margin:0 0 1.2rem;
+  display:flex;
+  flex-direction:column;
+  gap:.45rem;
+  font-size:.78rem;
+  color:#314257;
+}
+/* Footer */
+footer{
+  background:#0A1220;
+  color:#d2d9e2;
+  padding:3.2rem 0 2.4rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+footer:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(13,110,253,.35),transparent 60%),
+    linear-gradient(160deg,rgba(13,110,253,.2),transparent 70%);
+  opacity:.55;
+  pointer-events:none;
+}
+footer .footer-inner{position:relative;z-index:2;max-width:980px;margin:0 auto;}
+.footer-brand{
+  font-size:1.2rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  display:inline-block;
+  margin-bottom:.35rem;
+}
+footer a{color:#f3f8ff;}
+footer a:hover{color:#fff;text-decoration:underline;}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:1.2rem;
+  margin:1.15rem 0 1.4rem;
+  font-size:.75rem;
+  letter-spacing:.05em;
+  font-weight:600;
+  text-transform:uppercase;
+}
+.footer-meta{
+  font-size:.65rem;
+  letter-spacing:.04em;
+  color:#b5c3d2;
+  display:flex;
+  flex-direction:column;
+  gap:.35rem;
+  align-items:center;
+}
+.footer-divider{
+  width:100%;
+  max-width:680px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#325e9f 35%,#325e9f 65%,transparent);
+  margin:1.6rem auto 1.3rem;
+  opacity:.55;
+}
+/* Utility */
+.note{font-size:.7rem;color:#5c6774;}
+.upgrade-note{font-size:.64rem;color:#576274;margin-top:.25rem;text-align:center;}
+/* Not Included panel starts closed */
+.not-panel{display:none;}
+/* Utility width helpers (replace inline max-width styles) */
+.mw-560{max-width:560px}
+.mw-620{max-width:620px}
+.mw-640{max-width:640px}
+.mw-660{max-width:660px}
+.mw-680{max-width:680px}
+.mw-700{max-width:700px}
+.mw-710{max-width:710px}
+.mw-760{max-width:760px}
+.mw-780{max-width:780px}
+.mw-860{max-width:860px}
+.mw-1050{max-width:1050px}
+.mi-auto{margin-inline:auto}
+/* Careers */
+.hidden{display:none!important}
+.form-card{background:#fff;border:1px solid #e1e7ef;border-radius:var(--radius-lg);padding:1.5rem}
+.role-grid{display:grid;gap:1rem}
+@media (min-width:800px){.role-grid{grid-template-columns:1fr 2fr}}
+fieldset{border:1px solid #e5ebf4;border-radius:var(--radius);padding:1rem}
+legend{font-size:.9rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:#f7faff;border:1px solid #e1ecff;border-radius:.55rem;padding:.25rem .5rem;color:#0a4f9e}
+.required{color:#c62828}
+/* Not Included Toggle styling */
+.not-toggle{
+  appearance:none;
+  background:#ffffff;
+  border:1px solid #d0d8e6;
+  color:#0a4f9e;
+  border-radius:var(--radius);
+  padding:.75rem 1rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:background .3s var(--easing), border-color .3s var(--easing), color .3s var(--easing), box-shadow .3s var(--easing);
+}
+.not-toggle:hover{
+  background:#f6faff;
+  border-color:#bcd9ff;
+  color:#09386d;
+}
+.not-toggle:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+  box-shadow:var(--shadow-sm);
+}
+/* Animations */
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .85s var(--easing),transform .85s var(--easing);}
+.fade-in.appear{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .fade-in{opacity:1;transform:none;transition:none;}
+  .card-base,.btn{transition:none;}
+}
+#toTop{
+  position:fixed;
+  right:1rem;
+  bottom:1rem;
+  width:50px;
+  height:50px;
+  border:none;
+  border-radius:50%;
+  background:var(--gradient);
+  color:#fff;
+  font-weight:600;
+  font-size:1rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 .6rem 1.4rem -.5rem rgba(13,110,253,.6);
+  cursor:pointer;
+  opacity:0;
+  visibility:hidden;
+  transition:.55s var(--easing);
+  z-index:60;
+}
+#toTop:hover{filter:brightness(.92);}
+#toTop:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+/* Portal overlay */
+body.portal-open{overflow:hidden;}
+#portal{position:fixed;inset:0;z-index:200;background:rgba(10,20,40,.72);backdrop-filter:saturate(180%) blur(12px);overflow-y:auto;padding:2rem 1rem;display:grid;place-items:center;}
+#portal .container{display:grid;place-items:center;min-height:100%;width:100%;}
+#portal .form-card{max-width:760px;margin:0 auto;box-shadow:0 1.4rem 3.1rem -1.2rem rgba(0,0,0,.5);} 
+/* Unlocked: fill whole screen */
+body.portal-unlocked #portal{display:block;padding:1.5rem 1rem;}
+body.portal-unlocked #portal .container{display:block;min-height:auto;width:100%;}
+body.portal-unlocked #portal .form-card{max-width:none;width:100%;background:transparent;border:none;box-shadow:none;padding:0;}
+/* Portal metrics */
+.kpi-note{font-size:.7rem;color:#5c6774}
+.bar-list{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.bar-item{display:flex;align-items:center;gap:.5rem}
+.bar-label{width:64px;font-size:.72rem;color:#5a6678}
+.bar{flex:1;height:10px;border-radius:6px;background:linear-gradient(90deg,#e7f1ff,#bcd9ff)}
+.bar>.fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0D6EFD,#3b8cff)}
+/* Owner console (owner-only section styling) */
+.owner-shell{
+  background:linear-gradient(180deg,#0c1424,#0a1220 60%);
+  border:1px solid #1b2a44;
+  border-radius:var(--radius-lg);
+  padding:1rem 1rem 1.15rem;
+  color:#c9d6ea;
+}
+.owner-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.25rem}
+.owner-badge{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:#dff3ff;background:linear-gradient(90deg,#0D6EFD,#4aa3ff);
+  padding:.28rem .5rem;border-radius:.5rem;
+  box-shadow:0 .6rem 1.4rem -.7rem rgba(13,110,253,.6);
+}
+.owner-sub{font-size:.72rem;color:#9db1c9}
+.owner-shell .card-base{background:linear-gradient(140deg,#0e182a,#0a1322);border:1px solid #20324e;color:#c9d6ea}
+.owner-shell .h6, .owner-shell h3{color:#e9f1ff}
+.owner-shell .metric-card{background:linear-gradient(140deg,#0d1a2e,#0a1424);border:1px solid #20324e}
+.owner-shell .metric-value{
+  background:linear-gradient(90deg,#5ac8fa,#0D6EFD);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.owner-shell .metric-label{color:#9db1c9}
+.owner-shell .kpi-note{color:#8ca3be}
+.owner-shell .bar{background:linear-gradient(90deg,#14253b,#25486f)}
+.owner-shell .bar>.fill{background:linear-gradient(90deg,#45b6ff,#0D6EFD)}
+.owner-shell .note{color:#94a8c0}
+/* Portal intro note */
+.portal-note{background:linear-gradient(145deg,#f4f8ff,#ffffff);border:1px solid #dfe7f4;border-radius:.7rem;padding:.6rem .8rem}
+/* Navbar */
+.navbar{
+  backdrop-filter:saturate(180%) blur(14px);
+  background:rgba(255,255,255,.9)!important;
+}
+.navbar .navbar-brand,.navbar .nav-link{color:#0b1730;}
+.navbar .nav-link:hover{color:#0a4f9e;}
+.navbar-brand{
+  font-weight:700;
+  letter-spacing:.01em;
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+.navbar-brand .dev{
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  font-weight:700;
+}
+.navbar-nav .nav-link{position:relative;font-weight:500;}
+.navbar-nav .nav-link:after{
+  content:"";
+  position:absolute;
+  left:6px;right:6px;bottom:3px;
+  height:2px;
+  background:var(--gradient);
+  border-radius:2px;
+  scale:0 1;
+  transform-origin:left;
+  transition:.55s var(--easing);
+  opacity:.45;
+}
+.navbar-nav .nav-link:hover:after,
+.navbar-nav .nav-link:focus-visible:after{scale:1 1;}
+/* Plan modal (minimal tweaks for contrast) */
+.plan-modal{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;padding:2.5rem 1rem 3rem;background:rgba(10,20,40,.62);backdrop-filter:saturate(180%) blur(12px);z-index:150;overflow-y:auto;opacity:0;visibility:hidden;transition:.35s;}
+.plan-dialog{background:#fff;width:100%;max-width:860px;border-radius:1.25rem;box-shadow:0 1.4rem 3.1rem -1.2rem rgba(0,0,0,.4);position:relative;animation:pop .5s var(--easing);}
+@keyframes pop{0%{transform:translateY(28px) scale(.97);opacity:0;}100%{transform:none;opacity:1;}}
+.plan-modal.show{opacity:1;visibility:visible;}
+.close-btn{position:absolute;top:.65rem;right:.65rem;border:none;background:#f1f4f8;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#334;cursor:pointer;transition:.4s;}
+.close-btn:hover{background:#e2e7ed;}
+.badge-chip{display:inline-block;background:#e5f1ff;color:#0D6EFD;font-size:.6rem;font-weight:600;letter-spacing:.06em;padding:.4rem .55rem;border-radius:.55rem;text-transform:uppercase;}
+.plan-header{padding:1.15rem 1.5rem .95rem;border-bottom:1px solid #eef1f5;padding-right:3.6rem;}
+.plan-body{padding:1.1rem 1.55rem 1.5rem;}
+.plan-footer{padding:1rem 1.55rem 1.35rem;border-top:1px solid #eef1f5;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;}
+.plan-section-card{background:#1d2a36;border:1px solid #2c455a;border-radius:.85rem;padding:.85rem .9rem .75rem;}
+.plan-section-card{color:#d4dce5;}
+.plan-section-card h5{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:#ffffff;margin-bottom:.45rem;}
+/* Calendly loader: center one spinner, hide duplicates */
+.calendly-overlay [class*="spinner"],
+.calendly-popup [class*="spinner"]{
+  position:fixed !important;
+  top:50% !important;
+  left:50% !important;
+  transform:translate(-50%,-50%) !important;
+  margin:0 !important;
+}
+.calendly-overlay [class*="spinner"]:not(:first-of-type),
+.calendly-popup [class*="spinner"]:not(:first-of-type){
+  display:none !important;
+}
+</style>
 </head>
-<body>
-  <!-- Skip link -->
-  <a href="#main" class="visually-hidden-focusable bg-primary text-white px-3 py-2 rounded shadow-sm ms-2 mt-2">Skip to main content</a>
+<body class="d-flex flex-column h-100">
+<a href="#main" class="skip-link">Skip to main content</a>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg bg-body border-bottom py-2 fixed-top">
+<nav class="navbar navbar-expand-sm navbar-light fixed-top border-bottom" aria-label="Primary navigation">
+  <div class="container">
+    <a class="navbar-brand" href="#">sinwlkn<span class="dev">.dev</span></a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navMain" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto small fw-medium align-items-sm-center text-center text-sm-start">
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#comparison">Compare</a></li>
+        <li class="nav-item"><a class="nav-link" href="#results">Impact</a></li>
+        <li class="nav-item"><a class="nav-link" href="#cases">Work</a></li>
+        <li class="nav-item"><a class="nav-link" href="#reviews">Reviews</a></li>
+  <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
+  <li class="nav-item"><a id="navPortal" class="nav-link" href="#portal">Client Portal</a></li>
+  <li class="nav-item"><a id="navCareers" class="nav-link" href="#careers">Careers</a></li>
+        <li class="nav-item mt-2 mt-sm-0 ms-sm-3">
+          <a class="btn btn-gradient btn-sm px-3" href="#schedule">Book Intro</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="fade-in">
+      <h1 class="centered">Operational Brand Management for Growth Teams</h1>
+  <p class="lead centered mx-auto mw-860">
+        We turn positioning into a living brand system—strategy, identity evolution, messaging governance & embedded execution—to cut revision cycles and accelerate go‑to‑market impact.
+      </p>
+      <div class="d-flex flex-wrap gap-3 cta-group">
+        <a href="#schedule" class="btn btn-gradient btn-lg px-4">Book Intro Call</a>
+        <a href="#pricing" class="btn btn-soft btn-lg px-4">View Plans</a>
+        <a href="#comparison" class="btn btn-outline-primary btn-lg px-4">Compare Tiers</a>
+      </div>
+      <div class="proof-strip">
+        <div class="proof-pill"><span>37%</span> fewer revisions</div>
+        <div class="proof-pill"><span>5.2w</span> clarity sprint</div>
+        <div class="proof-pill"><span>3.1x</span> faster updates</div>
+        <div class="proof-pill"><span>92%</span> retention &gt;6m</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="flex-shrink-0">
+  <!-- CAREERS (hidden until clicked) -->
+  <section id="careers" class="section" style="display:none;">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-        <span class="logo-text">sinwlkn<span class="text-primary">.dev</span></span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <div class="container-narrow form-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="h4 mb-0">Careers – Quick application</h2>
+          <button id="closeCareers" class="btn btn-outline-primary btn-sm" type="button" aria-label="Close Careers">Close</button>
+        </div>
+        <p class="small text-secondary mb-3">Select a role to see its details (salary, day‑to‑day, requirements) while you apply. All questions are required. No uploads. If you don’t meet every requirement, apply anyway.</p>
+
+        <div class="mb-3">
+          <label for="careerRole" class="form-label">Select a role <span class="required">*</span></label>
+          <select id="careerRole" class="form-select" required>
+            <option value="" selected disabled>Choose…</option>
+            <option value="brand-strategist">Brand Strategist</option>
+            <option value="copywriter">Messaging Copywriter</option>
+            <option value="designer">Visual Designer</option>
+            <option value="operations">Operations Coordinator</option>
+            <option value="brand-coordinator">Brand Coordinator</option>
+            <option value="junior-copywriter">Junior Copywriter</option>
+            <option value="junior-designer">Junior Designer</option>
+            <option value="operations-assistant">Operations Assistant</option>
+            <option value="content-creator">Content Creator</option>
+            <option value="video-editor">Video Editor</option>
+          </select>
+        </div>
+
+        <!-- Role info (revealed on selection) -->
+        <div id="roleInfo" class="card-base mb-3 hidden">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h3 class="h6 mb-1" id="roleInfoTitle">Role</h3>
+              <div class="small text-secondary" id="roleInfoLevel">Level • Discipline</div>
+            </div>
+            <span id="roleInfoSalary" class="badge" style="background:#eef6ff;color:#0a4f9e;border:1px solid #cfe3ff"></span>
+          </div>
+          <p class="small mt-2" id="roleInfoDesc"></p>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="small"><strong>Day‑to‑day</strong>
+                <ul class="mb-2 ps-3" id="roleInfoDaily"></ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="small"><strong>Requirements</strong>
+                <ul class="mb-2 ps-3" id="roleInfoReq"></ul>
+                <em class="text-secondary">If you’re close but not exact, apply anyway.</em>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form id="careerForm" novalidate>
+          <input type="hidden" name="role" id="careerRoleHidden">
+          <div class="role-grid">
+            <div>
+              <div class="mb-3">
+                <label class="form-label">Full name <span class="required">*</span></label>
+                <input type="text" class="form-control" name="name" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email <span class="required">*</span></label>
+                <input type="email" class="form-control" name="email" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">LinkedIn URL <span class="required">*</span></label>
+                <input type="url" class="form-control" name="linkedin" placeholder="https://www.linkedin.com/in/…" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Location / Timezone <span class="required">*</span></label>
+                <input type="text" class="form-control" name="timezone" placeholder="City, Country (UTC±)" required>
+              </div>
+            </div>
+            <div>
+              <!-- Brand Strategist -->
+              <fieldset id="fs-brand-strategist" class="hidden">
+                <legend>Brand Strategist Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Years of relevant experience <span class="required">*</span></label>
+                  <input type="number" class="form-control" min="0" name="exp_years" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Favorite positioning framework & why <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="framework" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Example of strategy → measurable impact <span class="required">*</span></label>
+                  <textarea class="form-control" rows="4" name="impact_case" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Stakeholder alignment approach <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="alignment" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Availability (hours/week) <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="availability" required>
+                </div>
+              </fieldset>
+
+              <!-- Messaging Copywriter -->
+              <fieldset id="fs-copywriter" class="hidden">
+                <legend>Messaging Copywriter Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Primary channels (web, email, ads, etc.) <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="channels" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Describe your messaging matrix approach <span class="required">*</span></label>
+                  <textarea class="form-control" rows="4" name="matrix_approach" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Example of measurable lift you contributed <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="lift_example" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Voice/tone guidelines you like and why <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="voice_tone" required></textarea>
+                </div>
+              </fieldset>
+
+              <!-- Visual Designer -->
+              <fieldset id="fs-designer" class="hidden">
+                <legend>Visual Designer Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Design systems/identity work you’ve done <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="systems_work" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Identity extension experience (motion/iconography) <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="identity_extension" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Primary tools (Figma, AE, etc.) <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="tools" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Portfolio URL <span class="required">*</span></label>
+                  <input type="url" class="form-control" name="portfolio" placeholder="https://" required>
+                </div>
+              </fieldset>
+
+              <!-- Operations Coordinator -->
+              <fieldset id="fs-operations" class="hidden">
+                <legend>Operations Coordinator Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Project management tools used <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="pm_tools" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Experience with governance/SLAs <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="governance" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Capacity (hours/week) <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="capacity" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Timezone overlap with ET (hours) <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="overlap" required>
+                </div>
+              </fieldset>
+
+              <!-- ENTRY: Brand Coordinator -->
+              <fieldset id="fs-brand-coordinator" class="hidden">
+                <legend>Brand Coordinator Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">What’s a brand you think operates clearly, and why? <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="brand_example" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Share a research summary you’ve created (link or brief) <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="research_summary" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Comfort with docs/slides? Tools you use <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="docs_tools" required>
+                </div>
+              </fieldset>
+
+              <!-- ENTRY: Junior Copywriter -->
+              <fieldset id="fs-junior-copywriter" class="hidden">
+                <legend>Junior Copywriter Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Share 2–3 links or paste short samples <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="samples" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Explain a message you’d A/B test on a homepage hero <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="ab_idea" required></textarea>
+                </div>
+              </fieldset>
+
+              <!-- ENTRY: Junior Designer -->
+              <fieldset id="fs-junior-designer" class="hidden">
+                <legend>Junior Designer Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Portfolio or work‑in‑progress link <span class="required">*</span></label>
+                  <input type="url" class="form-control" name="junior_portfolio" placeholder="https://" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">What’s a component you enjoy designing and why? <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="fav_component" required></textarea>
+                </div>
+              </fieldset>
+
+              <!-- ENTRY: Operations Assistant -->
+              <fieldset id="fs-operations-assistant" class="hidden">
+                <legend>Operations Assistant Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">How do you keep yourself and others organized? <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="org_method" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Tools you’ve used for tasks/notes/scheduling <span class="required">*</span></label>
+                  <input type="text" class="form-control" name="ops_tools" required>
+                </div>
+              </fieldset>
+
+              <!-- CONTENT: Content Creator -->
+              <fieldset id="fs-content-creator" class="hidden">
+                <legend>Content Creator Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Share 2–3 links to content you produced <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="creator_links" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Describe a repeatable content workflow you’ve used <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="creator_workflow" required></textarea>
+                </div>
+              </fieldset>
+
+              <!-- CONTENT: Video Editor -->
+              <fieldset id="fs-video-editor" class="hidden">
+                <legend>Video Editor Questions</legend>
+                <div class="mb-3">
+                  <label class="form-label">Links to edited videos or a reel <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="video_links" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Your editing stack and workflow <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3" name="video_stack" required></textarea>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 mt-3">
+            <button id="careerSubmit" class="btn btn-gradient px-4" type="submit" disabled>Submit Application</button>
+            <button type="reset" class="btn btn-outline-primary px-3">Reset</button>
+          </div>
+          <div id="careerAlert" class="alert mt-3 hidden" role="status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENT PORTAL (hidden until clicked) -->
+  <section id="portal" class="section" style="display:none;">
+    <div class="container">
+      <div class="container-narrow form-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="h4 mb-0">Client Portal</h2>
+          <button id="closePortal" class="btn btn-outline-primary btn-sm" type="button" aria-label="Close Portal">Close</button>
+        </div>
+        <div id="portalIntro">
+          <p class="small text-secondary portal-note">Enter your portal key to access your account. If you haven’t received your key within 24 hours of onboarding, reach out to <a href="mailto:contact@sinwlkn.dev">contact@sinwlkn.dev</a>.</p>
+          <div class="card-base mb-3" aria-label="Portal details">
+            <div class="small text-secondary">
+              <strong>What you can do here</strong>
+              <ul class="mb-2 ps-3">
+                <li>See your documents and milestones</li>
+                <li>Review invoices and support options</li>
+                <li>Find helpful links and contacts</li>
+              </ul>
+              <em>Need help? Email contact@sinwlkn.dev</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gate -->
+        <form id="portalGate" class="mb-3" novalidate>
+          <div class="row g-2 align-items-end">
+            <div class="col-sm-8">
+              <label class="form-label" for="portalKey">Portal key (Stripe invoice number) <span class="required">*</span></label>
+              <input id="portalKey" class="form-control" type="text" inputmode="text" autocomplete="one-time-code" placeholder="Enter invoice number" required>
+            </div>
+            <div class="col-sm-4 d-grid">
+              <button id="portalEnter" type="submit" class="btn btn-gradient">Enter</button>
+            </div>
+          </div>
+          <div id="portalMsg" class="alert mt-2 hidden" role="status" aria-live="polite"></div>
+          <!-- PIN step -->
+          <div id="portalPinWrap" class="row g-2 align-items-end mt-2 hidden">
+            <div class="col-sm-8">
+              <label class="form-label" for="portalPin">Enter your 4‑digit PIN <span class="required">*</span></label>
+              <input id="portalPin" class="form-control" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4" placeholder="••••" aria-describedby="pinHelp">
+              <div id="pinHelp" class="form-text">Two‑step verification required for this key.</div>
+            </div>
+            <div class="col-sm-4 d-grid">
+              <button id="portalVerify" type="button" class="btn btn-outline-primary">Verify</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Content (hidden until unlocked) -->
+        <div id="portalContent" class="hidden">
+          <div id="portalSigned" class="card-base mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <div>
+                <strong>Signed in</strong>
+                <div class="small text-secondary">Invoice key: <span id="portalInvoice"></span></div>
+              </div>
+              <button id="portalSignout" class="btn btn-outline-primary btn-sm">Sign out</button>
+            </div>
+          </div>
+          <div id="ownerDashboard" class="hidden">
+            <div class="owner-shell mb-3">
+              <div class="owner-header">
+                <div>
+                  <div class="owner-badge" aria-label="Owner Console">OWNER CONSOLE</div>
+                  <div class="owner-sub">Studio metrics & operations</div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <button id="ownerSignout" class="btn btn-outline-primary btn-sm">Sign out</button>
+                </div>
+              </div>
+              <div class="row g-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiRevenue">$0</div>
+                    <div class="metric-label">YTD Revenue</div>
+                    <div class="kpi-note" id="kpiRevenueNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiMRR">$0</div>
+                    <div class="metric-label">Current MRR</div>
+                    <div class="kpi-note" id="kpiMRRNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiClients">0</div>
+                    <div class="metric-label">Active Clients</div>
+                    <div class="kpi-note" id="kpiClientsNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiTickets">0</div>
+                    <div class="metric-label">Open Tickets</div>
+                    <div class="kpi-note" id="kpiTicketsNote"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiNetNew">$0</div>
+                    <div class="metric-label">Net New MRR</div>
+                    <div class="kpi-note" id="kpiNetNewNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiChurn">0%</div>
+                    <div class="metric-label">Churn Rate</div>
+                    <div class="kpi-note" id="kpiChurnNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiCash">$0</div>
+                    <div class="metric-label">Cash on Hand</div>
+                    <div class="kpi-note" id="kpiCashNote"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="kpiRunway">0</div>
+                    <div class="metric-label">Runway (mo)</div>
+                    <div class="kpi-note" id="kpiRunwayNote"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-lg-7">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Revenue Trend (last 6 mo)</h3>
+                    <ul class="bar-list" id="revBars"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-5">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Ticket Queue</h3>
+                    <ul class="small ps-3 mb-2" id="ticketList"></ul>
+                    <p class="note mb-0">Reply by email: contact@sinwlkn.dev</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Client Summary</h3>
+                    <ul class="small ps-3 mb-0" id="clientSummary"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Pipeline Snapshot</h3>
+                    <ul class="small ps-3 mb-0" id="pipeline"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Utilization by Role</h3>
+                    <ul class="bar-list" id="utilList"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">A/R Aging</h3>
+                    <ul class="small ps-3 mb-0" id="arAging"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Top Clients by MRR</h3>
+                    <ul class="small ps-3 mb-0" id="topClients"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Expenses Breakdown</h3>
+                    <ul class="bar-list" id="expensesList"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Capacity Forecast (6 weeks)</h3>
+                    <ul class="bar-list" id="capacityList"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Expenses Detail</h3>
+                    <ul class="small ps-3 mb-0" id="expensesDetailList"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Staff (<span id="staffCount">0</span>)</h3>
+                    <ul class="small ps-3 mb-0" id="staffList" style="max-height:240px;overflow:auto"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Top Earners</h3>
+                    <ul class="small ps-3 mb-0" id="topEarners"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="card-base h-100">
+                    <h3 class="h6 mb-1">Least Productive</h3>
+                    <ul class="small ps-3 mb-0" id="leastProductive"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="clientGeneral" class="row g-3">
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Project Documents</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li><strong>SOW</strong> — scope, cadence, SLAs</li>
+                  <li><strong>Guidelines</strong> — identity + voice/tone</li>
+                  <li><strong>Messaging Matrix</strong> — reusable blocks</li>
+                  <li><strong>QA Archive</strong> — feedback + outcomes</li>
+                </ul>
+                <p class="note mt-2 mb-0">Need a link updated? Email contact@sinwlkn.dev</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Upcoming Milestones</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>W1: Alignment + intake</li>
+                  <li>W2: Matrix adjustments</li>
+                  <li>W3: QA batch</li>
+                  <li>W4: Review + next plan</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Support</h3>
+                <p class="small text-secondary mb-2">Have a request or blocker? Use the preferred channel below.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-soft btn-sm" href="#schedule">Book a call</a>
+                  <a class="btn btn-outline-primary btn-sm" href="mailto:contact@sinwlkn.dev">Email</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Invoices</h3>
+                <p class="small text-secondary mb-2">Use your Stripe customer portal to view/pay invoices. If you need your link, email us.</p>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>Invoice history</li>
+                  <li>Payment methods</li>
+                  <li>Billing contact</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Deliverables This Month</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>Messaging updates — home, pricing</li>
+                  <li>QA batch — email + ads</li>
+                  <li>Identity extension — icons set A</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Assets & Access</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>Brand folder (Drive/Dropbox)</li>
+                  <li>Figma project link</li>
+                  <li>Analytics dashboard</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Timeline & Cadence</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>Weekly stand-up: Tue 10:00 ET</li>
+                  <li>QA drop: Thu EOD</li>
+                  <li>Monthly review: last Fri</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-base h-100">
+                <h3 class="h6">Contacts</h3>
+                <ul class="small ps-3 mb-0 text-secondary">
+                  <li>Account lead — sinwlkn</li>
+                  <li>Design — sinwlkn</li>
+                  <li>Copy — sinwlkn</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card-base h-100">
+                <h3 class="h6">Helpful Links</h3>
+                <div class="d-flex flex-wrap gap-2 small">
+                  <a class="btn btn-outline-primary btn-sm" href="#" role="button">Brand folder</a>
+                  <a class="btn btn-outline-primary btn-sm" href="#" role="button">Messaging matrix</a>
+                  <a class="btn btn-outline-primary btn-sm" href="#" role="button">QA archive</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section">
+    <div class="container">
+      <div class="centered mb-5 fade-in">
+        <h2 class="mb-3">Core Components</h2>
+  <p class="text-secondary mx-auto mw-700">Pillars we assemble into a scalable, measurable brand operating system.</p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base service-card h-100">
+            <h3 class="h6 fw-bold mb-2">Strategy Sprint</h3>
+            <p class="small text-secondary mb-2">Crystallize positioning.</p>
+            <ul class="small ps-3 mb-0">
+              <li>Audience + jobs map</li><li>Narrative contrast</li><li>Value architecture</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base service-card h-100">
+            <h3 class="h6 fw-bold mb-2">Identity System</h3>
+            <p class="small text-secondary mb-2">Visual & verbal toolkit.</p>
+            <ul class="small ps-3 mb-0">
+              <li>Mark refinement</li><li>Palette & type scale</li><li>Voice & tone frames</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base service-card h-100">
+            <h3 class="h6 fw-bold mb-2">Messaging System</h3>
+            <p class="small text-secondary mb-2">Reusable narrative assets.</p>
+            <ul class="small ps-3 mb-0">
+              <li>Messaging matrix</li><li>Page frameworks</li><li>Campaign copy kits</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base service-card h-100">
+            <h3 class="h6 fw-bold mb-2">Governance Loop</h3>
+            <p class="small text-secondary mb-2">Consistency & velocity.</p>
+            <ul class="small ps-3 mb-0">
+              <li>Asset QA</li><li>Variance audits</li><li>KPI instrumentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="centered mt-4 fade-in">
+        <a href="#pricing" class="btn btn-outline-primary btn-lg px-4">See Packaging</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="section-alt">
+    <div class="container">
+      <div class="centered mb-4 fade-in">
+        <h2 class="mb-2">Monthly Retainers</h2>
+  <p class="text-secondary mx-auto mw-680">Select the stewardship level aligned to capacity & brand maturity. Click any card for deeper scope.</p>
+        <p class="note mt-2">Annual option: 15% savings (upfront) — request during intro call.</p>
+      </div>
+      <div class="row g-4 justify-content-center" id="planCards">
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base price-card h-100 d-flex flex-column focus-ring text-center" data-plan="brand-essentials" tabindex="0" aria-label="Brand Essentials plan – $2400 per month. Press Enter for details.">
+            <h3 class="h6 fw-bold mb-1">Brand Essentials</h3>
+            <p class="small text-secondary mb-2">Foundational upkeep</p>
+            <div class="h3 fw-bold mb-3 price">$2,400 <small>/mo</small></div>
+            <ul class="small ps-3 text-start mb-3">
+              <li>Quarterly mini audit</li><li>Guideline updates</li><li>Email advisory</li>
+            </ul>
+            <button class="btn btn-outline-primary btn-sm mt-auto view-details" data-plan="brand-essentials" type="button">Details</button>
+            <p class="upgrade-note">Stage: Seed–A</p>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base price-card featured h-100 d-flex flex-column focus-ring text-center" data-plan="growth-steward" tabindex="0" aria-label="Growth Steward plan – $5000 per month. Press Enter for details.">
+            <h3 class="h6 fw-bold mb-1">Growth Steward</h3>
+            <p class="small text-secondary mb-2">Strategy + messaging</p>
+            <div class="h3 fw-bold mb-3 price">$5,000 <small>/mo</small></div>
+            <ul class="small ps-3 text-start mb-3">
+              <li>Bi‑monthly strategy</li><li>Messaging refresh</li><li>Asset QA feedback</li><li>Priority response</li>
+            </ul>
+            <button class="btn btn-gradient btn-sm mt-auto view-details" data-plan="growth-steward" type="button">Details</button>
+            <p class="upgrade-note">Most upgrades → Scale</p>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base price-card h-100 d-flex flex-column focus-ring text-center" data-plan="scale-system" tabindex="0" aria-label="Scale System plan – $8500 per month. Press Enter for details.">
+            <h3 class="h6 fw-bold mb-1">Scale System</h3>
+            <p class="small text-secondary mb-2">Identity evolution</p>
+            <div class="h3 fw-bold mb-3 price">$8,500 <small>/mo</small></div>
+            <ul class="small ps-3 text-start mb-3">
+              <li>Monthly workshop</li><li>Identity extension</li><li>Channel audits</li><li>Measurement reporting</li>
+            </ul>
+            <button class="btn btn-outline-primary btn-sm mt-auto view-details" data-plan="scale-system" type="button">Details</button>
+            <p class="upgrade-note">Stage: Post-PMF</p>
+          </div>
+        </div>
+        <div class="col-10 col-sm-6 col-lg-3 fade-in">
+          <div class="card-base price-card h-100 d-flex flex-column focus-ring text-center" data-plan="fractional-team" tabindex="0" aria-label="Fractional Brand Team plan – $14000 per month. Press Enter for details.">
+            <h3 class="h6 fw-bold mb-1">Fractional Brand Team</h3>
+            <p class="small text-secondary mb-2">Embedded pod</p>
+            <div class="h3 fw-bold mb-3 price">$14,000 <small>/mo</small></div>
+            <ul class="small ps-3 text-start mb-3">
+              <li>Weekly collab</li><li>Campaign kits</li><li>Design + copy hours</li><li>Experiment pipeline</li>
+            </ul>
+            <button class="btn btn-outline-primary btn-sm mt-auto view-details" data-plan="fractional-team" type="button">Details</button>
+            <p class="upgrade-note">Alt to hires</p>
+          </div>
+        </div>
+      </div>
+  <button class="not-toggle mx-auto d-block mt-5 fade-in" data-target="#notIncluded" aria-expanded="false" style="max-width:500px">
+        What's Not Included (All Plans) <span aria-hidden="true">+</span>
       </button>
-      <div id="navMenu" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="#process">Process</a></li>
-          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-          <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
-          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
-          <li class="nav-item">
-            <button id="themeToggleBtn" class="btn btn-outline-secondary btn-sm ms-lg-2" type="button" aria-label="Toggle dark mode">🌙</button>
-          </li>
-          <li class="nav-item ms-lg-2">
-            <a href="#schedule" class="btn btn-primary btn-sm">Book a Call</a>
-          </li>
+  <div id="notIncluded" class="not-panel centered" aria-hidden="true" style="display:none;">
+        <ul style="display:inline-block;text-align:left;font-size:.67rem;">
+          <li>Performance paid media management</li>
+          <li>Full product UI/UX beyond identity extensions</li>
+          <li>Long-form content (&gt;1500 words) unless scoped</li>
+          <li>PR / media pitching</li>
+          <li>Community moderation</li>
         </ul>
       </div>
+      <p class="note mt-4 centered fade-in">Need a one‑time sprint (rebrand, naming, motion spec)? Discuss during the intro call.</p>
     </div>
-  </nav>
+  </section>
 
-  <!-- HERO (single-column now) -->
-  <header class="hero pt-7 pb-5 pt-lg-8" style="margin-top:4rem">
+  <!-- COMPARISON -->
+  <section id="comparison" class="section">
     <div class="container">
-      <div class="col-lg-10 col-xl-9 px-0">
-        <span class="small-note text-secondary d-inline-block mb-2">Solo Web Development</span>
-        <h1 class="display-5 fw-bold mb-3">
-          Affordable, Clean, Fast <span class="gradient-text">Websites</span>
-        </h1>
-        <p class="lead mb-4">
-          I build simple, fast, mobile‑friendly websites for small businesses, side projects, and creators. No agency layers. Straightforward process, honest pricing.
-        </p>
-        <div class="d-flex flex-wrap gap-3">
-          <a href="#schedule" class="btn btn-primary btn-lg px-4">Book Intro Call</a>
-          <a href="mailto:don@sinwlkn.dev" class="btn btn-outline-secondary btn-lg px-4">Email Me</a>
-        </div>
-        <div class="d-flex flex-wrap gap-4 mt-4 small text-secondary">
-          <div><strong>Fast load</strong></div>
-          <div><strong>Responsive</strong></div>
-          <div><strong>Accessible basics</strong></div>
-        </div>
+      <div class="centered mb-4 fade-in">
+        <h2 class="mb-3">Plan Comparison</h2>
+        <p class="text-secondary mx-auto" style="max-width:680px">Depth, cadence & system maturity progression.</p>
+      </div>
+  <div class="table-responsive fade-in mw-1050 mi-auto">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Essentials</th>
+              <th class="highlight-column">Steward</th>
+              <th>Scale</th>
+              <th>Fractional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Approx hours</td><td>10</td><td>20</td><td>35</td><td>50–55</td></tr>
+            <tr><td>Strategy cadence</td><td>Quarterly</td><td>Bi‑monthly</td><td>Monthly workshop</td><td>Weekly stand‑up</td></tr>
+            <tr><td>Messaging evolution</td><td>Minor tweaks</td><td>Rolling refresh</td><td>Structured extensions</td><td>Continuous iteration</td></tr>
+            <tr><td>Identity extension</td><td>—</td><td>Advisory</td><td>1 / month</td><td>Parallel streams</td></tr>
+            <tr><td>Asset QA capacity</td><td>2 / mo</td><td>6 / mo</td><td>12 / mo</td><td>Unlimited (hrs)</td></tr>
+            <tr><td>Reporting</td><td>Quarterly note</td><td>Monthly snapshot</td><td>KPI deck</td><td>Integrated dashboard</td></tr>
+            <tr><td>Experimentation</td><td>—</td><td>Hypothesis list</td><td>Prioritized queue</td><td>Active pipeline</td></tr>
+            <tr><td>Response SLA</td><td>48h</td><td>24–36h</td><td>24h</td><td>Same-day</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">Hours reflect typical allocation bands; overages & dedicated production can be added.</p>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main id="main">
-    <!-- SERVICES -->
-    <section id="services" class="py-5">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">What I Offer</h2>
-          <p class="text-secondary mb-0">Focused on practical web development. No fluff.</p>
-        </div>
-        <div class="row g-4">
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">🌐</div>
-                <h5 class="card-title mb-2">New Website Build</h5>
-                <p class="small mb-2">Custom layout with your branding, fast and responsive.</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Home + inner pages</li>
-                  <li>Lead / contact form integration</li>
-                  <li>Basic SEO meta & structure</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">🛠️</div>
-                <h5 class="card-title mb-2">Site Updates</h5>
-                <p class="small mb-2">Add pages, tweak layout, improve responsiveness or speed.</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Refactoring</li>
-                  <li>Bug fixes</li>
-                  <li>Content changes</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">⚡</div>
-                <h5 class="card-title mb-2">Performance Basics</h5>
-                <p class="small mb-2">Lightweight tuning for faster initial load + core improvements.</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Image optimization</li>
-                  <li>Bundle trimming</li>
-                  <li>Simple caching advice</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">📝</div>
-                <h5 class="card-title mb-2">Basic CMS Setup</h5>
-                <p class="small mb-2">Optional simple content management (static or headless).</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Blog / posts</li>
-                  <li>Editable pages</li>
-                  <li>Docs area</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">🔐</div>
-                <h5 class="card-title mb-2">Launch Support</h5>
-                <p class="small mb-2">Help deploying to a host and basic configuration.</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Hosting setup</li>
-                  <li>Form handling</li>
-                  <li>Simple analytics</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <div class="card h-100 card-hover shadow-sm">
-              <div class="card-body">
-                <div class="fs-2 mb-2">🔁</div>
-                <h5 class="card-title mb-2">Maintenance</h5>
-                <p class="small mb-2">Small monthly support for fixes & light changes.</p>
-                <ul class="small ps-3 mb-0">
-                  <li>Minor edits</li>
-                  <li>Content updates</li>
-                  <li>Error checks</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div><!-- /row -->
-      </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section id="process" class="py-5 bg-body-tertiary">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">Simple Process</h2>
-          <p class="text-secondary mb-0">Clear steps from idea to launch.</p>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="d-flex flex-column gap-4">
-              <div class="position-relative ps-5 process-step">
-                <div class="process-line"></div>
-                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:2.6rem;height:2.6rem;">1</div>
-                <h5>Quick Chat</h5>
-                <p class="small text-secondary mb-0">You tell me what you need (pages, purpose, deadline).</p>
-              </div>
-              <div class="position-relative ps-5 process-step">
-                <div class="process-line"></div>
-                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:2.6rem;height:2.6rem;">2</div>
-                <h5>Scope & Quote</h5>
-                <p class="small text-secondary mb-0">I outline what’s included, timeline, and a flat or range price.</p>
-              </div>
-              <div class="position-relative ps-5 process-step">
-                <div class="process-line"></div>
-                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:2.6rem;height:2.6rem;">3</div>
-                <h5>Build</h5>
-                <p class="small text-secondary mb-0">I implement the pages & features, share previews for feedback.</p>
-              </div>
-              <div class="position-relative ps-5 process-step">
-                <div class="process-line"></div>
-                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:2.6rem;height:2.6rem;">4</div>
-                <h5>Polish & Test</h5>
-                <p class="small text-secondary mb-0">Responsiveness, basic accessibility, performance basics.</p>
-              </div>
-              <div class="position-relative ps-5 process-step">
-                <div class="position-absolute top-0 start-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                     style="width:2.6rem;height:2.6rem;">5</div>
-                <h5>Launch & Support</h5>
-                <p class="small text-secondary mb-0">Deploy + optional maintenance for small tweaks later.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section id="pricing" class="py-5">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">Straightforward Pricing</h2>
-          <p class="text-secondary mb-0">Affordable ranges while I build my portfolio. Transparent and fair.</p>
-        </div>
-        <div class="row g-4 align-items-stretch">
-          <div class="col-md-6 col-lg-4">
-            <div class="card plan-card h-100">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Starter Site</h5>
-                <p class="small text-secondary flex-grow-0">Simple online presence (great for local service or landing).</p>
-                <h3 class="fw-bold mb-3">$500 – $900</h3>
-                <ul class="small ps-3 flex-grow-1">
-                  <li>Up to 3 pages</li>
-                  <li>Mobile friendly layout</li>
-                  <li>Lead / contact form integration</li>
-                  <li>Basic SEO meta</li>
-                </ul>
-                <a href="#schedule" class="btn btn-outline-primary w-100 mt-2">Book Intro Call</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="card plan-card h-100 highlight">
-              <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="card-title mb-0">Standard Website</h5>
-                  <span class="badge text-bg-primary">Popular</span>
-                </div>
-                <p class="small text-secondary flex-grow-0">Business site with more content & structure.</p>
-                <h3 class="fw-bold mb-3">$900 – $1.8k</h3>
-                <ul class="small ps-3 flex-grow-1">
-                  <li>Up to ~8 pages</li>
-                  <li>Reusable components</li>
-                  <li>Simple CMS (optional)</li>
-                  <li>Performance & accessibility basics</li>
-                </ul>
-                <a href="#schedule" class="btn btn-primary w-100 mt-2">Book Intro Call</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 col-lg-4">
-            <div class="card plan-card h-100">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Maintenance</h5>
-                <p class="small text-secondary flex-grow-0">Light monthly updates & fixes.</p>
-                <h3 class="fw-bold mb-3">$150 – $400/mo</h3>
-                <ul class="small ps-3 flex-grow-1">
-                  <li>Small content changes</li>
-                  <li>Minor feature tweaks</li>
-                  <li>Error checks & improvements</li>
-                </ul>
-                <a href="#schedule" class="btn btn-outline-primary w-100 mt-2">Book Intro Call</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="small text-secondary text-center mt-4 mb-0">
-          Final price depends on pages, features, integrations. <a href="#schedule">Tell me what you need →</a>
-        </p>
-      </div>
-    </section>
-
-    <!-- SCHEDULE -->
-    <section id="schedule" class="py-5 bg-body-tertiary">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">Schedule a 15‑Minute Intro</h2>
-          <p class="text-secondary mb-0">Pick a time that works. I’ll confirm and send a quick outline beforehand.</p>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="schedule-wrapper text-center">
-              <p class="small text-secondary mb-4">No long forms. Choose a slot and we’ll connect.</p>
-              <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-3">
-                <button id="openScheduleBtn" class="btn btn-primary btn-lg px-4">Open Scheduling Widget</button>
-                <a href="mailto:don@sinwlkn.dev" class="btn btn-outline-secondary btn-lg px-4">Email Instead</a>
-              </div>
-              <p class="small text-secondary mb-0">
-                If the widget doesn’t open, <a href="https://calendly.com/sinwlkn/15" rel="noopener" target="_blank">open direct link</a>.
-              </p>
-              <!-- Inline alternative (disabled):
-              <div class="calendly-inline-widget mt-4"
-                   data-url="https://calendly.com/sinwlkn/15?hide_landing_page_details=1&hide_gdpr_banner=1"
-                   style="min-width:320px;height:680px;"></div>
-              -->
-              <noscript class="small d-block mt-4">
-                JavaScript required to load the scheduler.
-              </noscript>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="py-5">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">FAQ</h2>
-          <p class="text-secondary mb-0">Quick answers.</p>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="accordion" id="faqAccordion">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="fq1">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fa1" aria-expanded="true" aria-controls="fa1">
-                    How long does a site take?
-                  </button>
-                </h2>
-                <div id="fa1" class="accordion-collapse collapse show" aria-labelledby="fq1" data-bs-parent="#faqAccordion">
-                  <div class="accordion-body small">
-                    Starter sites are often 1–2 weeks. Standard sites 2–4 weeks depending on feedback speed and content readiness.
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="fq2">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa2" aria-expanded="false" aria-controls="fa2">
-                    Do you write copy or provide design?
-                  </button>
-                </h2>
-                <div id="fa2" class="accordion-collapse collapse" aria-labelledby="fq2" data-bs-parent="#faqAccordion">
-                  <div class="accordion-body small">
-                    I focus on development. If you have branding / copy I implement it. I can assist with layout structure & basic styling decisions but not full brand identity design.
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="fq3">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa3" aria-expanded="false" aria-controls="fa3">
-                    What tech do you use?
-                  </button>
-                </h2>
-                <div id="fa3" class="accordion-collapse collapse" aria-labelledby="fq3" data-bs-parent="#faqAccordion">
-                  <div class="accordion-body small">
-                    Modern HTML, CSS, JavaScript. Can add lightweight frameworks or static tools if they add value. Optional simple headless CMS for content editing.
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="fq4">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fa4" aria-expanded="false" aria-controls="fa4">
-                    How do payments work?
-                  </button>
-                </h2>
-                <div id="fa4" class="accordion-collapse collapse" aria-labelledby="fq4" data-bs-parent="#faqAccordion">
-                  <div class="accordion-body small">
-                    Typically 40% to start, remainder at handoff / launch. Maintenance billed monthly. Flexible for very small projects if needed.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="small text-center mt-4 mb-0">
-              More questions? <a href="mailto:don@sinwlkn.dev">Email me</a> or <a href="#schedule">book a call</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="py-4 border-top bg-body">
+  <!-- RESULTS -->
+  <section id="results" class="section-alt">
     <div class="container">
-      <div class="row gy-3 align-items-center">
-        <div class="col-md-6">
-          <span class="small text-secondary">&copy; <span id="year"></span> sinwlkn.dev. All rights reserved.</span>
+      <div class="centered mb-4 fade-in">
+        <h2 class="mb-3">Impact Metrics</h2>
+  <p class="text-secondary mx-auto mw-660">Representative rolling median outcomes across retained clients.</p>
+      </div>
+      <div class="metric-grid fade-in">
+        <div class="metric-card">
+          <div class="metric-value">37%</div>
+          <div class="metric-label">Revision Drop</div>
+          <p class="small mb-0 text-secondary">Governance & stricter guideline adoption.</p>
         </div>
-        <div class="col-md-6">
-          <div class="d-flex flex-wrap justify-content-md-end gap-3 small">
-            <a href="#services" class="link-secondary text-decoration-none">Services</a>
-            <a href="#process" class="link-secondary text-decoration-none">Process</a>
-            <a href="#pricing" class="link-secondary text-decoration-none">Pricing</a>
-            <a href="#schedule" class="link-secondary text-decoration-none">Schedule</a>
-            <a href="#faq" class="link-secondary text-decoration-none">FAQ</a>
-            <a href="mailto:don@sinwlkn.dev" class="link-secondary text-decoration-none">Email</a>
-            <a href="#" class="link-secondary text-decoration-none">Privacy</a>
-          </div>
+        <div class="metric-card">
+          <div class="metric-value">+18%</div>
+          <div class="metric-label">Page CVR</div>
+          <p class="small mb-0 text-secondary">Post messaging matrix refresh.</p>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">5.2w</div>
+          <div class="metric-label">Clarity Sprint</div>
+          <p class="small mb-0 text-secondary">Median time to positioning sign‑off.</p>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">92%</div>
+          <div class="metric-label">Retention</div>
+          <p class="small mb-0 text-secondary">Clients beyond 6‑month mark.</p>
         </div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Floating CTA -->
-  <div class="floating-cta">
-    <a href="#schedule" class="btn btn-primary shadow">Book a Call →</a>
+  <!-- CASES -->
+  <section id="cases" class="section">
+    <div class="container">
+      <div class="centered mb-5 fade-in">
+        <h2 class="mb-3">Case Snapshots</h2>
+  <p class="text-secondary mx-auto mw-700">Anonymized examples illustrating leverage points & typical tier transitions.</p>
+      </div>
+      <div class="case-grid fade-in">
+        <div class="card-base case-card">
+          <span class="case-metric">+24% Signups</span>
+          <h3 class="h6 fw-bold mb-1">Dev SaaS (Series A)</h3>
+          <p class="small mb-0">Rebuilt messaging matrix & QA loop reduced narrative drift across top conversion paths.</p>
+          <p class="note mb-0">Steward → Scale (month 5).</p>
+        </div>
+        <div class="card-base case-card">
+          <span class="case-metric">-41% Asset Time</span>
+          <h3 class="h6 fw-bold mb-1">Fintech Growth</h3>
+          <p class="small mb-0">Componentized identity extensions (motion/icon spec) cut redesign & revision cycles.</p>
+          <p class="note mb-0">Scale retained 11 months.</p>
+        </div>
+        <div class="card-base case-card">
+          <span class="case-metric">3 Launches/Q</span>
+          <h3 class="h6 fw-bold mb-1">Health Platform</h3>
+          <p class="small mb-0">Fractional pod implemented experiment cadence accelerating campaign iteration.</p>
+          <p class="note mb-0">Ongoing Fractional.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews" class="section-alt">
+    <div class="container">
+      <div class="centered mb-5 fade-in">
+        <h2 class="mb-2">Recent Review Sentiments</h2>
+  <p class="text-secondary mx-auto mw-710">
+          Average rating <strong>4.3 / 5</strong> based on last 100 anonymized internal feedback entries.
+          <br><span class="note d-block mt-2">Excerpts generalized to preserve confidentiality.</span>
+        </p>
+        <div class="stars" aria-label="Average rating 4.3 out of 5 stars" style="font-size:1rem">★★★★☆ <span class="small text-secondary ms-1">4.3 (100)</span></div>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card fade-in">
+          <div class="stars">★★★★★</div>
+          <p>"Positioning structure eliminated internal debate & sped approvals."</p>
+          <div class="review-meta"><span>Speed</span><span>Positioning</span></div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★☆</div>
+          <p>"Audit quantified variance; governance loop cut rework quickly."</p>
+          <div class="review-meta"><span>Governance</span><span>Consistency</span></div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★★</div>
+          <p>"Messaging refresh lifted mid‑funnel engagement almost immediately."</p>
+          <div class="review-meta"><span>Messaging</span><span>Conversion</span></div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★☆</div>
+          <p>"Identity extension spec made multi‑channel creative plug & play."</p>
+          <div class="review-meta"><span>Identity</span><span>Efficiency</span></div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★☆</div>
+          <p>"Fractional pod integrated seamlessly—accelerated experimentation."</p>
+          <div class="review-meta"><span>Fractional</span><span>Velocity</span></div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="stars">★★★★☆</div>
+          <p>"Narrative adherence tracking changed how we brief marketing."</p>
+          <div class="review-meta"><span>Clarity</span><span>Briefing</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE (NO EMBED) -->
+  <section id="schedule" class="section schedule-section">
+    <div class="container">
+      <div class="schedule-box fade-in">
+        <h2 class="mb-3">Book a 15‑Minute Intro Call</h2>
+  <p class="text-secondary mx-auto mw-640">Short discovery to surface current friction, maturity & the fastest brand lift. Zero pressure—just clarity.</p>
+        <div class="schedule-badges">
+          <span>15 MIN</span><span>LIVE</span><span>DISCOVERY</span><span>NO PITCH</span>
+        </div>
+  <ul class="inline-list mx-auto mw-560">
+          <li>Agenda: context → bottlenecks → goals → potential lever</li>
+          <li>Outcome: tier or sprint recommendation & next step</li>
+          <li>Ask about 15% annual when relevant</li>
+        </ul>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <a href="#" class="btn btn-gradient px-5 py-2" data-calendly="https://calendly.com/sinwlkn/15" role="button">
+            Open Scheduler
+          </a>
+          <a href="mailto:contact@sinwlkn.dev" class="btn btn-outline-primary px-4 py-2">Or Email Instead</a>
+        </div>
+        <p class="note mt-3 mb-0">Prefer a different length? Request during booking confirmation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section-alt" style="padding:3.4rem 0;">
+    <div class="container">
+      <div class="fade-in centered">
+        <h2 class="h3 fw-bold mb-3">Ready to eliminate brand friction?</h2>
+  <p class="text-secondary mx-auto mw-620">Map the highest leverage identity or governance moves in a quick intro call.</p>
+        <a href="#schedule" class="btn btn-gradient btn-lg px-5 mt-2">Book Intro</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer role="contentinfo">
+  <div class="footer-inner fade-in">
+    <div class="footer-brand">sinwlkn.dev</div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#comparison">Compare</a>
+      <a href="#results">Impact</a>
+      <a href="#cases">Work</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#schedule">Schedule</a>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">
+      <div>&copy; <span id="year"></span> sinwlkn.dev. All rights reserved.</div>
+      <div>Average rating 4.3 / 5 (last 100 anonymized internal reviews)</div>
+      <div>Annual option: 15% savings (request during intro)</div>
+    </div>
   </div>
+</footer>
 
-  <!-- JS: Bootstrap -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"
-  ></script>
+<button id="toTop" aria-label="Back to top">↑</button>
 
-  <!-- Calendly widget -->
-  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- PLAN MODAL -->
+<div class="plan-modal" id="planModal" aria-modal="true" role="dialog" aria-labelledby="planTitle" aria-describedby="planDesc">
+  <div class="plan-dialog">
+    <button class="close-btn" id="closePlan" aria-label="Close plan details">×</button>
+    <div class="plan-header">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+        <div>
+          <h3 id="planTitle" class="mb-1"></h3>
+          <p id="planSubtitle" class="small text-secondary mb-0"></p>
+        </div>
+        <div class="text-end">
+          <p id="planPrice" class="h5 mb-1 fw-bold"></p>
+          <span id="planChip" class="badge-chip"></span>
+        </div>
+      </div>
+    </div>
+    <div class="plan-body">
+      <p id="planDesc" class="mb-4"></p>
+      <div class="row g-3 mb-4" id="deliverablesBlocks"></div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="plan-section-card">
+            <h5>Onboarding (First 2 Weeks)</h5>
+            <ul id="planOnboarding" class="mb-0 small ps-3"></ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="plan-section-card">
+            <h5>Ideal Fit</h5>
+            <ul id="planFit" class="mb-0 small ps-3"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="plan-section-card mb-4">
+        <h5>Sample Month Timeline</h5>
+        <ul id="planTimeline" class="mb-0 small ps-3"></ul>
+      </div>
+      <div class="plan-section-card mb-4">
+        <h5>Expected Outcomes (6–12m)</h5>
+        <div id="planOutcomes" class="d-flex flex-wrap gap-2"></div>
+      </div>
+      <div class="plan-section-card mb-2">
+        <h5>Scope Guardrails</h5>
+        <ul id="planNotes" class="mb-0 small ps-3"></ul>
+      </div>
+    </div>
+    <div class="plan-footer">
+      <div class="d-flex flex-wrap gap-2">
+        <button id="planCheckout" class="btn btn-gradient btn-sm">Book Intro for This Plan</button>
+        <button id="planContact" class="btn btn-outline-primary btn-sm">General Intro</button>
+      </div>
+      <small class="text-muted">Ask about ANNUAL15 on the call for 15% savings.</small>
+    </div>
+  </div>
+</div>
 
-  <script>
-    /* Utility: throttle scroll events */
-    function throttle(fn, wait){
-      let t=0;
-      return function(...args){
-        const now = Date.now();
-        if(now - t >= wait){
-          t = now;
-          fn.apply(this,args);
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+// ========= App bootstrap =========
+document.addEventListener('DOMContentLoaded',()=>{
+  // Config and magic numbers
+  const CFG={
+    scrollTopThreshold:600,
+    fadeThreshold:.2,
+    calendlyRetry:{max:20,interval:150},
+    portal:{sessionFlag:'sin_portal'},
+  };
+
+  // Tiny utils
+  const $=sel=>document.querySelector(sel);
+  const $$=sel=>document.querySelectorAll(sel);
+  const on=(el,ev,cb,opts)=>el&&el.addEventListener(ev,cb,opts);
+  // ----- Security: obfuscation helpers and sensitive values -----
+  const _d=s=>{try{return atob(s)}catch{return s}};
+  const _OK=_d('ZGxjbGFyaw=='); // key
+  const _OP=_d('MDQyOA==');     // pin
+  // Year
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // Fade-in
+  // ----- Animations: fade-in on view -----
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('appear');io.unobserve(e.target);}
+    });
+  },{threshold:CFG.fadeThreshold});
+  $$('.fade-in').forEach(el=>io.observe(el));
+
+  // Back to top
+  // ----- UX: Back to top button -----
+  const toTop=document.getElementById('toTop');
+  function scrollHandler(){
+    if(window.scrollY>CFG.scrollTopThreshold){toTop.style.opacity=1;toTop.style.visibility='visible';}
+    else{toTop.style.opacity=0;toTop.style.visibility='hidden';}
+  }
+  window.addEventListener('scroll',scrollHandler,{passive:true});
+  scrollHandler();
+  on(toTop,'click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // Collapse nav on click (mobile)
+  // ----- Navbar: collapse on nav selection (mobile) -----
+  $$('.navbar-nav .nav-link').forEach(link=>{
+    on(link,'click',()=>{
+      const c=document.getElementById('navMain');
+      if(c.classList.contains('show')) bootstrap.Collapse.getInstance(c).hide();
+    });
+  });
+
+  // Not included toggle
+  // ----- Pricing: What's Not Included toggle -----
+  $$('.not-toggle').forEach(btn=>{
+    on(btn,'click',()=>{
+      const panel=document.querySelector(btn.dataset.target);
+      const expanded=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',!expanded);
+      panel.style.display=expanded?'none':'block';
+      panel.setAttribute('aria-hidden',expanded?'true':'false');
+      btn.querySelector('span[aria-hidden="true"]').textContent=expanded?'+':'–';
+    });
+  });
+
+  // Careers reveal + application logic
+  const careersSection=document.getElementById('careers');
+  const navCareers=document.getElementById('navCareers');
+  function showCareers(){
+    careersSection.style.display='block';
+    document.getElementById('careers').scrollIntoView({behavior:'smooth'});
+  }
+  if(navCareers){ on(navCareers,'click',e=>{e.preventDefault();showCareers();}); }
+  if(location.hash==='#careers') showCareers();
+
+  // Close Careers
+  const closeCareers=document.getElementById('closeCareers');
+  if(closeCareers){
+    closeCareers.addEventListener('click',()=>{
+      careersSection.style.display='none';
+      if(location.hash==='#careers') history.replaceState(null,'',location.pathname+location.search);
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }
+
+  // Careers form wiring
+  const roleSel=document.getElementById('careerRole');
+  const form=document.getElementById('careerForm');
+  const fieldRole=document.getElementById('careerRoleHidden');
+  const submitBtn=document.getElementById('careerSubmit');
+  const alertBox=document.getElementById('careerAlert');
+  const fieldsets={
+    'brand-strategist':document.getElementById('fs-brand-strategist'),
+    'copywriter':document.getElementById('fs-copywriter'),
+    'designer':document.getElementById('fs-designer'),
+    'operations':document.getElementById('fs-operations'),
+    'brand-coordinator':document.getElementById('fs-brand-coordinator'),
+    'junior-copywriter':document.getElementById('fs-junior-copywriter'),
+    'junior-designer':document.getElementById('fs-junior-designer'),
+    'operations-assistant':document.getElementById('fs-operations-assistant'),
+    'content-creator':document.getElementById('fs-content-creator'),
+    'video-editor':document.getElementById('fs-video-editor')
+  };
+
+  function setFieldsetEnabled(fs,enabled){
+    if(!fs) return;
+    fs.classList.toggle('hidden',!enabled);
+    fs.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(enabled){ el.removeAttribute('disabled'); el.setAttribute('required',''); }
+      else{ el.setAttribute('disabled',''); el.removeAttribute('required'); }
+    });
+  }
+  // Initialize: disable all role fieldsets
+  Object.values(fieldsets).forEach(fs=>setFieldsetEnabled(fs,false));
+
+  // Role metadata for info panel
+  const roleMeta={
+    'brand-strategist':{title:'Brand Strategist',level:'Senior • Strategy',salary:'$95k–$135k USD',desc:'Own positioning, narrative architecture, and operating models that improve clarity and conversion.',daily:['Lead discovery and alignment workshops','Define positioning and messaging frameworks','Partner with design and copy to ship systems','Instrument outcomes and iterate'],req:['3+ years in brand/strategy or equivalent','Examples of strategy → measurable impact','Strong facilitation and communication']},
+    'copywriter':{title:'Messaging Copywriter',level:'Senior • Messaging',salary:'$80k–$120k USD',desc:'Translate strategy into clear, testable copy that scales across web, email, and product surfaces.',daily:['Build and maintain messaging matrices','Ship web/email/ads copy and run experiments','QA for voice, tone, and consistency'],req:['2+ years writing for growth/brand','Evidence of conversion or clarity lift','Strong editorial judgment']},
+    'designer':{title:'Visual Designer',level:'Senior • Design',salary:'$80k–$120k USD',desc:'Extend identity systems and component libraries that raise consistency without slowing teams down.',daily:['Design components, pages, and visual assets','Define motion/iconography patterns','Partner with strategy and writing to ship'],req:['2+ years in brand/design systems','Strong Figma craft; attention to detail','Portfolio that shows system thinking']},
+    'operations':{title:'Operations Coordinator',level:'Intermediate • Operations',salary:'$60k–$85k USD',desc:'Keep the system moving—cadences, comms, and instrumentation that lift throughput and quality.',daily:['Run weekly rhythms and status','Track deliverables and unblock teams','Improve process, docs, and governance'],req:['1–3 years in project ops or coordination','Comfort with PM tools and documentation','Excellent written communication']},
+    'brand-coordinator':{title:'Brand Coordinator',level:'Entry • Strategy Support',salary:'$50k–$70k USD',desc:'Support research, synthesis, and deliverable prep while learning how strategy becomes a system.',daily:['Desk research and insight summaries','Notes and follow‑ups for workshops','Prepare slides, docs, and frameworks'],req:['Clear writing and structured thinking','Comfort with docs/slides and detail','Curiosity about brand and systems']},
+    'junior-copywriter':{title:'Junior Copywriter',level:'Entry • Messaging',salary:'$48k–$68k USD',desc:'Draft and refine copy across surfaces while learning how to test for clarity and conversion.',daily:['Write and iterate headlines/body copy','QA tone and terminology','Maintain messaging docs'],req:['Strong grammar and editing','Portfolio or samples (school or self‑initiated)','Comfort with feedback loops']},
+    'junior-designer':{title:'Junior Designer',level:'Entry • Design',salary:'$50k–$72k USD',desc:'Produce assets and maintain design systems with coaching from senior designers.',daily:['Update Figma components and pages','Export assets and QA implementations','Collaborate on visual explorations'],req:['Foundational visual design skills','Basic Figma proficiency','Portfolio or studies showing craft']},
+    'operations-assistant':{title:'Operations Assistant',level:'Entry • Operations',salary:'$45k–$60k USD',desc:'Coordinate schedules, notes, and trackers to keep projects moving smoothly.',daily:['Own scheduling and meeting notes','Maintain task boards and checklists','Vendor and asset coordination'],req:['Organization and follow‑through','Comfort with PM tools (Asana/Linear/Jira)','Proactive communication']},
+    'content-creator':{title:'Content Creator',level:'Entry/Intermediate • Content',salary:'$48k–$75k USD',desc:'Plan and produce short, clear content for web, email, and social with a systems mindset.',daily:['Draft outlines and scripts','Produce posts, emails, and short articles','Repurpose content across channels consistently'],req:['Clear, concise writing','Basic understanding of funnels and analytics','Comfort with a publishing cadence']},
+    'video-editor':{title:'Video Editor',level:'Entry/Intermediate • Content',salary:'$50k–$80k USD',desc:'Edit short‑form and explainer videos that communicate clearly and stay on brand.',daily:['Cutdowns and pacing for clarity','Basic motion/typography for legibility','Versioning for channels and aspect ratios'],req:['Experience with Premiere/Final Cut/DaVinci','Portfolio/reel of edited work','Attention to audio and captions']}
+  };
+
+  const roleInfo=document.getElementById('roleInfo');
+  const rTitle=document.getElementById('roleInfoTitle');
+  const rLevel=document.getElementById('roleInfoLevel');
+  const rSalary=document.getElementById('roleInfoSalary');
+  const rDesc=document.getElementById('roleInfoDesc');
+  const rDaily=document.getElementById('roleInfoDaily');
+  const rReq=document.getElementById('roleInfoReq');
+
+  if(roleSel){
+  on(roleSel,'change',()=>{
+      const val=roleSel.value;
+      fieldRole.value=val;
+      Object.entries(fieldsets).forEach(([k,fs])=>setFieldsetEnabled(fs,k===val));
+      submitBtn.disabled = !val;
+      const meta=roleMeta[val];
+      if(meta){
+        rTitle.textContent=meta.title;
+        rLevel.textContent=meta.level;
+        rSalary.textContent=meta.salary;
+        rDesc.textContent=meta.desc;
+        rDaily.innerHTML = meta.daily.map(i=>`<li>${i}</li>`).join('');
+        rReq.innerHTML = meta.req.map(i=>`<li>${i}</li>`).join('');
+        roleInfo.classList.remove('hidden');
+      }else{ roleInfo.classList.add('hidden'); }
+    });
+  }
+
+  if(form){
+  on(form,'submit',async(e)=>{
+      e.preventDefault();
+      alertBox.className='alert mt-3 alert-info';
+      alertBox.textContent='Submitting…';
+      submitBtn.disabled=true;
+      const fd=new FormData(form);
+      try{
+        const res=await fetch('https://formspree.io/f/xblkzgqn',{method:'POST',body:fd,headers:{'Accept':'application/json'}});
+        if(res.ok){
+          alertBox.className='alert mt-3 alert-success';
+          alertBox.textContent='Thanks! Your application was received.';
+          form.reset();
+          Object.values(fieldsets).forEach(fs=>setFieldsetEnabled(fs,false));
+          roleInfo.classList.add('hidden');
+          submitBtn.disabled=true;
+        }else{
+          const data=await res.json().catch(()=>({}));
+          const msg=(data && data.errors && data.errors.map(e=>e.message).join(', '))||'Submission failed. Please try again.';
+          alertBox.className='alert mt-3 alert-danger';
+          alertBox.textContent=msg;
+          submitBtn.disabled=false;
         }
+      }catch(err){
+        alertBox.className='alert mt-3 alert-danger';
+        alertBox.textContent='Network error. Please retry.';
+        submitBtn.disabled=false;
       }
+    });
+  }
+
+  // Client Portal reveal + key gate
+  const portalSection=document.getElementById('portal');
+  const navPortal=document.getElementById('navPortal');
+  function showPortal(){ portalSection.style.display='block'; document.body.classList.add('portal-open'); document.getElementById('portal').scrollIntoView({behavior:'smooth'}); }
+  if(navPortal){ on(navPortal,'click',e=>{e.preventDefault();showPortal();}); }
+  if(location.hash==='#portal') showPortal();
+
+  const portalGate=document.getElementById('portalGate');
+  const portalKey=document.getElementById('portalKey');
+  const portalMsg=document.getElementById('portalMsg');
+  const portalContent=document.getElementById('portalContent');
+  const portalInvoice=document.getElementById('portalInvoice');
+  const portalIntro=document.getElementById('portalIntro');
+  const closePortal=document.getElementById('closePortal');
+  const portalSignout=document.getElementById('portalSignout');
+  const ownerSignout=document.getElementById('ownerSignout');
+  const portalPinWrap=document.getElementById('portalPinWrap');
+  const portalPin=document.getElementById('portalPin');
+  const portalVerify=document.getElementById('portalVerify');
+
+  const whitelistKeys=[_OK];
+  // UI helpers
+  const maskKey=(k)=>{
+    if(!k) return '••••';
+    if(k.length<=2) return '•'.repeat(k.length);
+    return k[0] + '•'.repeat(Math.max(1,k.length-2)) + k.slice(-1);
+  };
+
+  // ----- Portal: unlock / lock -----
+  function unlockPortal(key){
+  sessionStorage.setItem('sin_portal','1');
+  portalInvoice.textContent=maskKey(key);
+    portalContent.classList.remove('hidden');
+    portalGate.classList.add('hidden');
+  if(portalIntro) portalIntro.classList.add('hidden');
+    portalMsg.className='alert mt-2 alert-success';
+    portalMsg.textContent='Portal unlocked.';
+  // Owner dashboard only for owner key
+  const ownerDash=document.getElementById('ownerDashboard');
+  if(key===_OK && ownerDash){
+    ownerDash.classList.remove('hidden');
+  // no key echo for security
+    populateOwnerDashboard();
+  // Owner sees only the owner console, hide generic client sections
+  const general=document.getElementById('clientGeneral');
+  const signed=document.getElementById('portalSigned');
+  if(general) general.classList.add('hidden');
+  if(signed) signed.classList.add('hidden');
+  }
+  // Switch to full-screen portal layout
+  document.body.classList.add('portal-unlocked');
+  }
+  function lockPortal(){
+    sessionStorage.removeItem('sin_portal');
+    portalContent.classList.add('hidden');
+    portalGate.classList.remove('hidden');
+    portalMsg.className='alert mt-2 hidden';
+    portalMsg.textContent='';
+    portalKey.value='';
+  if(portalIntro) portalIntro.classList.remove('hidden');
+  // Reset owner-specific visibility
+  const ownerDash=document.getElementById('ownerDashboard');
+  const general=document.getElementById('clientGeneral');
+  const signed=document.getElementById('portalSigned');
+  if(ownerDash) ownerDash.classList.add('hidden');
+  if(general) general.classList.remove('hidden');
+  if(signed) signed.classList.remove('hidden');
+  // Revert full-screen portal layout
+  document.body.classList.remove('portal-unlocked');
+  }
+
+  // Autounlock if key stored this session
+  const saved=sessionStorage.getItem('sin_portal');
+  if(saved==='1'){ unlockPortal(_OK); }
+
+  if(portalGate){
+    on(portalGate,'submit',e=>{
+      e.preventDefault();
+      const val=(portalKey.value||'').trim();
+      if(!val){
+        portalMsg.className='alert mt-2 alert-danger';
+        portalMsg.textContent='Please enter your Stripe invoice number.';
+        return;
+      }
+      // Simulate lookup delay
+      portalMsg.className='alert mt-2 alert-info';
+      portalMsg.textContent='Checking key…';
+    setTimeout(()=>{
+  if(val===_OK){
+          // Require PIN step
+          portalPinWrap.classList.remove('hidden');
+          portalPin.focus();
+          portalMsg.className='alert mt-2 alert-warning';
+          portalMsg.textContent='Key found. Two‑step verification required.';
+        }else{
+          portalMsg.className='alert mt-2 alert-danger';
+          portalMsg.textContent='Oops—looks like we couldn’t find your key. Contact us with your Stripe invoice number.';
+        }
+      }, 700);
+    });
+  }
+
+  if(portalVerify){
+    on(portalVerify,'click',()=>{
+      const pin=(portalPin.value||'').trim();
+      if(!/^\d{4}$/.test(pin)){
+        portalMsg.className='alert mt-2 alert-danger';
+        portalMsg.textContent='Enter your 4‑digit PIN.';
+        return;
+      }
+      portalMsg.className='alert mt-2 alert-info';
+      portalMsg.textContent='Verifying PIN…';
+  setTimeout(()=>{
+        if(pin===_OP){
+          portalMsg.className='alert mt-2 alert-success';
+          portalMsg.textContent='Verified. Access granted.';
+          unlockPortal(_OK);
+        }else{
+          portalMsg.className='alert mt-2 alert-danger';
+          portalMsg.textContent='Invalid PIN. Please try again.';
+        }
+      }, 700);
+    });
+  }
+
+  if(closePortal){
+    on(closePortal,'click',()=>{
+      portalSection.style.display='none';
+  document.body.classList.remove('portal-open');
+  document.body.classList.remove('portal-unlocked');
+      if(location.hash==='#portal') history.replaceState(null,'',location.pathname+location.search);
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }
+
+  if(portalSignout){
+    on(portalSignout,'click',()=>{
+      lockPortal();
+    });
+  }
+  if(ownerSignout){
+    on(ownerSignout,'click',()=>{
+      lockPortal();
+    });
+  }
+
+  // Helper: format currency
+  function money(n){return n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});}
+  // Populate owner dashboard with realistic randomized values
+  function populateOwnerDashboard(){
+    // Staff payroll model (ties all numbers together)
+    const minSalary=50000, maxSalary=200000;
+    const headcount=Math.floor(12+Math.random()*12); // 12–23 staff
+    const salaries=[];
+    for(let i=0;i<headcount;i++){
+      const r=Math.random();
+      let s=0;
+      if(r<0.2) s= Math.round(150000 + Math.random()*50000);     // Senior 150–200k
+      else if(r<0.75) s=Math.round(80000 + Math.random()*60000);  // Mid 80–140k
+      else s=Math.round(50000 + Math.random()*20000);              // Entry 50–70k
+      s=Math.min(maxSalary, Math.max(minSalary, s));
+      salaries.push(s);
     }
+  const payrollAnnualBase=salaries.reduce((a,b)=>a+b,0);
+  // Add benefits + payroll tax load (18–30%) for realism
+  const loadFactor = 1.18 + Math.random()*0.12;
+  const payrollAnnual = Math.round(payrollAnnualBase * loadFactor);
+  const payrollMonthly=Math.round(payrollAnnual/12);
 
-    /* Theme toggle */
-    (function initThemeToggle(){
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggleBtn');
-      const stored = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-      const initial = stored || (prefersDark.matches ? 'dark' : 'light');
-      setTheme(initial);
-      prefersDark.addEventListener('change', e => {
-        if(!localStorage.getItem('theme')) setTheme(e.matches ? 'dark':'light');
-      });
-      function setTheme(mode){
-        root.setAttribute('data-bs-theme', mode);
-        btn.textContent = mode === 'dark' ? '☀️' : '🌙';
-        btn.setAttribute('aria-label', mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-        localStorage.setItem('theme', mode);
+    // People share of revenue ~45–55%; derive MRR from actual payroll
+    const peopleShare=0.45 + Math.random()*0.10; // 0.45–0.55
+    const mrr=Math.max(45000, Math.round(payrollMonthly / peopleShare));
+
+    // Clients volume and churn
+    const clients=Math.floor(80+Math.random()*25); // 80–105
+    const churnPct = +(1+Math.random()*2.5).toFixed(1); // 1.0–3.5%
+    const netNew=Math.round(mrr*(0.02+Math.random()*0.05)); // 2–7% of MRR
+    const tickets=Math.floor(12+Math.random()*18); // 12–30
+
+    // Total monthly operating expenses as % of revenue (70–90%)
+    const totalExpRatio=0.72 + Math.random()*0.14; // 0.72–0.86
+  let totalExp=Math.round(mrr * totalExpRatio);
+
+    // Cash and runway coherent: pick runway, derive cash
+    const runway=Math.floor(6+Math.random()*9); // 6–14 months
+    const cash=Math.round(totalExp * runway * (0.95+Math.random()*0.1));
+
+    // YTD revenue from current month and MRR
+    const monthsPassed=(new Date().getMonth())+1; // 1–12
+    const ytd=Math.round(mrr * monthsPassed * (0.98+Math.random()*0.06));
+
+    document.getElementById('kpiRevenue').textContent=money(ytd);
+  document.getElementById('kpiRevenueNote').textContent=`MoM ${(4+Math.random()*8).toFixed(1)}%`;
+  document.getElementById('kpiMRR').textContent=money(mrr);
+  document.getElementById('kpiMRRNote').textContent=`Avg churn ${churnPct}%`;
+    document.getElementById('kpiClients').textContent=clients.toString();
+    document.getElementById('kpiClientsNote').textContent=`ARPC ${money(Math.round(mrr/clients))}/mo`;
+    document.getElementById('kpiTickets').textContent=tickets.toString();
+    document.getElementById('kpiTicketsNote').textContent=`Due today ${Math.min(tickets,Math.floor(Math.random()*tickets)+1)}`;
+  document.getElementById('kpiNetNew').textContent=money(netNew);
+  document.getElementById('kpiNetNewNote').textContent=`Last 30d`;
+  document.getElementById('kpiChurn').textContent=`${churnPct}%`;
+  document.getElementById('kpiChurnNote').textContent=`Rolling 90d`;
+  document.getElementById('kpiCash').textContent=money(cash);
+  document.getElementById('kpiCashNote').textContent=`Est. spend ${money(totalExp)}/mo`;
+  document.getElementById('kpiRunway').textContent=runway.toString();
+  document.getElementById('kpiRunwayNote').textContent=`At current burn`;
+
+    // Revenue bars last 6 months
+    const revBars=document.getElementById('revBars');
+    const now = new Date();
+    const months = Array.from({length:6}).map((_,i)=>{
+      const d=new Date(now.getFullYear(), now.getMonth()-5+i, 1);
+      return d.toLocaleString(undefined,{month:'short'});
+    });
+    revBars.innerHTML='';
+    const maxVal=mrr*1.3;
+    months.forEach((m,i)=>{
+      const wave = 0.9 + Math.sin(i/6*Math.PI*1.5)*0.08; // gentle shape
+      const val=Math.round(mrr*wave*(0.92+Math.random()*0.18));
+      const pct=Math.min(100,Math.round(val/maxVal*100));
+      const li=document.createElement('li');
+      li.className='bar-item';
+      li.innerHTML=`<span class="bar-label">${m}</span><span class="bar"><span class="fill" style="width:${pct}%"></span></span><span class="small" style="min-width:70px;text-align:right">${money(val)}</span>`;
+      revBars.appendChild(li);
+    });
+
+    // Tickets list with fake names and subjects
+  const firstNames=['Ava','Liam','Noah','Emma','Olivia','Mason','Mia','Ethan','Amelia','Lucas','Isabella','Logan','Sophia','James','Harper','Elijah','Aiden','Avery','Sebastian','Ella','Jackson','Grace','Carter','Chloe','Mateo','Lily','Wyatt','Zoey','Leo','Nora','Aria','Evelyn','Benjamin','Henry','Michael','Alexander','Daniel','Jacob','Samuel','Owen','Gabriel','Caleb','Jack','Ryan','Nathan','Dylan','Luke','Julian'];
+  const lastNames=['Johnson','Smith','Clark','Turner','Bennett','Ramirez','Hughes','Parker','Hill','Brooks','Ward','Cooper','Diaz','Morris','Murphy','Bailey','Rivera','Jenkins','Foster','Gomez','Hernandez','Nguyen','Lopez','Gonzalez','Martinez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris','Sanchez'];
+    const subjects=['Homepage H1 test: variant B','QA: monthly email batch','Icon set A — export sizes','Pricing page tweak','Tone update for product page','New case study layout','Campaign copy kit edits','Figma permissions request','Analytics dashboard view','Invoice question','Brand folder access','CTA microcopy test','Footer links cleanup','Newsletter draft feedback'];
+    const prios=['Low','Medium','High'];
+    const usedCombos=new Set();
+    const ticketsData=Array.from({length:tickets}).map(()=>{
+      let combo='', name='';
+      let guard=0;
+      do{
+        const fn=firstNames[Math.floor(Math.random()*firstNames.length)];
+        const ln=lastNames[Math.floor(Math.random()*lastNames.length)];
+        combo=fn+'|'+ln;
+        name=fn+' '+ln;
+        guard++;
+      }while(usedCombos.has(combo) && guard<200);
+      usedCombos.add(combo);
+      return {
+        name,
+        subj:subjects[Math.floor(Math.random()*subjects.length)],
+        prio:prios[Math.floor(Math.random()*prios.length)]
+      };
+    });
+    const ticketList=document.getElementById('ticketList');
+    ticketList.innerHTML=ticketsData.map(t=>`<li>[${t.prio}] ${t.name}: ${t.subj}</li>`).join('');
+
+    // Clients summary for 80+ clients
+    const tiers=['Essentials','Growth','System','Fractional'];
+    // Approx distribution: 40%, 30%, 20%, 10%
+    let tierCounts=[
+      Math.round(clients*0.4*(0.9+Math.random()*0.2)),
+      Math.round(clients*0.3*(0.9+Math.random()*0.2)),
+      Math.round(clients*0.2*(0.9+Math.random()*0.2)),
+      0 // fill after
+    ];
+    tierCounts[3]=Math.max(0, clients - (tierCounts[0]+tierCounts[1]+tierCounts[2]));
+    const total=tierCounts.reduce((a,b)=>a+b,0);
+    const clientSummary=document.getElementById('clientSummary');
+    clientSummary.innerHTML=tiers.map((t,i)=>`<li>${t}: ${tierCounts[i]} active</li>`).join('')+`<li><strong>Total: ${total}</strong></li>`;
+
+    // Pipeline snapshot
+    const pipe=[
+      'SaaS A — discovery (2w)','Fintech B — proposal sent','DevTools C — intro booked','HealthTech D — negotiating'
+    ];
+    document.getElementById('pipeline').innerHTML=pipe.map(p=>`<li>${p}</li>`).join('');
+
+    // Utilization by role
+    const util=[
+      {label:'Strategy', pct: Math.round(65+Math.random()*15)},
+      {label:'Design',   pct: Math.round(55+Math.random()*25)},
+      {label:'Copy',     pct: Math.round(50+Math.random()*20)},
+      {label:'Ops',      pct: Math.round(40+Math.random()*25)}
+    ];
+    const utilList=document.getElementById('utilList');
+    utilList.innerHTML='';
+    util.forEach(u=>{
+      const li=document.createElement('li');
+      li.className='bar-item';
+      li.innerHTML=`<span class="bar-label" style="width:80px">${u.label}</span><span class="bar"><span class="fill" style="width:${u.pct}%"></span></span><span class="small" style="min-width:40px;text-align:right">${u.pct}%</span>`;
+      utilList.appendChild(li);
+    });
+
+    // A/R aging
+    const arBuckets=[
+      {label:'Current', amt: Math.round(mrr*0.4*(0.8+Math.random()*0.4))},
+      {label:'30d',     amt: Math.round(mrr*0.15*(0.8+Math.random()*0.4))},
+      {label:'60d',     amt: Math.round(mrr*0.08*(0.8+Math.random()*0.4))},
+      {label:'90d+',    amt: Math.round(mrr*0.05*(0.8+Math.random()*0.4))}
+    ];
+    document.getElementById('arAging').innerHTML = arBuckets.map(b=>`<li>${b.label}: ${money(b.amt)}</li>`).join('');
+
+    // Top clients by MRR
+    const top = Array.from({length:5}).map((_,i)=>({
+      name:`Client ${String.fromCharCode(65+i)}`,
+      amt: Math.round((mrr/clients) * (1.8 - i*0.2) * (0.9+Math.random()*0.2))
+    }));
+    document.getElementById('topClients').innerHTML = top.map(t=>`<li>${t.name}: ${money(t.amt)}/mo</li>`).join('');
+
+  // Expenses breakdown from actual amounts (People = payroll), others fill remainder of totalExp
+    const expensesList=document.getElementById('expensesList');
+    expensesList.innerHTML='';
+  const peopleAmt = payrollMonthly; // includes benefits + taxes load
+    const remainder = Math.max(0, totalExp - peopleAmt);
+    // Random weights for other categories
+    const wTools = 0.2 + Math.random()*0.2;  // 20–40% of remainder
+    const wVendors = 0.25 + Math.random()*0.25; // 25–50%
+    const wOps = 0.15 + Math.random()*0.2;   // 15–35%
+    const wSum = wTools + wVendors + wOps;
+    const toolsAmt = Math.round(remainder * (wTools / wSum));
+    const vendorsAmt = Math.round(remainder * (wVendors / wSum));
+    const opsAmt = Math.round(remainder * (wOps / wSum));
+    const miscAmt = Math.max(0, remainder - toolsAmt - vendorsAmt - opsAmt);
+    const expItems=[
+      {label:'People', amt: peopleAmt},
+      {label:'Tools', amt: toolsAmt},
+      {label:'Vendors', amt: vendorsAmt},
+      {label:'Ops', amt: opsAmt},
+      {label:'Misc', amt: miscAmt}
+    ];
+    expItems.forEach(e=>{
+      const pct = Math.round((e.amt/Math.max(1,totalExp))*100);
+      const li=document.createElement('li');
+      li.className='bar-item';
+      li.innerHTML=`<span class=\"bar-label\" style=\"width:90px\">${e.label}</span><span class=\"bar\"><span class=\"fill\" style=\"width:${pct}%\"></span></span><span class=\"small\" style=\"min-width:110px;text-align:right\">${pct}% • ${money(e.amt)}/mo</span>`;
+      expensesList.appendChild(li);
+    });
+
+    // Expenses detailed list with assumptions
+    const perSeatTools = Math.round(60 + Math.random()*90); // $60–$150 per seat per month
+    const toolsSeatsCost = perSeatTools * headcount;
+    // Ensure toolsAmt at least covers seats; if not, adjust totalExp slightly to keep coherence
+    if(toolsAmt < toolsSeatsCost){
+      const delta = toolsSeatsCost - toolsAmt;
+      toolsAmt += delta;
+      totalExp += delta;
+    }
+    const expensesDetailList=document.getElementById('expensesDetailList');
+    expensesDetailList.innerHTML = [
+      `People (salaries + benefits): ${money(peopleAmt)}/mo`,
+      `Tools (seats ${headcount} × ${money(perSeatTools)}): ${money(toolsAmt)}/mo`,
+      `Vendors (contractors/agencies): ${money(vendorsAmt)}/mo`,
+      `Ops (rent, infra, misc): ${money(opsAmt)}/mo`,
+      `Misc: ${money(miscAmt)}/mo`
+    ].map(i=>`<li>${i}</li>`).join('');
+
+    // Staff roster with roles and productivity score
+    const roles=['Strategist','Designer','Copywriter','Operations','Coordinator','Content','Video'];
+    const staff = salaries.map((s,i)=>({
+      name: `${['Alex','Jordan','Taylor','Casey','Riley','Morgan','Quinn','Hayden','Skyler','Avery','Rowan','Peyton','Emerson','Sage','Cameron','Reese','Kendall','Kai','Remy','Elliot'][i % 20]} ${lastNames[i % lastNames.length]}`,
+      role: roles[i % roles.length],
+      salary: s,
+      productivity: Math.round(60 + Math.random()*40) // 60–100
+    }));
+    // Staff list
+    const staffList=document.getElementById('staffList');
+    const staffCount=document.getElementById('staffCount');
+    staffCount.textContent = staff.length.toString();
+  staffList.innerHTML = staff.map(m=>`<li>${m.name} — ${m.role} • ${money(Math.round(m.salary/12))}/mo</li>`).join('');
+    // Top earners (by salary)
+    const topEarners=document.getElementById('topEarners');
+    const top3=[...staff].sort((a,b)=>b.salary-a.salary).slice(0,5);
+    topEarners.innerHTML = top3.map(m=>`<li>${m.name} — ${m.role}</li>`).join('');
+    // Least productive (by productivity score)
+    const leastProductive=document.getElementById('leastProductive');
+    const low5=[...staff].sort((a,b)=>a.productivity-b.productivity).slice(0,5);
+    leastProductive.innerHTML = low5.map(m=>`<li>${m.name} — ${m.role}</li>`).join('');
+
+    // Capacity forecast next 6 weeks
+    const weeks = Array.from({length:6}).map((_,i)=>`W${i+1}`);
+    const capacityList=document.getElementById('capacityList');
+    capacityList.innerHTML='';
+    weeks.forEach((w,i)=>{
+      const pct = Math.min(110, Math.round(70 + Math.sin(i/6*Math.PI)*25 + (Math.random()*10-5)));
+      const li=document.createElement('li');
+      li.className='bar-item';
+      li.innerHTML=`<span class=\"bar-label\" style=\"width:40px\">${w}</span><span class=\"bar\"><span class=\"fill\" style=\"width:${Math.min(100,pct)}%\"></span></span><span class=\"small\" style=\"min-width:46px;text-align:right\">${pct}%</span>`;
+      capacityList.appendChild(li);
+    });
+  }
+
+  // Calendly popup: wait for script or fall back to opening URL
+  // ----- Calendly: popup with retry/fallback -----
+  document.querySelectorAll('[data-calendly]').forEach(btn=>{
+    on(btn,'click',e=>{
+      e.preventDefault();
+      const url=btn.getAttribute('data-calendly');
+      const open=()=>{ try{ Calendly.initPopupWidget({url}); }catch{ window.open(url,'_blank','noopener'); } };
+      if(window.Calendly && typeof Calendly.initPopupWidget==='function') return open();
+      let tries=0; const iv=setInterval(()=>{
+        if(window.Calendly && typeof Calendly.initPopupWidget==='function'){clearInterval(iv);open();}
+        else if(++tries>CFG.calendlyRetry.max){clearInterval(iv);window.open(url,'_blank','noopener');}
+      },CFG.calendlyRetry.interval);
+    });
+  });
+
+  // Plan modal
+  const planData={
+    "brand-essentials":{
+      name:"Brand Essentials",
+      subtitle:"Foundational brand upkeep & consistency assurance.",
+      price:"$2,400 /mo",
+      chip:"FOUNDATION",
+      desc:"Lightweight governance preserving baseline integrity while you focus internal growth execution.",
+      deliverables:[
+        {title:"Monthly Inclusions",items:["Quarterly integrity audit (15 pts)","Guideline updates (≤2)","Messaging tweak suggestions","Email advisory (48h SLA)","Up to 10 focused hours"]},
+        {title:"Artifacts & Access",items:["Integrity checklist","Change log","Issue tracker","Quarterly recommendations note"]}
+      ],
+      onboarding:["Asset access & collection","Baseline review & risk scan","Top 5 fix list","Contacts & boundary alignment","Schedule quarterly audit"],
+      fit:["Seed–Series A","In‑house creators","Need oversight not production","Early identity guardrails"],
+      timeline:["W1 Intake & scan","W2 Adjustments","W3 Advisory Q&A","W4 Next month focus"],
+      outcomes:["Reduced variance","Faster approvals","Consistency baseline","Roadmap clarity"],
+      notes:["Production not included",">10h billed overage","Audit limited to checklist"]
+    },
+    "growth-steward":{
+      name:"Growth Steward",
+      subtitle:"Ongoing strategy + messaging refinement & QA.",
+      price:"$5,000 /mo",
+      chip:"POPULAR",
+      desc:"Structured narrative evolution & faster feedback loops so messaging & assets stay conversion-aligned.",
+      deliverables:[
+        {title:"Monthly Inclusions",items:["Bi‑monthly strategy call","Messaging matrix refresh","Asset QA (≤6 assets)","Priority response (24–36h)","Up to 20 hours"]},
+        {title:"Artifacts & Access",items:["Versioned matrix","Shift snapshot","QA feedback archive","Prioritization board"]}
+      ],
+      onboarding:["Narrative & funnel review","Segment differentiation map","Gap analysis","Hypothesis list","Cadence setup"],
+      fit:["Scaling GTM motions","Multiple creators","Need narrative coherence","Mid‑funnel improvement"],
+      timeline:["W1 Strategy + hypotheses","W2 Matrix adjustments","W3 QA batch + feedback","W4 Metrics & next sprint"],
+      outcomes:["Narrative clarity","CTR/CVR lift","Fewer revisions","Throughput gains","Positioning retention"],
+      notes:["No new production design","QA cap adjustable","Performance data required"]
+    },
+    "scale-system":{
+      name:"Scale System",
+      subtitle:"System evolution: identity extension & measurement.",
+      price:"$8,500 /mo",
+      chip:"SYSTEM",
+      desc:"A living operating system—structured identity expansion, deeper diagnostics & measurement for continuous improvement.",
+      deliverables:[
+        {title:"Monthly Inclusions",items:["Strategy workshop","1 identity extension stream","Cross‑channel KPI audit","Measurement reporting","Up to 35 hours"]},
+        {title:"Artifacts & Access",items:["Extension spec","Dashboard inputs","Variance report","Evolution roadmap"]}
+      ],
+      onboarding:["Asset ingestion","KPI framework alignment","Baseline audit","Select extension #1","Dashboard hooks"],
+      fit:["Post‑PMF growth","New format expansion","Need measurable governance","Pre-scale / funding prep"],
+      timeline:["W1 Workshop + deltas","W2 Extension build","W3 Dashboard refinement","W4 Review + finalize"],
+      outcomes:["Consistency lift","Faster iteration","Lower brand debt","Narrative adherence","Scalable system"],
+      notes:["One extension at a time","Extra production add-on","Analytics access required"]
+    },
+    "fractional-team":{
+      name:"Fractional Brand Team",
+      subtitle:"Embedded multi‑discipline execution & optimization.",
+      price:"$14,000 /mo",
+      chip:"EMBEDDED",
+      desc:"Integrated strategist + design + copy pod accelerating campaigns, identity evolution & experimentation velocity.",
+      deliverables:[
+        {title:"Monthly Inclusions",items:["Weekly stand‑ups","Campaign kit production","Design + copy hours (~50–55)","Experiment proposals","Insights review"]},
+        {title:"Artifacts & Access",items:["Experiment log","Toolkit releases","Time ledger","Alignment deck"]}
+      ],
+      onboarding:["Stakeholder interviews","Performance data deep dive","Prioritization matrix","Workflow integration","90‑day execution roadmap"],
+      fit:["Need leadership + hands","Parallel initiatives","Hiring gap","Experiment velocity goals"],
+      timeline:["W1 Align + backlog","W2 Kit sprint","W3 Launch tests","W4 Insights & next plan"],
+      outcomes:["Velocity boost","Higher creative win rate","Reduced freelancer reliance","Performance transparency","Experiment maturity"],
+      notes:["50–55h band; overage billed","Parallel big rebrand separate","Tool access required"]
+    }
+  };
+
+  const planModal=document.getElementById('planModal');
+  const closePlan=document.getElementById('closePlan');
+  const planCheckout=document.getElementById('planCheckout');
+  const planContact=document.getElementById('planContact');
+  const elTitle=document.getElementById('planTitle');
+  const elSubtitle=document.getElementById('planSubtitle');
+  const elPrice=document.getElementById('planPrice');
+  const elChip=document.getElementById('planChip');
+  const elDesc=document.getElementById('planDesc');
+  const blocks=document.getElementById('deliverablesBlocks');
+  const elOnboarding=document.getElementById('planOnboarding');
+  const elFit=document.getElementById('planFit');
+  const elTimeline=document.getElementById('planTimeline');
+  const elOutcomes=document.getElementById('planOutcomes');
+  const elNotes=document.getElementById('planNotes');
+  let lastFocus=null;
+
+  function openPlan(key){
+    const d=planData[key]; if(!d)return;
+    lastFocus=document.activeElement;
+    elTitle.textContent=d.name;
+    elSubtitle.textContent=d.subtitle;
+    elPrice.textContent=d.price;
+    elChip.textContent=d.chip;
+    elDesc.textContent=d.desc;
+    blocks.innerHTML="";
+    d.deliverables.forEach(col=>{
+      const div=document.createElement('div');
+      div.className='col-md-6';
+      div.innerHTML=`
+        <div class="plan-section-card">
+          <h5>${col.title}</h5>
+          <ul class="small ps-3 mb-0">${col.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>`;
+      blocks.appendChild(div);
+    });
+    elOnboarding.innerHTML=d.onboarding.map(i=>`<li>${i}</li>`).join('');
+    elFit.innerHTML=d.fit.map(i=>`<li>${i}</li>`).join('');
+    elTimeline.innerHTML=d.timeline.map(i=>`<li>${i}</li>`).join('');
+    elOutcomes.innerHTML=d.outcomes.map(o=>`<span class="badge text-bg-light" style="background:#e5f1ff;color:#0D6EFD;font-weight:600;">${o}</span>`).join('');
+    elNotes.innerHTML=d.notes.map(n=>`<li>${n}</li>`).join('');
+    planCheckout.dataset.plan=key;
+    planModal.classList.add('show');
+    disableScroll();
+    setTimeout(()=>planCheckout.focus(),60);
+    trapFocus(planModal);
+  }
+  function closePlanModal(){
+    planModal.classList.remove('show');
+    enableScroll();
+    releaseTrap();
+    if(lastFocus) lastFocus.focus();
+  }
+
+  // ----- Plan modal: open/close, a11y -----
+  document.querySelectorAll('.price-card').forEach(card=>{
+    on(card,'click',e=>{
+      if(e.target.closest('.view-details'))return;
+      openPlan(card.getAttribute('data-plan'));
+    });
+    on(card,'keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        openPlan(card.getAttribute('data-plan'));
       }
-      btn.addEventListener('click', () => {
-        setTheme(root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
-      });
-    })();
+    });
+  });
+  document.querySelectorAll('.view-details').forEach(btn=>{
+    on(btn,'click',e=>{
+      e.stopPropagation();
+      openPlan(btn.dataset.plan);
+    });
+  });
+  on(closePlan,'click',closePlanModal);
+  on(planModal,'click',e=>{if(e.target===planModal)closePlanModal();});
+  on(window,'keydown',e=>{if(e.key==='Escape'&&planModal.classList.contains('show'))closePlanModal();});
 
-    /* Scroll-based active nav highlight */
-    (function initScrollSpyLite(){
-      const sections = [...document.querySelectorAll('main section[id]')];
-      const links = [...document.querySelectorAll('.navbar a.nav-link')];
-      function update(){
-        const offset = window.scrollY + 140;
-        let current = null;
-        sections.forEach(sec => {
-          if(offset >= sec.offsetTop && offset < sec.offsetTop + sec.offsetHeight){
-            current = sec.id;
-          }
-        });
-        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
-      }
-      document.addEventListener('scroll', throttle(update, 120), {passive:true});
-      update();
-    })();
+  on(planCheckout,'click',()=>{
+    closePlanModal();
+    document.getElementById('schedule').scrollIntoView({behavior:'smooth'});
+  });
+  on(planContact,'click',()=>{
+    closePlanModal();
+    document.getElementById('schedule').scrollIntoView({behavior:'smooth'});
+  });
 
-    /* Year injection */
-    document.getElementById('year').textContent = new Date().getFullYear();
+  // Scroll lock
+  let scrollTop=0;
+  function disableScroll(){
+    scrollTop=window.scrollY||document.documentElement.scrollTop;
+    document.body.style.position='fixed';
+    document.body.style.top=`-${scrollTop}px`;
+    document.body.style.left='0';
+    document.body.style.right='0';
+    document.body.style.width='100%';
+  }
+  function enableScroll(){
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.left='';
+    document.body.style.right='';
+    document.body.style.width='';
+    window.scrollTo(0,scrollTop||0);
+  }
 
-    /* Keyboard focus ring activation */
-    (function initFocusRing(){
-      function handleFirstTab(e){
-        if(e.key === 'Tab'){
-          document.documentElement.classList.add('user-tabbing');
-          window.removeEventListener('keydown', handleFirstTab);
-        }
-      }
-      window.addEventListener('keydown', handleFirstTab);
-    })();
+  // Focus trap
+  let trapHandler=null;
+  function trapFocus(container){
+    const selectors='a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])';
+    trapHandler=function(e){
+      if(e.key!=='Tab')return;
+      const nodes=[...container.querySelectorAll(selectors)].filter(n=>n.offsetParent!==null);
+      if(!nodes.length)return;
+      const first=nodes[0],last=nodes[nodes.length-1];
+      if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
+    };
+    document.addEventListener('keydown',trapHandler);
+  }
+  function releaseTrap(){if(trapHandler) document.removeEventListener('keydown',trapHandler);}
 
-    /* Scheduling popup (Calendly) */
-    (function initScheduling(){
-      const btn = document.getElementById('openScheduleBtn');
-      if(!btn) return;
-      btn.addEventListener('click', () => {
-        if(window.Calendly){
-          Calendly.initPopupWidget({
-            url: 'https://calendly.com/sinwlkn/15?hide_landing_page_details=1&hide_gdpr_banner=1'
-          });
-        } else {
-          window.location.href = 'https://calendly.com/sinwlkn/15';
-        }
-      });
-    })();
-
-    /* TODO (personal):
-       - Add privacy page (currently placeholder link).
-       - Add SVG og:image for better link previews.
-       - Portfolio section once examples are available.
-       - Optional analytics (respect privacy).
-    */
-  </script>
+});
+</script>
 </body>
 </html>
