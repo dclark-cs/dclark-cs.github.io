@@ -334,33 +334,49 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <div class="mb-3">
+              <label for="progress" class="form-label visually-hidden">Progress</label>
+              <div class="progress" style="height: 8px; background:rgba(255,255,255,0.08); margin-bottom:18px;">
+                <div id="formProgressBar" class="progress-bar bg-primary" role="progressbar" style="width: 0%; transition: width 0.4s cubic-bezier(.4,0,.2,1);" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
             <form id="interestForm" action="https://formspree.io/f/xblkzgqn" method="POST" autocomplete="on">
               <div class="mb-3">
                 <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" required placeholder="Your full name">
+                <input type="text" class="form-control" id="name" name="name" required placeholder="Your full name" oninput="updateProgress()">
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Business Email</label>
-                <input type="email" class="form-control" id="email" name="email" required placeholder="you@company.com">
+                <input type="email" class="form-control" id="email" name="email" required placeholder="you@company.com" oninput="updateProgress()">
               </div>
               <div class="mb-3">
                 <label for="channels" class="form-label">Channel Links <span class="text-muted" style="font-size:0.95em;">(Website, Instagram, LinkedIn, etc.)</span></label>
-                <input type="text" class="form-control" id="channels" name="channels" required placeholder="Paste your main channel links">
+                <input type="text" class="form-control" id="channels" name="channels" required placeholder="Paste your main channel links" oninput="updateProgress()">
               </div>
               <div class="mb-3">
                 <label for="challenge" class="form-label">What do you feel is holding back your growth?</label>
-                <textarea class="form-control" id="challenge" name="challenge" rows="2" required placeholder="Describe your current challenges"></textarea>
+                <textarea class="form-control" id="challenge" name="challenge" rows="2" required placeholder="Describe your current challenges" oninput="updateProgress()"></textarea>
               </div>
               <div class="mb-3">
                 <label for="goals" class="form-label">What are your main goals?</label>
-                <textarea class="form-control" id="goals" name="goals" rows="2" required placeholder="Share your business or brand goals"></textarea>
+                <textarea class="form-control" id="goals" name="goals" rows="2" required placeholder="Share your business or brand goals" oninput="updateProgress()"></textarea>
               </div>
               <div class="mb-3">
                 <label for="fit" class="form-label">Why do you think you're a good fit to work with us?</label>
-                <textarea class="form-control" id="fit" name="fit" rows="2" required placeholder="Tell us why you'd be a great partner"></textarea>
+                <textarea class="form-control" id="fit" name="fit" rows="2" required placeholder="Tell us why you'd be a great partner" oninput="updateProgress()"></textarea>
               </div>
               <button type="submit" class="btn btn-primary w-100">Send Application</button>
             </form>
+            <div class="mt-3 mb-2 text-muted" style="font-size:0.97em; opacity:0.7; text-align:center;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="vertical-align:middle; margin-right:4px; margin-bottom:2px;"><circle cx="9" cy="9" r="8" stroke="#13a0fd" stroke-width="2" fill="none"/><path d="M5 9.5l2.5 2.5L13 7" stroke="#13a0fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Your information is encrypted and never shared with third parties. Submissions are handled securely.
+            </div>
+            </form>
+            <div id="formLoading" style="display:none; justify-content:center; align-items:center; min-height:80px;">
+              <div class="spinner-border text-primary" role="status" style="width:2.5rem; height:2.5rem;">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
             <div id="formSuccess" class="d-flex flex-column align-items-center justify-content-center" style="display:none; min-height:120px;">
               <div class="mb-3" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
                 <svg id="successCheck" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:12px;">
@@ -391,6 +407,15 @@
         e.preventDefault();
         var form = e.target;
         var data = new FormData(form);
+        // Show loading spinner
+        form.style.display = 'none';
+        var formLoading = document.getElementById('formLoading');
+        formLoading.style.display = 'flex';
+        // Hide progress bar and privacy disclaimer
+        var progressBar = document.querySelector('.progress');
+        if (progressBar) progressBar.style.display = 'none';
+        var privacyNotice = document.querySelector('.mt-3.mb-2.text-muted');
+        if (privacyNotice) privacyNotice.style.display = 'none';
         fetch(form.action, {
           method: 'POST',
           body: data,
@@ -398,8 +423,8 @@
             'Accept': 'application/json'
           }
         }).then(function(response) {
+          formLoading.style.display = 'none';
           if (response.ok) {
-            form.style.display = 'none';
             var formSuccess = document.getElementById('formSuccess');
             formSuccess.style.display = 'flex';
             formSuccess.classList.add('d-flex');
@@ -417,6 +442,7 @@
             });
           }
         }).catch(function() {
+          formLoading.style.display = 'none';
           alert('Submission failed. Please try again later.');
         });
       });
@@ -426,6 +452,12 @@
         document.getElementById('interestForm').reset();
         document.getElementById('interestForm').style.display = 'block';
         document.getElementById('formSuccess').style.display = 'none';
+        document.getElementById('formLoading').style.display = 'none';
+        // Restore progress bar and privacy disclaimer
+        var progressBar = document.querySelector('.progress');
+        if (progressBar) progressBar.style.display = '';
+        var privacyNotice = document.querySelector('.mt-3.mb-2.text-muted');
+        if (privacyNotice) privacyNotice.style.display = '';
       });
     </script>
 
@@ -473,38 +505,7 @@
           for (let node of nodes) {
             node.x += node.vx;
             node.y += node.vy;
-            if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
-            if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
-          }
-          // Draw connections
-          for (let i = 0; i < nodes.length; i++) {
-            for (let j = i+1; j < nodes.length; j++) {
-              let a = nodes[i], b = nodes[j];
-              let dist = Math.hypot(a.x-b.x, a.y-b.y);
-              if (dist < canvas.width/7) {
-                ctx.save();
-                ctx.globalAlpha = 0.13 + 0.09 * (1 - dist/(canvas.width/7));
-                ctx.strokeStyle = dist < canvas.width/14 ? 'rgba(13,110,253,0.32)' : 'rgba(108,99,255,0.18)';
-                ctx.lineWidth = 2.2;
-                ctx.beginPath();
-                ctx.moveTo(a.x, a.y);
-                ctx.lineTo(b.x, b.y);
-                ctx.stroke();
-                ctx.restore();
-              }
-            }
-          }
-          // Draw nodes
-          for (let node of nodes) {
-            ctx.save();
-            ctx.globalAlpha = 0.7;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, node.r, 0, 2*Math.PI);
-            ctx.fillStyle = 'rgba(13,110,253,0.7)';
-            ctx.shadowColor = 'rgba(13,110,253,0.3)';
-            ctx.shadowBlur = 8;
-            ctx.fill();
-            ctx.restore();
+
           }
           // Soft vignette overlay for depth
           let vignette = ctx.createRadialGradient(
@@ -523,6 +524,40 @@
 
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Progress bar logic for form completion
+      function updateProgress() {
+        var form = document.getElementById('interestForm');
+        if (!form) return;
+        var fields = Array.from(form.querySelectorAll('input, textarea'));
+        var filled = fields.filter(function(f) {
+          return f.value && f.value.trim().length > 0;
+        }).length;
+        var percent = Math.round((filled / fields.length) * 100);
+        var bar = document.getElementById('formProgressBar');
+        if (bar) {
+          bar.style.width = percent + '%';
+          bar.setAttribute('aria-valuenow', percent);
+        }
+      }
+      // Attach input listeners to all form fields
+      function attachProgressListeners() {
+        var form = document.getElementById('interestForm');
+        if (!form) return;
+        var fields = form.querySelectorAll('input, textarea');
+        fields.forEach(function(field) {
+          field.removeEventListener('input', updateProgress);
+          field.addEventListener('input', updateProgress);
+        });
+      }
+      // Initialize progress bar and listeners on modal open
+      document.getElementById('openContactForm').addEventListener('click', function() {
+        setTimeout(function() {
+          attachProgressListeners();
+          updateProgress();
+        }, 120);
+      });
+    </script>
     <script>
     // Always start at the very top of the page on load
     window.addEventListener('load', function() {
