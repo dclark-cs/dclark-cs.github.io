@@ -98,8 +98,9 @@
       .btn-primary { background-color: var(--brand) !important; border-color: var(--brand) !important; color: #fff !important; box-shadow: 0 6px 18px rgba(13,110,253,0.18); }
       .btn-outline-primary { color: #fff !important; border-color: rgba(13,110,253,0.6) !important; }
 
-      .form-control { background-color: rgba(255,255,255,0.02); color: #fff; border: 1px solid rgba(255,255,255,0.06); }
-      .form-control:focus { box-shadow: 0 0 0 .2rem rgba(13,110,253,0.18); border-color: var(--brand); color: #fff; }
+  .form-control { background-color: rgba(255,255,255,0.02); color: #fff !important; border: 1px solid rgba(255,255,255,0.06); caret-color: var(--brand); }
+  .form-control:focus { box-shadow: 0 0 0 .2rem rgba(13,110,253,0.18); border-color: var(--brand); color: #fff !important; background-color: rgba(13,110,253,0.08); }
+  .form-control::placeholder { color: #bfc8e6 !important; opacity: 0.7; }
 
       .text-muted, small.text-muted, .lead, .card-text { color: #ffffff !important; opacity: 0.88; }
       a { color: #ffffff; }
@@ -316,39 +317,117 @@
             <h2 class="h4 fw-bold mb-0" style="letter-spacing:-1px; color:var(--brand); font-size:2em; word-break:break-word;">Site Update In Progress</h2>
           </div>
           <p class="mb-2" style="opacity:0.92; font-size:1.13em; word-break:break-word;">We are currently enhancing our digital experience to better serve you. Thank you for your patience as we work to deliver a more powerful and seamless platform.</p>
-          <div class="text-muted" style="font-size:0.98em; opacity:0.7; word-break:break-word;">For business inquiries, please check back soon or connect via our official channels.</div>
+          <div class="text-muted mb-3" style="font-size:0.98em; opacity:0.7; word-break:break-word;">For business inquiries, please check back soon or connect via our official channels.</div>
+          <hr style="border-top:1px solid rgba(13,110,253,0.18); opacity:0.5;">
+          <h2 class="h5 fw-bold mb-2" style="color:var(--brand);">We're Still Working Behind the Scenes</h2>
+          <p class="mb-3" style="opacity:0.92; font-size:1.08em;">Even though our site is updating, our team is still active. If you think you're a good fit to work with us, please reach out below!</p>
+          <button class="btn btn-primary" id="openContactForm" style="font-weight:600;">Express Interest</button>
         </div>
       </div>
     </section>
-    <style>
-      @keyframes gradientMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      @keyframes fadeInUpdate {
-        0% { opacity:0; transform:translateY(32px); }
-        100% { opacity:1; transform:translateY(0); }
-      }
-      .update-message-box:hover {
-        box-shadow:0 0 32px rgba(13,110,253,0.32), 0 2px 24px rgba(13,110,253,0.18);
-        border-color: var(--brand);
-        transform: scale(1.03);
-        transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
-      }
-      @media (max-width: 575.98px) {
-        .display-3 { font-size:2.2em !important; }
-        .update-message-box { padding:1.2em 0.7em !important; max-width:98vw !important; }
-        .h4 { font-size:1.3em !important; }
-        .lead { font-size:1em !important; }
-        .trusted-by div { gap:1em !important; }
-        .trusted-by span > svg, .trusted-by span > img { width:24px !important; height:24px !important; }
-        .scroll-indicator svg { width:24px !important; height:24px !important; }
-      }
-      @media (max-width: 991.98px) {
-        .hero { padding:3.5rem 0 !important; }
-      }
-    </style>
+    <!-- Contact Form Modal -->
+    <div class="modal fade" id="contactFormModal" tabindex="-1" aria-labelledby="contactFormLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:rgba(35,35,38,0.98); color:#fff; border-radius:var(--radius); border:1.5px solid var(--brand);">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="contactFormLabel" style="color:var(--brand);">Express Your Interest</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="interestForm" action="https://formspree.io/f/xblkzgqn" method="POST" autocomplete="on">
+              <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" required placeholder="Your full name">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Business Email</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="you@company.com">
+              </div>
+              <div class="mb-3">
+                <label for="channels" class="form-label">Channel Links <span class="text-muted" style="font-size:0.95em;">(Website, Instagram, LinkedIn, etc.)</span></label>
+                <input type="text" class="form-control" id="channels" name="channels" required placeholder="Paste your main channel links">
+              </div>
+              <div class="mb-3">
+                <label for="challenge" class="form-label">What do you feel is holding back your growth?</label>
+                <textarea class="form-control" id="challenge" name="challenge" rows="2" required placeholder="Describe your current challenges"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="goals" class="form-label">What are your main goals?</label>
+                <textarea class="form-control" id="goals" name="goals" rows="2" required placeholder="Share your business or brand goals"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="fit" class="form-label">Why do you think you're a good fit to work with us?</label>
+                <textarea class="form-control" id="fit" name="fit" rows="2" required placeholder="Tell us why you'd be a great partner"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Send Application</button>
+            </form>
+            <div id="formSuccess" class="d-flex flex-column align-items-center justify-content-center" style="display:none; min-height:120px;">
+              <div class="mb-3" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <svg id="successCheck" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:12px;">
+                  <circle cx="32" cy="32" r="28" stroke="#28a745" stroke-width="4" fill="none"/>
+                  <path id="checkPath" d="M20 34L30 44L44 24" stroke="#28a745" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <div class="text-success fw-semibold mb-2" style="font-size:1.15em; text-align:center;">Submission sent!</div>
+                <div class="text-success mb-2" style="font-size:1em; text-align:center; opacity:0.8;">Our team will reach out shortly if you're a good fit.</div>
+              </div>
+              <button type="button" class="btn btn-outline-primary" id="closeSuccessPopup" style="margin-top:8px;">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.getElementById('openContactForm').addEventListener('click', function() {
+        var modal = new bootstrap.Modal(document.getElementById('contactFormModal'));
+        // Always reset form and hide success popup on open
+        document.getElementById('interestForm').reset();
+        document.getElementById('interestForm').style.display = 'block';
+        document.getElementById('formSuccess').style.display = 'none';
+        document.getElementById('formSuccess').classList.remove('d-none');
+        document.getElementById('formSuccess').classList.remove('d-flex');
+        modal.show();
+      });
+      document.getElementById('interestForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = e.target;
+        var data = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).then(function(response) {
+          if (response.ok) {
+            form.style.display = 'none';
+            var formSuccess = document.getElementById('formSuccess');
+            formSuccess.style.display = 'flex';
+            formSuccess.classList.add('d-flex');
+            // Animate checkmark
+            var checkPath = document.getElementById('checkPath');
+            checkPath.style.strokeDasharray = checkPath.getTotalLength();
+            checkPath.style.strokeDashoffset = checkPath.getTotalLength();
+            checkPath.style.transition = 'stroke-dashoffset 0.7s cubic-bezier(.4,0,.2,1)';
+            setTimeout(function() {
+              checkPath.style.strokeDashoffset = 0;
+            }, 120);
+          } else {
+            response.json().then(function(data) {
+              alert(data.error || 'Submission failed. Please try again later.');
+            });
+          }
+        }).catch(function() {
+          alert('Submission failed. Please try again later.');
+        });
+      });
+      document.getElementById('closeSuccessPopup').addEventListener('click', function() {
+        var modal = bootstrap.Modal.getInstance(document.getElementById('contactFormModal'));
+        modal.hide();
+        document.getElementById('interestForm').reset();
+        document.getElementById('interestForm').style.display = 'block';
+        document.getElementById('formSuccess').style.display = 'none';
+      });
+    </script>
 
     <footer class="py-4 mt-5">
       <div class="container text-center">
