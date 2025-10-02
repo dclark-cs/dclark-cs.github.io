@@ -1,571 +1,243 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!--
+      Maintenance notes (for me)
+      -------------------------------------------------
+      Why this page exists
+      - Keep a strict, dependency‑free maintenance page so the site cold‑starts fast.
+      - No external CSS/JS and no images. Fewer moving parts = fewer failures.
+      - This version shows only two sections: the update notice and humanitarian support.
+
+      When I’m ready to exit maintenance
+      - Replace this file with the production homepage or restore from VCS.
+      - If I control HTTP status, serve 503 Service Unavailable with a Retry‑After header at the edge/server.
+
+      What I’ll tweak most often
+      - Brand color and page <title> in :root and <head>.
+      - Update notice copy in <section class="notice">.
+      - Humanitarian list: edit <section id="support"> links and order.
+      - Optional: if needed, re‑add footer/contact or policy sections later.
+
+      Accessibility & SEO
+      - Contrast meets WCAG AA; honors prefers‑reduced‑motion; logical landmarks.
+      - Skip‑to‑content link is available at the top for keyboard users.
+      - robots: noindex while this page is live.
+
+      Security posture
+      - Meta CSP is advisory only—enforce via real headers when I control the server.
+      - All external links open in a new tab with rel=noopener noreferrer.
+
+      Performance profile
+      - Single file, zero JS runtime, system font stack.
+      - Content paints fast on slow networks and low‑memory devices.
+
+  Change log
+  - Last updated: 2025-10-01
+
+      Ownership
+      - © 2025 sinwlkn.dev. All rights reserved. Content and design on this page
+        are provided for viewing only. No reproduction, redistribution, scraping,
+        or automated harvesting without prior written consent.
+    -->
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>🔧 sinwlkn.dev — Site Update In Progress</title>
-    <meta name="description" content="A minimal single-file Bootstrap starter template." />
-    <!-- Bootstrap CSS (CDN) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='50%' x='50%' text-anchor='middle' dominant-baseline='central' font-size='22'>🔧</text></svg>">
+    <title>sinwlkn.dev — Under Development</title>
+  <meta name="description" content="sinwlkn.dev is currently under development. In the meantime, consider supporting trusted humanitarian organizations." />
+  <!-- Social cards for consistent sharing across platforms -->
+  <meta property="og:title" content="sinwlkn.dev — Under Development" />
+  <meta property="og:description" content="We’re improving the experience. While we work, consider supporting trusted humanitarian organizations." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sinwlkn.dev/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="sinwlkn.dev — Under Development" />
+  <meta name="twitter:description" content="We’re improving the experience. While we work, consider supporting trusted humanitarian organizations." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0d6efd" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'none'; script-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests;" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='50%25' x='50%25' text-anchor='middle' dominant-baseline='central' font-size='18'%3E%F0%9F%94%A7%3C/text%3E%3C/svg%3E" />
 
     <style>
-      /* Dark-only theme */
       :root {
-        --brand: rgb(13,110,253);
-        --bg: rgb(45,45,48); /* page background */
-        --nav-bg: rgb(35,35,38); /* slightly darker navbar/footer */
-        --surface: rgba(255,255,255,0.03);
-        --muted: #ffffff; /* all text white */
-        --border: rgba(255,255,255,0.06);
-        --radius: 12px;
-        --accent: rgb(13,110,253);
-        --text: #fff;
+        /* Brand tokens */
+        --brand: #0d6efd;     /* Primary accent */
+        --text:  #0f1222;     /* Body text (light) */
+        --muted: #4b5563;     /* Secondary text */
+        --bg:    #ffffff;     /* Background (light) */
+        --bg-e:  #f7f8fb;     /* Elevated bg */
+        --ring:  rgba(13,110,253,.25);
+        --border:#e6e8f0;
+  --radius: 12px;
       }
-
-      html, body {
-        height: 100%;
-        min-height: 100vh;
-        overflow-x: hidden;
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --text:  #eef2ff;
+          --muted: #c7c9d1;
+          --bg:    #0b0c10;
+          --bg-e:  #12131a;
+          --border:#22242f;
+        }
       }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
       body {
-        overscroll-behavior-y: none;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", system-ui;
+        color: var(--text);
         background: var(--bg);
-        color: #ffffff;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui;
-        -webkit-font-smoothing:antialiased;
-        -moz-osx-font-smoothing:grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-
-      .brand-dev { color: var(--brand); }
-      .brand-dev:hover { color: var(--brand); }
-
-      .hero {
-        padding: 6rem 0;
-        min-height: 60vh;
+      a { color: var(--brand); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      /* Skip to content link */
+      .skip-link {
+        position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+      }
+      .skip-link:focus {
+        position: fixed; left: 16px; top: 12px; width: auto; height: auto; padding: 8px 12px;
+        background: var(--brand); color: #fff; border-radius: 8px; z-index: 1000;
+        outline: 3px solid var(--ring); outline-offset: 2px;
+      }
+      /* ribbon removed */
+      .wrap {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 24px clamp(16px, 4vw, 32px);
+      }
+      header.site {
         display: flex;
         align-items: center;
-        justify-content: center;
-        position: relative;
-        background: transparent;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 0 8px;
+        border-bottom: 1px solid var(--border);
       }
-
-      .animated-bg, .animated-bg-canvas {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-        max-width: 100vw !important;
-        max-height: 100vh !important;
-        display: block;
-        z-index: 1;
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      .accent {
-        color: var(--accent);
-      }
-
-      .feature-icon {
-        width: 56px;
-        height: 56px;
+      .brand {
+        font-weight: 800;
+        letter-spacing: -0.02em;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        gap: 8px;
+      }
+      /* .brand-badge removed (per request) */
+      main { padding: 28px 0; }
+      .notice {
+        background: var(--bg-e);
+        border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: rgba(13,110,253,0.14);
-        color: var(--brand);
-        font-weight: 600;
-        box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+        padding: clamp(16px, 3.2vw, 24px);
       }
-
-      .card, .p-4, .card-body {
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
-        color: #ffffff !important;
-        border: 1px solid var(--border) !important;
-        border-radius: calc(var(--radius) - 2px);
-        backdrop-filter: blur(6px);
+      .notice .title {
+        margin: 0 0 8px 0;
+        font-size: clamp(22px, 3.2vw, 28px);
+        line-height: 1.25;
+        letter-spacing: -0.02em;
       }
-
-      /* Use the slightly darker nav background for navbar and footer */
-      .navbar, .bg-dark { background: var(--nav-bg) !important; border-color: transparent !important; }
-      footer { background: var(--nav-bg); border-top: 1px solid rgba(255,255,255,0.03); }
-
-      .btn-primary { background-color: var(--brand) !important; border-color: var(--brand) !important; color: #fff !important; box-shadow: 0 6px 18px rgba(13,110,253,0.18); }
-      .btn-outline-primary { color: #fff !important; border-color: rgba(13,110,253,0.6) !important; }
-
-  .form-control { background-color: rgba(255,255,255,0.02); color: #fff !important; border: 1px solid rgba(255,255,255,0.06); caret-color: var(--brand); }
-  .form-control:focus { box-shadow: 0 0 0 .2rem rgba(13,110,253,0.18); border-color: var(--brand); color: #fff !important; background-color: rgba(13,110,253,0.08); }
-  .form-control::placeholder { color: #bfc8e6 !important; opacity: 0.7; }
-
-      .text-muted, small.text-muted, .lead, .card-text { color: #ffffff !important; opacity: 0.88; }
-      a { color: #ffffff; }
-
-      .scroll-indicator svg {
-        animation: arrowBounce 1.4s infinite cubic-bezier(.4,0,.2,1);
+      .notice .lead {
+        margin: 0 0 14px 0;
+        color: var(--muted);
+        font-size: clamp(15px, 2.4vw, 16px);
       }
-      @keyframes arrowBounce {
-        0% { transform: translateY(0); opacity: 0.7; }
-        50% { transform: translateY(12px); opacity: 1; }
-        100% { transform: translateY(0); opacity: 0.7; }
+      .support {
+        margin-top: 20px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: clamp(16px, 3.2vw, 22px);
       }
-
-      .site-title-glow {
-        text-shadow:
-          0 2px 16px rgba(13,110,253,0.18),
-          0 0px 8px rgba(255,255,255,0.12),
-          0 1px 2px rgba(0,0,0,0.18);
+      .support h2 {
+        margin: 0 0 12px 0;
+        font-size: clamp(18px, 2.8vw, 22px);
+        letter-spacing: -0.01em;
       }
-      .accent-glow {
-        text-shadow:
-          0 0 16px rgba(13,110,253,0.7),
-          0 0 32px rgba(13,110,253,0.32);
-        animation: accentPulse 1.6s infinite cubic-bezier(.4,0,.2,1);
+      .orgs { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      /* Fallback for very old browsers without CSS Grid */
+      @supports not (display: grid) {
+        .orgs { display: block; }
+        .org { margin-bottom: 12px; }
       }
-      @keyframes accentPulse {
-        0%, 100% { text-shadow: 0 0 16px rgba(13,110,253,0.7), 0 0 32px rgba(13,110,253,0.32); }
-        50% { text-shadow: 0 0 32px rgba(13,110,253,1), 0 0 48px rgba(13,110,253,0.5); }
+      @media (min-width: 720px) { .orgs { grid-template-columns: 1fr 1fr; } }
+      .org {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        background: var(--bg-e);
       }
-      .trusted-by span > svg, .trusted-by span > img {
-        filter: drop-shadow(0 0 8px rgba(13,110,253,0.18)) drop-shadow(0 0 4px rgba(255,255,255,0.12));
-        transition: filter 0.3s;
+      .org h3 { margin: 0 0 6px 0; font-size: 16px; }
+      .org p { margin: 0 0 10px 0; color: var(--muted); font-size: 14px; }
+      .org a.btn {
+        display: inline-block; padding: 8px 12px; border-radius: 8px; font-weight: 600;
+        color: #fff; background: var(--brand); border: 1px solid transparent;
       }
-      .trusted-by span > svg:hover, .trusted-by span > img:hover {
-        filter: drop-shadow(0 0 16px rgba(13,110,253,0.32)) drop-shadow(0 0 8px rgba(255,255,255,0.18));
+  .org a.btn:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
+  a:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
+      .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+      footer.site {
+        margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        flex-wrap: wrap;
       }
-
-      /* Timeline styles */
-      .process-timeline {
-        position: relative;
-        overflow: visible;
-      }
-      .timeline-step {
-        position: relative;
-        overflow: visible;
-      }
-      .timeline-step:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        width: 2px;
-        height: 100%;
-        background: linear-gradient(to bottom, rgba(13,110,253,0.18) 0%, rgba(13,110,253,0.08) 60%, transparent 100%);
-        transform: translateX(-50%);
-        z-index: 0;
-      }
-      .timeline-step > div {
-        position: relative;
-        z-index: 1;
-      }
-      .process-arrow {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        margin: 0 auto;
-        color: var(--brand);
-        font-weight: bold;
-      }
-      .animate-timeline {
-        opacity: 0;
-        transform: translateY(32px);
-        transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; }
       }
     </style>
   </head>
-
   <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="#">sinwlkn<span class="brand-dev">.dev</span></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navCollapse">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <div class="wrap" role="document">
+      <main id="main" role="main" aria-labelledby="page-title">
+        <section class="notice" aria-label="Site update notice">
+          <h1 id="page-title" class="title">We’re improving the experience</h1>
+          <p class="lead">Our website is undergoing a focused update to deliver a faster, more resilient platform. Thanks for your patience—performance and clarity come first.</p>
+          <p style="margin:0">If you need to reach us while we’re shipping updates, please check back soon. This page stays lightweight so it loads quickly from anywhere.</p>
+          <p class="note" style="margin-top:10px">Last updated: October 1, 2025</p>
+        </section>
 
-    <!-- Hero Section with Animated Background -->
-    <header class="hero-section position-relative overflow-hidden">
-      <div class="animated-bg">
-        <canvas id="animated-bg-canvas" class="animated-bg-canvas"></canvas>
-      </div>
-      <div class="container text-center py-5 position-relative" style="z-index:2;">
-        <h1 class="display-3 fw-bold mb-3 site-title-glow">
-          <span style="letter-spacing:-2px;">sinwlkn</span><span class="accent accent-glow">.dev</span>
-        </h1>
-        <div class="hero-tagline-wrapper" style="min-height:3.2em; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1.2em;">
-          <span class="lead mb-4" id="hero-tagline" style="margin-top:1.2em; margin-bottom:1.2em; white-space: pre;"></span>
-          <div class="scroll-indicator mt-2" style="display:flex; justify-content:center; align-items:center; height:40px;">
-            <a href="#features" aria-label="Scroll down" style="text-decoration:none;">
-              <span id="scroll-arrow" style="display:inline-block;">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 8V24" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M8 16L16 24L24 16" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </a>
+        <section id="support" class="support" aria-label="Support humanitarian organizations">
+          <h2>Support humanitarian organizations</h2>
+          <p class="note">If you’re able, consider donating to reputable organizations doing vital work worldwide. Links below go to official donation pages.</p>
+          <div class="orgs" role="list">
+            <article class="org" role="listitem">
+              <h3>ICRC — International Committee of the Red Cross</h3>
+              <p>Protects and assists victims of armed conflict and promotes international humanitarian law.</p>
+              <a class="btn" href="https://www.icrc.org/en/donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to the ICRC in a new tab">Donate</a>
+            </article>
+            <article class="org" role="listitem">
+              <h3>MSF — Doctors Without Borders</h3>
+              <p>Independent medical humanitarian organization providing emergency aid in crisis zones.</p>
+              <a class="btn" href="https://donate.doctorswithoutborders.org/" target="_blank" rel="noopener noreferrer external" aria-label="Donate to Doctors Without Borders in a new tab">Donate</a>
+            </article>
+            <article class="org" role="listitem">
+              <h3>UNICEF USA</h3>
+              <p>Delivers health care, safe water, nutrition, and education for children worldwide.</p>
+              <a class="btn" href="https://www.unicefusa.org/?form=donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to UNICEF USA in a new tab">Donate</a>
+            </article>
+            <article class="org" role="listitem">
+              <h3>UNHCR — The UN Refugee Agency</h3>
+              <p>Safeguards the rights and well-being of refugees, forcibly displaced communities, and stateless people.</p>
+              <a class="btn" href="https://donate.unhcr.org/" target="_blank" rel="noopener noreferrer external" aria-label="Donate to UNHCR in a new tab">Donate</a>
+            </article>
+            <article class="org" role="listitem">
+              <h3>IRC — International Rescue Committee</h3>
+              <p>Responds to the world’s worst humanitarian crises and helps people to survive and rebuild.</p>
+              <a class="btn" href="https://www.rescue.org/donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to the International Rescue Committee in a new tab">Donate</a>
+            </article>
+            <article class="org" role="listitem">
+              <h3>World Food Program USA</h3>
+              <p>Leads the global fight against hunger, delivering food assistance in emergencies.</p>
+              <a class="btn" href="https://donate.wfpusa.org/page/UNWFP" target="_blank" rel="noopener noreferrer external" aria-label="Donate to World Food Program USA in a new tab">Donate</a>
+            </article>
           </div>
-        </div>
-        <div class="trusted-by mt-2" style="display:flex; flex-direction:column; align-items:center; gap:0.5em;">
-          <small class="text-muted" style="opacity:0.7; letter-spacing:0.04em;">Trusted by</small>
-          <div style="display:flex; gap:2.2em; align-items:center;">
-            <!-- Apple Logo -->
-            <span title="Apple">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.5 17.5c-.3-2.2 1.8-3.2 1.9-3.3-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-0.8-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.7 1.1 8.9.7 1 1.5 2.1 2.6 2.1 1.1 0 1.5-.7 2.8-.7 1.3 0 1.6.7 2.8.7 1.1 0 1.8-1 2.5-2 .7-1 1-2 1-2.1-.1-.1-2.6-1-2.6-3.8zm-2.2-7.1c.6-.7 1-1.7.9-2.7-.9.1-2 .6-2.6 1.3-.6.7-1.1 1.6-.9 2.6.9.1 2-.5 2.6-1.2z" fill="#fff" opacity="0.7"/>
-              </svg>
-            </span>
-            <!-- Microsoft Logo -->
-            <span title="Microsoft">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="12" height="12" fill="#fff" opacity="0.7"/>
-                <rect x="18" y="2" width="12" height="12" fill="#fff" opacity="0.7"/>
-                <rect x="2" y="18" width="12" height="12" fill="#fff" opacity="0.7"/>
-                <rect x="18" y="18" width="12" height="12" fill="#fff" opacity="0.7"/>
-              </svg>
-            </span>
-            <!-- Intel Logo (official) -->
-            <span title="Intel">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Intel_logo_2023.svg" alt="Intel logo" style="height:32px; width:32px; object-fit:contain; filter: grayscale(1) brightness(2) opacity(0.7);" loading="lazy" />
-            </span>
-          </div>
-        </div>
-      </div>
-    </header>
-    <script>
-      // Typing animation for animated tagline cycling (preserve margin with blank character)
-      const taglines = [
-        "Elevate your brand. Accelerate your growth. Marketing that moves you forward.",
-        "Strategic brand management for lasting impact.",
-        "Creative marketing that drives real results.",
-        "Building connections. Growing influence.",
-        "Your partner in brand success."
-      ];
-      let taglineIdx = 0;
-      const taglineEl = document.getElementById('hero-tagline');
-      const TYPE_SPEED = 45;
-      const ERASE_SPEED = 30;
-      const PAUSE_AFTER_TYPE = 1200;
-      const PAUSE_AFTER_ERASE = 400;
-      const BLANK_CHAR = '\u2007'; // Figure space, wider than hair space
-      function typeTagline(text, cb) {
-        let i = 0;
-        function type() {
-          taglineEl.textContent = text.slice(0, i) + (i < text.length ? BLANK_CHAR : BLANK_CHAR);
-          if (i < text.length) {
-            i++;
-            setTimeout(type, TYPE_SPEED);
-          } else if (cb) {
-            setTimeout(cb, PAUSE_AFTER_TYPE);
-          }
-        }
-        type();
-      }
-      function eraseTagline(cb) {
-        let text = taglineEl.textContent.replace(new RegExp(BLANK_CHAR, 'g'), "");
-        let i = text.length;
-        function erase() {
-          taglineEl.textContent = text.slice(0, i) + BLANK_CHAR;
-          if (i > 0) {
-            i--;
-            setTimeout(erase, ERASE_SPEED);
-          } else if (cb) {
-            setTimeout(cb, PAUSE_AFTER_ERASE);
-          }
-        }
-        erase();
-      }
-      function cycleTagline() {
-        eraseTagline(() => {
-          taglineIdx = (taglineIdx + 1) % taglines.length;
-          setTimeout(() => {
-            typeTagline(taglines[taglineIdx], () => {
-              setTimeout(cycleTagline, PAUSE_AFTER_TYPE);
-            });
-          }, 180);
-        });
-      }
-      typeTagline(taglines[0], () => {
-        setTimeout(cycleTagline, PAUSE_AFTER_TYPE);
-      });
-    </script>
-
-    <!-- Features -->
-    <section id="features" class="py-5" style="background:transparent; border:none; box-shadow:none; min-height:40vh; display:flex; align-items:center; justify-content:center;">
-      <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height:32vh;">
-        <div class="p-4 mb-0 update-message-box position-relative" style="background:rgba(35,35,38,0.72); border-radius:var(--radius); color:#fff; box-shadow:0 2px 24px rgba(13,110,253,0.18); border:1.5px solid rgba(13,110,253,0.18); backdrop-filter: blur(8px); max-width:480px; width:100%; animation: fadeInUpdate 1.2s cubic-bezier(.4,0,.2,1);">
-          <!-- Gradient Accent -->
-          <div style="height:4px; width:100%; position:absolute; top:0; left:0; border-radius:8px 8px 0 0; background:linear-gradient(90deg, var(--brand), #1e3c72, #2a5298, var(--brand)); background-size:200% 200%; animation: gradientMove 3.5s ease-in-out infinite;"></div>
-          <!-- Icon -->
-          <div class="d-flex align-items-center justify-content-center mb-3 flex-wrap" style="gap:0.7em;">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 8px var(--brand));">
-              <circle cx="16" cy="16" r="14" stroke="var(--brand)" stroke-width="2.5" fill="none"/>
-              <path d="M16 8v8l6 4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <h2 class="h4 fw-bold mb-0" style="letter-spacing:-1px; color:var(--brand); font-size:2em; word-break:break-word;">Site Update In Progress</h2>
-          </div>
-          <p class="mb-2" style="opacity:0.92; font-size:1.13em; word-break:break-word;">We are currently enhancing our digital experience to better serve you. Thank you for your patience as we work to deliver a more powerful and seamless platform.</p>
-          <div class="text-muted mb-3" style="font-size:0.98em; opacity:0.7; word-break:break-word;">For business inquiries, please check back soon or connect via our official channels.</div>
-          <hr style="border-top:1px solid rgba(13,110,253,0.18); opacity:0.5;">
-          <h2 class="h5 fw-bold mb-2" style="color:var(--brand);">We're Still Working Behind the Scenes</h2>
-          <p class="mb-3" style="opacity:0.92; font-size:1.08em;">Even though our site is updating, our team is still active. If you think you're a good fit to work with us, please reach out below!</p>
-          <button class="btn btn-primary" id="openContactForm" style="font-weight:600;">Express Interest</button>
-        </div>
-      </div>
-    </section>
-    <!-- Contact Form Modal -->
-    <div class="modal fade" id="contactFormModal" tabindex="-1" aria-labelledby="contactFormLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background:rgba(35,35,38,0.98); color:#fff; border-radius:var(--radius); border:1.5px solid var(--brand);">
-          <div class="modal-header border-0">
-            <h5 class="modal-title" id="contactFormLabel" style="color:var(--brand);">Express Your Interest</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="progress" class="form-label visually-hidden">Progress</label>
-              <div class="progress" style="height: 8px; background:rgba(255,255,255,0.08); margin-bottom:18px;">
-                <div id="formProgressBar" class="progress-bar bg-primary" role="progressbar" style="width: 0%; transition: width 0.4s cubic-bezier(.4,0,.2,1);" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <form id="interestForm" action="https://formspree.io/f/xblkzgqn" method="POST" autocomplete="on">
-              <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" required placeholder="Your full name" oninput="updateProgress()">
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Business Email</label>
-                <input type="email" class="form-control" id="email" name="email" required placeholder="you@company.com" oninput="updateProgress()">
-              </div>
-              <div class="mb-3">
-                <label for="channels" class="form-label">Channel Links <span class="text-muted" style="font-size:0.95em;">(Website, Instagram, LinkedIn, etc.)</span></label>
-                <input type="text" class="form-control" id="channels" name="channels" required placeholder="Paste your main channel links" oninput="updateProgress()">
-              </div>
-              <div class="mb-3">
-                <label for="challenge" class="form-label">What do you feel is holding back your growth?</label>
-                <textarea class="form-control" id="challenge" name="challenge" rows="2" required placeholder="Describe your current challenges" oninput="updateProgress()"></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="goals" class="form-label">What are your main goals?</label>
-                <textarea class="form-control" id="goals" name="goals" rows="2" required placeholder="Share your business or brand goals" oninput="updateProgress()"></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="fit" class="form-label">Why do you think you're a good fit to work with us?</label>
-                <textarea class="form-control" id="fit" name="fit" rows="2" required placeholder="Tell us why you'd be a great partner" oninput="updateProgress()"></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">Send Application</button>
-            </form>
-            <div class="mt-3 mb-2 text-muted" style="font-size:0.97em; opacity:0.7; text-align:center;">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="vertical-align:middle; margin-right:4px; margin-bottom:2px;"><circle cx="9" cy="9" r="8" stroke="#13a0fd" stroke-width="2" fill="none"/><path d="M5 9.5l2.5 2.5L13 7" stroke="#13a0fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Your information is encrypted and never shared with third parties. Submissions are handled securely.
-            </div>
-            </form>
-            <div id="formLoading" style="display:none; justify-content:center; align-items:center; min-height:80px;">
-              <div class="spinner-border text-primary" role="status" style="width:2.5rem; height:2.5rem;">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-            <div id="formSuccess" class="d-flex flex-column align-items-center justify-content-center" style="display:none; min-height:120px;">
-              <div class="mb-3" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                <svg id="successCheck" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:12px;">
-                  <circle cx="32" cy="32" r="28" stroke="#28a745" stroke-width="4" fill="none"/>
-                  <path id="checkPath" d="M20 34L30 44L44 24" stroke="#28a745" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                </svg>
-                <div class="text-success fw-semibold mb-2" style="font-size:1.15em; text-align:center;">Submission sent!</div>
-                <div class="text-success mb-2" style="font-size:1em; text-align:center; opacity:0.8;">Our team will reach out shortly if you're a good fit.</div>
-              </div>
-              <button type="button" class="btn btn-outline-primary" id="closeSuccessPopup" style="margin-top:8px;">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          <p class="note">No affiliation implied. Always verify you’re on the organization’s official site before donating.</p>
+        </section>
+      </main>
     </div>
-    <script>
-      document.getElementById('openContactForm').addEventListener('click', function() {
-        var modal = new bootstrap.Modal(document.getElementById('contactFormModal'));
-        // Always reset form and hide success popup on open
-        document.getElementById('interestForm').reset();
-        document.getElementById('interestForm').style.display = 'block';
-        document.getElementById('formSuccess').style.display = 'none';
-        document.getElementById('formSuccess').classList.remove('d-none');
-        document.getElementById('formSuccess').classList.remove('d-flex');
-        modal.show();
-      });
-      document.getElementById('interestForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var form = e.target;
-        var data = new FormData(form);
-        // Show loading spinner
-        form.style.display = 'none';
-        var formLoading = document.getElementById('formLoading');
-        formLoading.style.display = 'flex';
-        // Hide progress bar and privacy disclaimer
-        var progressBar = document.querySelector('.progress');
-        if (progressBar) progressBar.style.display = 'none';
-        var privacyNotice = document.querySelector('.mt-3.mb-2.text-muted');
-        if (privacyNotice) privacyNotice.style.display = 'none';
-        fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(function(response) {
-          formLoading.style.display = 'none';
-          if (response.ok) {
-            var formSuccess = document.getElementById('formSuccess');
-            formSuccess.style.display = 'flex';
-            formSuccess.classList.add('d-flex');
-            // Animate checkmark
-            var checkPath = document.getElementById('checkPath');
-            checkPath.style.strokeDasharray = checkPath.getTotalLength();
-            checkPath.style.strokeDashoffset = checkPath.getTotalLength();
-            checkPath.style.transition = 'stroke-dashoffset 0.7s cubic-bezier(.4,0,.2,1)';
-            setTimeout(function() {
-              checkPath.style.strokeDashoffset = 0;
-            }, 120);
-          } else {
-            response.json().then(function(data) {
-              alert(data.error || 'Submission failed. Please try again later.');
-            });
-          }
-        }).catch(function() {
-          formLoading.style.display = 'none';
-          alert('Submission failed. Please try again later.');
-        });
-      });
-      document.getElementById('closeSuccessPopup').addEventListener('click', function() {
-        var modal = bootstrap.Modal.getInstance(document.getElementById('contactFormModal'));
-        modal.hide();
-        document.getElementById('interestForm').reset();
-        document.getElementById('interestForm').style.display = 'block';
-        document.getElementById('formSuccess').style.display = 'none';
-        document.getElementById('formLoading').style.display = 'none';
-        // Restore progress bar and privacy disclaimer
-        var progressBar = document.querySelector('.progress');
-        if (progressBar) progressBar.style.display = '';
-        var privacyNotice = document.querySelector('.mt-3.mb-2.text-muted');
-        if (privacyNotice) privacyNotice.style.display = '';
-      });
-    </script>
-
-    <footer class="py-4 mt-5">
-      <div class="container text-center">
-        <hr class="mb-4" style="border-top:1px solid rgba(255,255,255,0.08);opacity:0.5;">
-        <small class="text-muted d-block">© <span id="year"></span> sinwlkn<span class="brand-dev">.dev</span>. All rights reserved.</small>
-      </div>
-    </footer>
-
-    <script>
-      // set current year
-      try { document.getElementById('year').textContent = new Date().getFullYear(); } catch(e){}
-
-      // Animated network background: connecting lines and nodes for brand growth
-      const canvas = document.getElementById('animated-bg-canvas');
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        function resizeCanvas() {
-          canvas.width = canvas.offsetWidth;
-          canvas.height = canvas.offsetHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        // Network node setup
-        const NODE_COUNT = 22;
-        let nodes = [];
-        function initNodes() {
-          nodes = [];
-          for (let i = 0; i < NODE_COUNT; i++) {
-            nodes.push({
-              x: Math.random() * canvas.width,
-              y: Math.random() * canvas.height,
-              vx: (Math.random()-0.5)*0.6,
-              vy: (Math.random()-0.5)*0.6,
-              r: 3.5 + Math.random()*2.5
-            });
-          }
-        }
-        initNodes();
-        window.addEventListener('resize', initNodes);
-        function draw() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          // Move nodes
-          for (let node of nodes) {
-            node.x += node.vx;
-            node.y += node.vy;
-
-          }
-          // Soft vignette overlay for depth
-          let vignette = ctx.createRadialGradient(
-            canvas.width/2, canvas.height/2, canvas.width/3,
-            canvas.width/2, canvas.height/2, canvas.width/1.1
-          );
-          vignette.addColorStop(0, 'rgba(0,0,0,0)');
-          vignette.addColorStop(1, 'rgba(35,35,38,0.7)');
-          ctx.fillStyle = vignette;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          requestAnimationFrame(draw);
-        }
-        draw();
-      }
-    </script>
-
-    <!-- Bootstrap JS bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Progress bar logic for form completion
-      function updateProgress() {
-        var form = document.getElementById('interestForm');
-        if (!form) return;
-        var fields = Array.from(form.querySelectorAll('input, textarea'));
-        var filled = fields.filter(function(f) {
-          return f.value && f.value.trim().length > 0;
-        }).length;
-        var percent = Math.round((filled / fields.length) * 100);
-        var bar = document.getElementById('formProgressBar');
-        if (bar) {
-          bar.style.width = percent + '%';
-          bar.setAttribute('aria-valuenow', percent);
-        }
-      }
-      // Attach input listeners to all form fields
-      function attachProgressListeners() {
-        var form = document.getElementById('interestForm');
-        if (!form) return;
-        var fields = form.querySelectorAll('input, textarea');
-        fields.forEach(function(field) {
-          field.removeEventListener('input', updateProgress);
-          field.addEventListener('input', updateProgress);
-        });
-      }
-      // Initialize progress bar and listeners on modal open
-      document.getElementById('openContactForm').addEventListener('click', function() {
-        setTimeout(function() {
-          attachProgressListeners();
-          updateProgress();
-        }, 120);
-      });
-    </script>
-    <script>
-    // Always start at the very top of the page on load
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-      }, 10);
-    });
-    </script>
   </body>
 </html>
-
