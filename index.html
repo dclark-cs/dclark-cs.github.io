@@ -50,7 +50,10 @@
   <meta property="og:description" content="We’re improving the experience. While we work, consider supporting trusted humanitarian organizations." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sinwlkn.dev/" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://sinwlkn.dev/og.svg" />
+  <meta property="og:image:type" content="image/svg+xml" />
+  <meta name="twitter:image" content="https://sinwlkn.dev/og.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="sinwlkn.dev — Under Development" />
   <meta name="twitter:description" content="We’re improving the experience. While we work, consider supporting trusted humanitarian organizations." />
     <meta name="robots" content="noindex, nofollow" />
@@ -60,6 +63,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'none'; script-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests;" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='50%25' x='50%25' text-anchor='middle' dominant-baseline='central' font-size='18'%3E%F0%9F%94%A7%3C/text%3E%3C/svg%3E" />
+  <link rel="canonical" href="https://sinwlkn.dev/" />
 
     <style>
       :root {
@@ -110,22 +114,7 @@
         margin: 0 auto;
         padding: 24px clamp(16px, 4vw, 32px);
       }
-      header.site {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 12px 0 8px;
-        border-bottom: 1px solid var(--border);
-      }
-      .brand {
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-      }
-      /* .brand-badge removed (per request) */
+      /* header/brand styles removed (not used) */
       main { padding: 28px 0; }
       .notice {
         background: var(--bg-e);
@@ -138,6 +127,13 @@
         font-size: clamp(22px, 3.2vw, 28px);
         line-height: 1.25;
         letter-spacing: -0.02em;
+      }
+      .brandline {
+        margin: 0 0 6px 0;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
       }
       .notice .lead {
         margin: 0 0 14px 0;
@@ -156,7 +152,8 @@
         font-size: clamp(18px, 2.8vw, 22px);
         letter-spacing: -0.01em;
       }
-      .orgs { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .orgs { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .group { display: block; margin: 16px 0 4px; font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
       /* Fallback for very old browsers without CSS Grid */
       @supports not (display: grid) {
         .orgs { display: block; }
@@ -169,7 +166,7 @@
         padding: 14px;
         background: var(--bg-e);
       }
-      .org h3 { margin: 0 0 6px 0; font-size: 16px; }
+  .org h3, .org h4 { margin: 0 0 6px 0; font-size: 16px; }
       .org p { margin: 0 0 10px 0; color: var(--muted); font-size: 14px; }
       .org a.btn {
         display: inline-block; padding: 8px 12px; border-radius: 8px; font-weight: 600;
@@ -178,14 +175,20 @@
   .org a.btn:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
   a:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
       .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
-      footer.site {
-        margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
-        flex-wrap: wrap;
-      }
-      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .mini-changelog { margin: 8px 0 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+  .mini-changelog li { margin: 4px 0; }
+      /* footer/sr-only styles removed (not used) */
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; }
+      }
+      @media print {
+        body { background: #fff; color: #000; }
+        a { color: #000; text-decoration: underline; }
+        .wrap { max-width: 100%; padding: 0; }
+        .support, .notice { border: 1px solid #000; border-radius: 0; }
+        .note { color: #000; }
+        /* Append URLs after links for print accessibility */
+        a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 90%; }
       }
     </style>
   </head>
@@ -194,44 +197,55 @@
     <div class="wrap" role="document">
       <main id="main" role="main" aria-labelledby="page-title">
         <section class="notice" aria-label="Site update notice">
+          <p class="brandline" aria-label="Site brand">sinwlkn.dev</p>
           <h1 id="page-title" class="title">We’re improving the experience</h1>
           <p class="lead">Our website is undergoing a focused update to deliver a faster, more resilient platform. Thanks for your patience—performance and clarity come first.</p>
           <p style="margin:0">If you need to reach us while we’re shipping updates, please check back soon. This page stays lightweight so it loads quickly from anywhere.</p>
           <p class="note" style="margin-top:10px">Questions or press inquiries? <a href="mailto:contact@sinwlkn.dev">contact@sinwlkn.dev</a></p>
           <p class="note" style="margin-top:10px">Last updated: October 1, 2025</p>
+          <ul class="mini-changelog" aria-label="Recent maintenance changes">
+            <li>Added canonical link and tightened social meta for consistency.</li>
+            <li>Improved print styles; trimmed unused CSS for faster loads.</li>
+            <li>Refined donation section copy and accessibility labels.</li>
+          </ul>
         </section>
 
         <section id="support" class="support" aria-label="Support humanitarian organizations">
           <h2>Support humanitarian organizations</h2>
           <p class="note">If you’re able, consider donating to reputable organizations doing vital work worldwide. Links below go to official donation pages.</p>
-          <div class="orgs" role="list">
+          <h3 class="group" id="grp-med" aria-label="Medical and emergency relief">Medical &amp; emergency relief</h3>
+          <div class="orgs" role="list" aria-labelledby="grp-med">
             <article class="org" role="listitem">
-              <h3>ICRC — International Committee of the Red Cross</h3>
+              <h4>ICRC — International Committee of the Red Cross</h4>
               <p>Protects and assists victims of armed conflict and promotes international humanitarian law.</p>
               <a class="btn" href="https://www.icrc.org/en/donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to the ICRC in a new tab">Donate</a>
             </article>
             <article class="org" role="listitem">
-              <h3>MSF — Doctors Without Borders</h3>
+              <h4>MSF — Doctors Without Borders</h4>
               <p>Independent medical humanitarian organization providing emergency aid in crisis zones.</p>
               <a class="btn" href="https://donate.doctorswithoutborders.org/" target="_blank" rel="noopener noreferrer external" aria-label="Donate to Doctors Without Borders in a new tab">Donate</a>
             </article>
+          </div>
+
+          <h3 class="group" id="grp-refugees" aria-label="Refugees, children, and food security">Refugees, children, and food security</h3>
+          <div class="orgs" role="list" aria-labelledby="grp-refugees">
             <article class="org" role="listitem">
-              <h3>UNICEF USA</h3>
+              <h4>UNICEF USA</h4>
               <p>Delivers health care, safe water, nutrition, and education for children worldwide.</p>
               <a class="btn" href="https://www.unicefusa.org/?form=donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to UNICEF USA in a new tab">Donate</a>
             </article>
             <article class="org" role="listitem">
-              <h3>UNHCR — The UN Refugee Agency</h3>
+              <h4>UNHCR — The UN Refugee Agency</h4>
               <p>Safeguards the rights and well-being of refugees, forcibly displaced communities, and stateless people.</p>
               <a class="btn" href="https://donate.unhcr.org/" target="_blank" rel="noopener noreferrer external" aria-label="Donate to UNHCR in a new tab">Donate</a>
             </article>
             <article class="org" role="listitem">
-              <h3>IRC — International Rescue Committee</h3>
+              <h4>IRC — International Rescue Committee</h4>
               <p>Responds to the world’s worst humanitarian crises and helps people to survive and rebuild.</p>
               <a class="btn" href="https://www.rescue.org/donate" target="_blank" rel="noopener noreferrer external" aria-label="Donate to the International Rescue Committee in a new tab">Donate</a>
             </article>
             <article class="org" role="listitem">
-              <h3>World Food Program USA</h3>
+              <h4>World Food Program USA</h4>
               <p>Leads the global fight against hunger, delivering food assistance in emergencies.</p>
               <a class="btn" href="https://donate.wfpusa.org/page/UNWFP" target="_blank" rel="noopener noreferrer external" aria-label="Donate to World Food Program USA in a new tab">Donate</a>
             </article>
